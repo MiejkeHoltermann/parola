@@ -51,38 +51,34 @@ export default function RegisterForm() {
   }
 
   return (
-    <div className="grid place-items-center h-screen">
-      <div className="shadow-lg p-5 rounded-lg border-t-4 border-green-400">
-        <h1 className="text-xl font-bold my-4">Enter the details</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <input
-            onChange={(e) => setName(e.target.value)}
-            type="text"
-            placeholder="Full Name"
-          />
-          <input
-            onChange={(e) => setEmail(e.target.value)}
-            type="text"
-            placeholder="Email"
-          />
-          <input
-            onChange={(e) => setPassword(e.target.value)}
-            type="text"
-            placeholder="Password"
-          />
-          <button className="bg-green-600 text-white font-bold cursor-pointer px-6 py-2">
-            Register
-          </button>
-          {error && (
-            <div className="bg-red-500 text-white w-fit tex t-sm py-1 px-3 rounded-md mt-2">
-              {error}
-            </div>
-          )}
-          <Link className="text-sm mt-3 text-right" href={"/"}>
-            Already have an account? <span className="underline">Login</span>
-          </Link>
-        </form>
-      </div>
-    </div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+      <input
+        onChange={(e) => setName(e.target.value)}
+        type="text"
+        placeholder="Name"
+      />
+      <input
+        onChange={(e) => setEmail(e.target.value)}
+        type="text"
+        placeholder="Email"
+      />
+      <input
+        onChange={(e) => setPassword(e.target.value)}
+        type="text"
+        placeholder="Passwort"
+      />
+      <button className="bg-green-600 text-white font-bold cursor-pointer px-6 py-2">
+        Registrieren
+      </button>
+      {error && (
+        <div className="bg-red-500 text-white w-fit tex t-sm py-1 px-3 rounded-md mt-2">
+          {error}
+        </div>
+      )}
+      <Link className="text-sm mt-3 text-right" href={"/"}>
+        DU hast schon ein Kundenkonto?{" "}
+        <span className="underline">Jetzt anmelden</span>
+      </Link>
+    </form>
   );
 }

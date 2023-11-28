@@ -8,5 +8,10 @@ export default async function Register() {
   if (session) {
     redirect("/dashboard");
   }
-  return <RegisterForm />;
+  return (
+    <main>
+      <h1 className="font-bold my-4">Jetzt registrieren</h1>
+      <RegisterForm />{" "}
+    </main>
+  );
 }
