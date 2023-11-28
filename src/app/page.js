@@ -1,16 +1,28 @@
-import { authOptions } from "./api/auth/[...nextauth]/route";
-import LoginForm from "./components/LoginForm";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
-  if (session) {
-    redirect("/dashboard");
-  }
   return (
     <main>
-      <LoginForm />
+      <h1 className="text-darkgreen text-3xl font-bold">Benvenuto!</h1>
+      <p>Was möchtest du heute machen?</p>
+      <Link
+        className="rounded-xl py-2 px-8 bg-gray-300 text-center w-64"
+        href="/wordform"
+      >
+        Vokabeln hinzufügen
+      </Link>
+      <Link
+        className="rounded-xl py-2 px-8 bg-gray-300 text-center w-64"
+        href="/wordlist"
+      >
+        Vokabeln üben
+      </Link>
+      <Link
+        className="rounded-xl py-2 px-8 bg-gray-300 text-center w-64"
+        href="/wordpractise"
+      >
+        Vokabeln prüfen
+      </Link>
     </main>
   );
 }
