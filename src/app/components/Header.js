@@ -9,7 +9,7 @@ export default function Header() {
 
   return (
     session && (
-      <header className="bg-white fixed top-0 left-0 h-16 w-full flex justify-end items-center gap-6 px-5">
+      <header className="bg-white fixed top-0 left-0 h-16 w-full flex justify-end items-center gap-6 px-5 z-10">
         <Link className="w-8 h-8 mx-2 bg-transparent" href="/login">
           <Image
             className="w-8 h-8"

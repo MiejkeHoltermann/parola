@@ -18,3 +18,16 @@ export async function POST(request) {
     );
   }
 }
+
+export async function GET() {
+  await connectMongoDB();
+  const words = await Word.find();
+  return NextResponse.json({ words });
+}
+
+export async function DELETE(request) {
+  const id = request.nextUrl.searchParams.get("id");
+  await connectMongoDB();
+  await Word.findByIdAndDelete(id);
+  return NextResponse.json({ message: "Word deleted" }, { status: 200 });
+}
