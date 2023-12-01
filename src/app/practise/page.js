@@ -33,15 +33,29 @@ export default function Practise() {
           const { wordsLevel1 } = userData;
           const { words } = data;
           const user = session.user;
-          const unpracticedWords = words.filter(
+          const wordsLevel0 = words.filter(
             (word) => !wordsLevel1.includes(word._id)
           );
-          if (unpracticedWords.length > 0) {
-            const index = Math.floor(Math.random() * unpracticedWords.length);
-            setActiveWord(unpracticedWords[index]);
-            setMessage("");
+          if (level === 0) {
+            if (wordsLevel0.length > 0) {
+              const index = Math.floor(Math.random() * wordsLevel0.length);
+              setActiveWord(wordsLevel0[index]);
+              setMessage("");
+            } else {
+              setMessage("Du hast alle Wörter auf Level 0 gelernt.");
+            }
+          }
+          if (level === 1) {
+            console.log(wordsLevel1);
+            if (wordsLevel1.length > 0) {
+              const index = Math.floor(Math.random() * wordsLevel1.length);
+              setActiveWord(wordsLevel1[index]);
+              setMessage("");
+            } else {
+              setMessage("Du hast alle Wörter auf Level 1 gelernt.");
+            }
           } else {
-            setMessage("Du hast alle Wörter gelernt.");
+            console.log("Du hast kein Level ausgewählt.");
           }
         } catch (error) {
           console.log("Error fetching user data.", error);
