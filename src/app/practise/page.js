@@ -26,11 +26,11 @@ export default function Practise() {
             cache: "no-store",
           });
           const userData = await response.json();
-          const { practicedWords } = userData;
+          const { wordsLevel1 } = userData;
           const { words } = data;
           const user = session.user;
           const unpracticedWords = words.filter(
-            (word) => !practicedWords.includes(word._id)
+            (word) => !wordsLevel1.includes(word._id)
           );
           if (unpracticedWords.length > 0) {
             const index = Math.floor(Math.random() * unpracticedWords.length);
@@ -58,13 +58,13 @@ export default function Practise() {
     if (activeWord.italianWord === e.target.form.italianWord.value) {
       setCorrect(true);
       const userId = session.user.id;
-      updatePracticedWords(userId, activeWord._id);
+      updateWordsLevel1(userId, activeWord._id);
     } else {
       setCorrect(false);
     }
   }
 
-  const updatePracticedWords = async (userId, wordId) => {
+  const updateWordsLevel1 = async (userId, wordId) => {
     try {
       await fetch(`/api/users/${userId}/practiced-words/${wordId}`, {
         method: "POST",

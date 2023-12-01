@@ -11,23 +11,23 @@ export async function POST(req, res) {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    if (!user.practicedWords.includes(wordId)) {
-      user.practicedWords.push(wordId);
+    if (!user.wordsLevel1.includes(wordId)) {
+      user.wordsLevel1.push(wordId);
 
       await user.save();
       return NextResponse.json(
-        { message: "Word added to practicedWords." },
+        { message: "Word added to WordsLevel1." },
         { status: 200 }
       );
     } else {
       return NextResponse.json(
-        { message: "Word already in practicedWords." },
+        { message: "Word already in WordsLevel1." },
         { status: 200 }
       );
     }
   } catch (error) {
     return NextResponse.json(
-      { message: "Error updating practicedWords." },
+      { message: "Error updating WordsLevel1." },
       { status: 500 }
     );
   }
