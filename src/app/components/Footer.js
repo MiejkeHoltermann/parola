@@ -37,7 +37,7 @@ export default function Footer() {
             height={100}
           />
         </Link>
-        <Link className="w-8 h-8 mx-2 bg-transparent" href="/practise">
+        <Link className="w-8 h-8 mx-2 bg-transparent" href="/levels">
           <Image
             className="w-8 h-8"
             src="/training-button.svg"

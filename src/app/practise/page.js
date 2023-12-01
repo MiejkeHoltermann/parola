@@ -3,17 +3,21 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState, useRef } from "react";
 import useSWR from "swr";
+import useLocalStorageState from "use-local-storage-state";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Practise() {
+  const [level, setLevel] = useLocalStorageState("level", {
+    defaultValue: null,
+  });
   const [activeWord, setActiveWord] = useState(null);
   const [correct, setCorrect] = useState(null);
   const [message, setMessage] = useState("");
   const [hint, setHint] = useState(null);
   const italianWordInputRef = useRef(null);
   const { data: session } = useSession();
-
+  console.log("Level: ", level);
   const { data } = useSWR("/api/words", fetcher);
 
   useEffect(() => {
