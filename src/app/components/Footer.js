@@ -28,7 +28,7 @@ export default function Footer() {
             height={100}
           />
         </Link>
-        <Link className="w-8 h-8 mx-2 bg-transparent" href="/wordlist">
+        <Link className="w-8 h-8 mx-2 bg-transparent" href="/wordlist-levels">
           <Image
             className="w-8 h-8"
             src="/practise-button.svg"
@@ -37,7 +37,7 @@ export default function Footer() {
             height={100}
           />
         </Link>
-        <Link className="w-8 h-8 mx-2 bg-transparent" href="/practise">
+        <Link className="w-8 h-8 mx-2 bg-transparent" href="/practise-levels">
           <Image
             className="w-8 h-8"
             src="/training-button.svg"

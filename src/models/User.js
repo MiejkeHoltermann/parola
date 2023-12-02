@@ -14,7 +14,10 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    practicedWords: [{ type: Schema.Types.ObjectId, ref: "Word" }],
+    wordsLevel1: [{ type: Schema.Types.ObjectId, ref: "Word" }],
+    wordsLevel2: [{ type: Schema.Types.ObjectId, ref: "Word" }],
+    wordsLevel3: [{ type: Schema.Types.ObjectId, ref: "Word" }],
+    wordsLevel4: [{ type: Schema.Types.ObjectId, ref: "Word" }],
   },
   { timestamps: true }
 );
