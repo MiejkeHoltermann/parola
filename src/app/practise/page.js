@@ -17,25 +17,29 @@ export default function Practise() {
   const [hint, setHint] = useState(null);
   const italianWordInputRef = useRef(null);
   const { data: session } = useSession();
-  console.log("Level: ", level);
   const { data } = useSWR("/api/words", fetcher);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!activeWord && session && data) {
+      if (!activeWord && session && data && level !== null) {
         const userId = session.user.id;
         try {
-          console.log(session.user.id);
           const response = await fetch(`/api/users/${userId}`, {
             cache: "no-store",
           });
           const userData = await response.json();
-          const { wordsLevel1 } = userData;
+          const { wordsLevel1, wordsLevel2, wordsLevel3, wordsLevel4 } =
+            userData;
           const { words } = data;
           const user = session.user;
           const wordsLevel0 = words.filter(
-            (word) => !wordsLevel1.includes(word._id)
+            (word) =>
+              !userData.wordsLevel1.some(
+                (level1Word) => level1Word._id === word._id
+              )
           );
+          console.log("Level 2", wordsLevel1);
+          console.log("level 3", wordsLevel2);
           if (level === 0) {
             if (wordsLevel0.length > 0) {
               const index = Math.floor(Math.random() * wordsLevel0.length);
@@ -44,15 +48,37 @@ export default function Practise() {
             } else {
               setMessage("Du hast alle Wörter auf Level 0 gelernt.");
             }
-          }
-          if (level === 1) {
-            console.log(wordsLevel1);
+          } else if (level === 1) {
             if (wordsLevel1.length > 0) {
               const index = Math.floor(Math.random() * wordsLevel1.length);
               setActiveWord(wordsLevel1[index]);
               setMessage("");
             } else {
               setMessage("Du hast alle Wörter auf Level 1 gelernt.");
+            }
+          } else if (level === 2) {
+            if (wordsLevel2.length > 0) {
+              const index = Math.floor(Math.random() * wordsLevel2.length);
+              setActiveWord(wordsLevel2[index]);
+              setMessage("");
+            } else {
+              setMessage("Du hast alle Wörter auf Level 2 gelernt.");
+            }
+          } else if (level === 3) {
+            if (wordsLevel3.length > 0) {
+              const index = Math.floor(Math.random() * wordsLevel3.length);
+              setActiveWord(wordsLevel3[index]);
+              setMessage("");
+            } else {
+              setMessage("Du hast alle Wörter auf Level 3 gelernt.");
+            }
+          } else if (level === 4) {
+            if (wordsLevel4.length > 0) {
+              const index = Math.floor(Math.random() * wordsLevel4.length);
+              setActiveWord(wordsLevel4[index]);
+              setMessage("");
+            } else {
+              setMessage("Du hast alle Wörter auf Level 4 gelernt.");
             }
           } else {
             console.log("Du hast kein Level ausgewählt.");
@@ -63,7 +89,7 @@ export default function Practise() {
       }
     };
     fetchData();
-  }, [data, activeWord, session]);
+  }, [data, activeWord, session, level]);
 
   useEffect(() => {}, [data, activeWord, session]);
 
@@ -76,18 +102,20 @@ export default function Practise() {
     if (activeWord.italianWord === e.target.form.italianWord.value) {
       setCorrect(true);
       const userId = session.user.id;
-      updateWordsLevel1(userId, activeWord._id);
+      if (level !== 4) {
+        updateWords(userId, level, activeWord._id);
+      }
     } else {
       setCorrect(false);
     }
   }
 
-  const updateWordsLevel1 = async (userId, wordId) => {
+  const updateWords = async (userId, level, wordId) => {
     try {
-      await fetch(`/api/users/${userId}/practiced-words/${wordId}`, {
+      await fetch(`/api/users/${userId}/${level}/${wordId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, wordId }),
+        body: JSON.stringify({ userId, level, wordId }),
       });
     } catch (error) {
       console.error("Error updating practiced words.", error);

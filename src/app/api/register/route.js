@@ -13,6 +13,9 @@ export async function POST(req) {
       email,
       password: hashedPassword,
       wordsLevel1: [],
+      wordsLevel2: [],
+      wordsLevel3: [],
+      wordsLevel4: [],
     });
 
     return NextResponse.json(

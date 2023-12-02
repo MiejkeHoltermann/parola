@@ -15,6 +15,9 @@ const userSchema = new Schema(
       required: true,
     },
     wordsLevel1: [{ type: Schema.Types.ObjectId, ref: "Word" }],
+    wordsLevel2: [{ type: Schema.Types.ObjectId, ref: "Word" }],
+    wordsLevel3: [{ type: Schema.Types.ObjectId, ref: "Word" }],
+    wordsLevel4: [{ type: Schema.Types.ObjectId, ref: "Word" }],
   },
   { timestamps: true }
 );

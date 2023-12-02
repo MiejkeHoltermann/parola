@@ -20,6 +20,21 @@ export default function Levels() {
     router.push("/practise");
   };
 
+  const filterLevel2 = () => {
+    setLevel(2);
+    router.push("/practise");
+  };
+
+  const filterLevel3 = () => {
+    setLevel(3);
+    router.push("/practise");
+  };
+
+  const filterLevel4 = () => {
+    setLevel(4);
+    router.push("/practise");
+  };
+
   return (
     <main>
       <button onClick={filterUnpracticed} className="underline">
@@ -27,6 +42,15 @@ export default function Levels() {
       </button>
       <button onClick={filterLevel1} className="underline">
         Level 1
+      </button>
+      <button onClick={filterLevel2} className="underline">
+        Level 2
+      </button>
+      <button onClick={filterLevel3} className="underline">
+        Level 3
+      </button>
+      <button onClick={filterLevel4} className="underline">
+        Level 4
       </button>
     </main>
   );
