@@ -32,14 +32,13 @@ export default function Practise() {
             userData;
           const { words } = data;
           const user = session.user;
-          const wordsLevel0 = words.filter(
-            (word) =>
-              !userData.wordsLevel1.some(
-                (level1Word) => level1Word._id === word._id
+          const wordsLevel0 = words.filter((word) => {
+            return ![1, 2, 3, 4].some((level) =>
+              userData[`wordsLevel${level}`].some(
+                (levelWord) => levelWord._id === word._id
               )
-          );
-          console.log("Level 2", wordsLevel1);
-          console.log("level 3", wordsLevel2);
+            );
+          });
           if (level === 0) {
             if (wordsLevel0.length > 0) {
               const index = Math.floor(Math.random() * wordsLevel0.length);
@@ -90,8 +89,6 @@ export default function Practise() {
     };
     fetchData();
   }, [data, activeWord, session, level]);
-
-  useEffect(() => {}, [data, activeWord, session]);
 
   if (!data) {
     return <p>Loading...</p>;
