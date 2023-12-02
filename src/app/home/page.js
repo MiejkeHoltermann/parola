@@ -1,9 +1,8 @@
 "use client";
-
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
-export default function UserInfo() {
+export default function Home() {
   const { data: session } = useSession();
 
   return (
@@ -13,20 +12,20 @@ export default function UserInfo() {
       </h1>
       <p>Was möchtest du heute machen?</p>
       <Link
-        className="rounded-xl py-2 px-8 bg-gray-300 text-center w-64"
-        href="/addwords"
+        className="bg-gray-800 flex justify-center gap-2 text-white w-80 font-bold rounded-xl cursor-pointer px-6 py-2"
+        href="/wordform"
       >
         Vokabeln hinzufügen
       </Link>
       <Link
-        className="rounded-xl py-2 px-8 bg-gray-300 text-center w-64"
-        href="/wordlist"
+        className="bg-gray-800 flex justify-center gap-2 text-white w-80 font-bold rounded-xl cursor-pointer px-6 py-2"
+        href="/wordlist-levels"
       >
-        Vokabeln üben
+        Vokabeln lernen
       </Link>
       <Link
-        className="rounded-xl py-2 px-8 bg-gray-300 text-center w-64"
-        href="/wordpractise"
+        className="bg-gray-800 flex justify-center gap-2 text-white w-80 font-bold rounded-xl cursor-pointer px-6 py-2"
+        href="/wordpractice-levels"
       >
         Vokabeln prüfen
       </Link>

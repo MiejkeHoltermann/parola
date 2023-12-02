@@ -16,10 +16,13 @@ export async function POST(req, res) {
     const wordsLevelUp = `wordsLevel${nextLevel}`;
 
     if (!user[wordsLevelUp].includes(wordId)) {
+      console.log(wordsLevelUp, wordId);
       user[wordsLevelUp].push(wordId);
-      const index = user[wordsLevel].indexOf(wordId);
-      if (index !== -1) {
-        user[wordsLevel].splice(index, 1);
+      if (level !== 1) {
+        const index = user[wordsLevel].indexOf(wordId);
+        if (index !== -1) {
+          user[wordsLevel].splice(index, 1);
+        }
       }
 
       await user.save();

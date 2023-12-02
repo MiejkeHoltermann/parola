@@ -1,16 +1,35 @@
 "use client";
-
 import { useState } from "react";
 
 export default function WordForm() {
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [germanWord, setGermanWord] = useState("");
+  const [italianWord, setItalianWord] = useState("");
+
+  const handleChangeGe = (e) => {
+    setGermanWord(e.target.value);
+  };
+
+  const handleChangeIt = (e) => {
+    setItalianWord(e.target.value);
+  };
+
+  const handleFocusGe = () => {
+    setGermanWord("");
+    setMessage("");
+  };
+
+  const handleFocusIt = () => {
+    setItalianWord("");
+    setMessage("");
+  };
 
   async function handleSubmit(e) {
     const germanWord = e.target.germanWord.value;
     const italianWord = e.target.italianWord.value;
     e.preventDefault();
     if (!germanWord || !italianWord) {
-      setError("Alle Felder müssen ausgefüllt sein.");
+      setMessage("Alle Felder müssen ausgefüllt sein");
       return;
     }
     try {
@@ -23,7 +42,7 @@ export default function WordForm() {
       });
       const { word1, word2 } = await responseWordExists.json();
       if (word1 && word2 && word1._id === word2._id) {
-        setError("Das Wort ist schon vorhanden.");
+        setMessage("Das Wort ist schon vorhanden");
         return;
       }
       const response = await fetch("/api/words", {
@@ -35,9 +54,9 @@ export default function WordForm() {
       });
       if (response.ok) {
         e.target.reset();
-        console.log("Erfolgreich hinzugefügt.");
+        setMessage("Erfolgreich hinzugefügt");
       } else {
-        console.log("Das Wort konnte nicht hinzugefügt werden.");
+        console.log("New word could not be created.");
       }
     } catch (error) {
       console.log(error);
@@ -49,28 +68,36 @@ export default function WordForm() {
       onSubmit={handleSubmit}
       className="w-full h-full flex flex-col items-center gap-6"
     >
-      <label htmlFor="germanWord-input" className="text-darkgreen">
-        Gib ein deutsches Wort ein.
+      <label htmlFor="germanWord" className="text-[0]">
+        Deutsch
       </label>
       <input
+        onChange={handleChangeGe}
+        onFocus={handleFocusGe}
+        value={germanWord}
         type="text"
-        id="germanWord-input"
+        id="germanWord"
         name="germanWord"
-        className="w-full min-h-[6rem] border border-gray-300 rounded-xl shadow-lg"
+        placeholder="Deutsches Wort"
+        className="pl-6 w-full min-h-[6rem] border border-gray-300 rounded-xl shadow-lg"
       />
-      <label htmlFor="italianWord-input" className="text-darkgreen">
-        Gib das italienische Wort ein.
+      <label htmlFor="italianWord" className="text-[0]">
+        Italienisch
       </label>
       <input
+        onChange={handleChangeIt}
+        onFocus={handleFocusIt}
+        value={italianWord}
         type="text"
-        id="italianWord-input"
+        id="italianWord"
         name="italianWord"
-        className="w-full min-h-[6rem] border border-gray-300 rounded-xl shadow-lg"
+        placeholder="Italienische Übersetzung"
+        className="pl-6 w-full min-h-[6rem] border border-gray-300 rounded-xl shadow-lg"
       />
-      {error && <p className="text-red-800">{error}</p>}
+      {message && <p>{message}</p>}
       <button
         type="submit"
-        className="rounded-xl py-2 px-8 bg-gray-300 text-center w-56"
+        className="bg-gray-800 flex justify-center gap-2 text-white w-60 font-bold rounded-xl cursor-pointer px-6 py-2"
       >
         Hinzufügen
       </button>

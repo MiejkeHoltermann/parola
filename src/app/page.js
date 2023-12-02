@@ -6,13 +6,11 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 export default async function Login() {
   const session = await getServerSession(authOptions);
   if (session) {
-    redirect("/dashboard");
+    redirect("/home");
   }
   return (
     <main>
-      <h1 className="font-bold my-4">
-        Um die App optimal nutzen zu können, logge dich jetzt ein.
-      </h1>
+      <h1 className="font-bold my-4">Jetzt anmelden.</h1>
       <LoginForm />
     </main>
   );

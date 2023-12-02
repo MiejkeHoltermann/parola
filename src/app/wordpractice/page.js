@@ -1,5 +1,4 @@
 "use client";
-
 import { useSession } from "next-auth/react";
 import { useEffect, useState, useRef } from "react";
 import useSWR from "swr";
@@ -28,60 +27,30 @@ export default function Practise() {
             cache: "no-store",
           });
           const userData = await response.json();
-          const { wordsLevel1, wordsLevel2, wordsLevel3, wordsLevel4 } =
+          const { wordsLevel2, wordsLevel3, wordsLevel4, wordsLevel5 } =
             userData;
           const { words } = data;
           const user = session.user;
-          const wordsLevel0 = words.filter((word) => {
-            return ![1, 2, 3, 4].some((level) =>
+          const wordsLevel1 = words.filter((word) => {
+            return ![2, 3, 4, 5].some((level) =>
               userData[`wordsLevel${level}`].some(
                 (levelWord) => levelWord._id === word._id
               )
             );
           });
-          if (level === 0) {
-            if (wordsLevel0.length > 0) {
-              const index = Math.floor(Math.random() * wordsLevel0.length);
-              setActiveWord(wordsLevel0[index]);
+          function provideRandomWords(level) {
+            const wordsLevel = `wordsLevel${level}`;
+            if (userData[wordsLevel].length > 0) {
+              const index = Math.floor(
+                Math.random() * userData[wordsLevel].length
+              );
+              setActiveWord(userData[wordsLevel][index]);
               setMessage("");
             } else {
-              setMessage("Du hast alle Wörter auf Level 0 gelernt.");
+              setMessage(`Du hast alle Wörter auf Level ${level} gelernt.`);
             }
-          } else if (level === 1) {
-            if (wordsLevel1.length > 0) {
-              const index = Math.floor(Math.random() * wordsLevel1.length);
-              setActiveWord(wordsLevel1[index]);
-              setMessage("");
-            } else {
-              setMessage("Du hast alle Wörter auf Level 1 gelernt.");
-            }
-          } else if (level === 2) {
-            if (wordsLevel2.length > 0) {
-              const index = Math.floor(Math.random() * wordsLevel2.length);
-              setActiveWord(wordsLevel2[index]);
-              setMessage("");
-            } else {
-              setMessage("Du hast alle Wörter auf Level 2 gelernt.");
-            }
-          } else if (level === 3) {
-            if (wordsLevel3.length > 0) {
-              const index = Math.floor(Math.random() * wordsLevel3.length);
-              setActiveWord(wordsLevel3[index]);
-              setMessage("");
-            } else {
-              setMessage("Du hast alle Wörter auf Level 3 gelernt.");
-            }
-          } else if (level === 4) {
-            if (wordsLevel4.length > 0) {
-              const index = Math.floor(Math.random() * wordsLevel4.length);
-              setActiveWord(wordsLevel4[index]);
-              setMessage("");
-            } else {
-              setMessage("Du hast alle Wörter auf Level 4 gelernt.");
-            }
-          } else {
-            console.log("Du hast kein Level ausgewählt.");
           }
+          provideRandomWords(level);
         } catch (error) {
           console.log("Error fetching user data.", error);
         }
@@ -99,7 +68,7 @@ export default function Practise() {
     if (activeWord.italianWord === e.target.form.italianWord.value) {
       setCorrect(true);
       const userId = session.user.id;
-      if (level !== 4) {
+      if (level !== 5) {
         updateWords(userId, level, activeWord._id);
       }
     } else {
