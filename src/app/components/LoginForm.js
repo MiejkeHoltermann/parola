@@ -1,5 +1,4 @@
 "use client";
-
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -21,11 +20,9 @@ export default function LoginForm() {
         redirect: false,
       });
       if (response.error) {
-        setError(
-          "Zu dieser Email-Adresse existiert noch kein Kundenkonto. Du musst dich erst registrieren."
-        );
+        setError("Du hast noch kein Konto");
       }
-      router.replace("dashboard");
+      router.replace("home");
     } catch (error) {
       console.log(error);
     }
@@ -44,16 +41,15 @@ export default function LoginForm() {
         placeholder="Passwort"
       />
       <button className="bg-green-600 text-white font-bold cursor-pointer px-6 py-2">
-        Login
+        Anmelden
       </button>
       {error && (
-        <div className="text-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+        <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
           {error}
         </div>
       )}
       <Link className="text-sm mt-3" href={"/register"}>
-        Noch kein Kundenkonto? Jetzt{" "}
-        <span className="underline">registrieren</span>.
+        Noch kein Konto? Jetzt <span className="underline">registrieren</span>.
       </Link>
     </form>
   );

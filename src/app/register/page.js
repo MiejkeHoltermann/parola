@@ -6,12 +6,12 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 export default async function Register() {
   const session = await getServerSession(authOptions);
   if (session) {
-    redirect("/dashboard");
+    redirect("/home");
   }
   return (
     <main>
       <h1 className="font-bold my-4">Jetzt registrieren</h1>
-      <RegisterForm />{" "}
+      <RegisterForm />
     </main>
   );
 }

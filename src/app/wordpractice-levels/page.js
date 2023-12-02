@@ -8,7 +8,7 @@ import LevelButton from "../components/LevelButton";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-export default function WordListLevels() {
+export default function WordPracticeLevels() {
   const [level, setLevel] = useLocalStorageState("level", {
     defaultValue: null,
   });
@@ -59,12 +59,16 @@ export default function WordListLevels() {
 
   const filterLevel = (selectedLevel) => {
     setLevel(selectedLevel);
-    router.push("/wordlist");
+    router.push("/wordpractice");
   };
 
   return (
     <main>
       <h1 className="text-xl font-bold">Wähle ein Level aus</h1>
+      <p>
+        Jedes Wort, das du richtig benennst, steigt ein Level auf. So festigst
+        du durch regelmäßige Wiederholungen deinen Wortschatz.
+      </p>
       {lengths.map((length, index) => (
         <LevelButton
           key={index + 1}

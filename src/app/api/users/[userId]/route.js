@@ -6,16 +6,16 @@ export async function GET(request, { params }) {
   const { userId } = params;
   await connectMongoDB();
   const user = await User.findOne({ _id: userId })
-    .populate("wordsLevel1")
     .populate("wordsLevel2")
     .populate("wordsLevel3")
-    .populate("wordsLevel4");
-  const wordsLevel1 = user.wordsLevel1;
+    .populate("wordsLevel4")
+    .populate("wordsLevel5");
   const wordsLevel2 = user.wordsLevel2;
   const wordsLevel3 = user.wordsLevel3;
   const wordsLevel4 = user.wordsLevel4;
+  const wordsLevel5 = user.wordsLevel5;
   return NextResponse.json(
-    { wordsLevel1, wordsLevel2, wordsLevel3, wordsLevel4 },
+    { wordsLevel2, wordsLevel3, wordsLevel4, wordsLevel5 },
     { status: 200 }
   );
 }

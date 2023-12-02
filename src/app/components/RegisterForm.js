@@ -14,10 +14,22 @@ export default function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
-      setError("All fields are necessary.");
+      setError("Alle Felder müssen ausgefüllt sein");
       return;
     }
     try {
+      const responseUserExists = await fetch("api/userExists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      const { user } = await responseUserExists.json();
+      if (user) {
+        setError("E-mail schon vorhanden");
+        return;
+      }
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -61,8 +73,8 @@ export default function RegisterForm() {
         </div>
       )}
       <Link className="text-sm mt-3 text-right" href="/">
-        Du hast schon ein Konto?{" "}
-        <span className="underline">Jetzt anmelden</span>
+        Du hast schon ein Konto? Jetzt{" "}
+        <span className="underline">anmelden</span>
       </Link>
     </form>
   );
