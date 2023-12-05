@@ -5,71 +5,36 @@ import { useSession } from "next-auth/react";
 import WordList from "../components/WordList";
 import useLocalStorageState from "use-local-storage-state";
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
-
 export default function WordListPage() {
   const [level, setLevel] = useLocalStorageState("level", {
     defaultValue: null,
   });
+  const [customWords, setCustomWords] = useState([]);
   const { data: session } = useSession();
-  const { data } = useSWR("/api/words", fetcher);
-
-  const [wordsLevel1, setWordsLevel1] = useState([]);
-  const [wordsLevel2, setWordsLevel2] = useState([]);
-  const [wordsLevel3, setWordsLevel3] = useState([]);
-  const [wordsLevel4, setWordsLevel4] = useState([]);
-  const [wordsLevel5, setWordsLevel5] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (data && session) {
+      if (session && level) {
         const userId = session.user.id;
         try {
-          const response = await fetch(`/api/users/${userId}`, {
+          const response = await fetch(`/api/users/${userId}/${level}`, {
             cache: "no-store",
           });
-          const userData = await response.json();
-          const { wordsLevel2, wordsLevel3, wordsLevel4, wordsLevel5 } =
-            userData;
-          setWordsLevel2(wordsLevel2);
-          setWordsLevel3(wordsLevel3);
-          setWordsLevel4(wordsLevel4);
-          setWordsLevel5(wordsLevel5);
-          const { words } = data;
-          const wordsLevel1 = words.filter((word) => {
-            return ![2, 3, 4, 5].some((level) =>
-              userData[`wordsLevel${level}`].some(
-                (levelWord) => levelWord._id === word._id
-              )
-            );
-          });
-          setWordsLevel1(wordsLevel1);
+          const { customWordsFiltered } = await response.json();
+          setCustomWords(customWordsFiltered);
         } catch (error) {
-          console.log(error);
+          console.log("Error fetching data.", error);
         }
       }
     };
     fetchData();
-  }, [data, session]);
-
-  if (!data) {
-    return <p>Loading...</p>;
-  }
-  const levelWordsMap = {
-    1: wordsLevel1,
-    2: wordsLevel2,
-    3: wordsLevel3,
-    4: wordsLevel4,
-    5: wordsLevel5,
-  };
-
-  const currentLevelWords = levelWordsMap[level];
+  }, [session, level]);
 
   return (
     <main>
-      {currentLevelWords.length > 0 ? (
+      {customWords.length > 0 ? (
         <>
-          {currentLevelWords.map((word) => (
+          {customWords.map((word) => (
             <WordList
               key={word._id}
               id={word._id}

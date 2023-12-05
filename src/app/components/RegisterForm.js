@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function RegisterForm() {
   const [name, setName] = useState("");
@@ -36,9 +37,13 @@ export default function RegisterForm() {
         body: JSON.stringify({ name, email, password }),
       });
       if (res.ok) {
-        const form = e.target;
-        form.reset();
-        router.replace("/");
+        await signIn("credentials", {
+          email: email,
+          password: password,
+          redirect: true,
+          callbackUrl: "/import-data",
+        });
+        router.push("/import-data");
       } else {
         console.log("User registration failed.");
       }

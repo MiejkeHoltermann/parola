@@ -1,21 +1,64 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import Word from "@/models/Word";
 import { NextResponse } from "next/server";
+
+export async function POST(req, res) {
+  const { userId } = await req.json();
+  await connectMongoDB();
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const defaultWords = await Word.find();
+    user.customWords.push(...defaultWords);
+    user.customWords.map((word) => (word.level = 1));
+    await user.save();
+    return NextResponse.json(
+      { message: "Data imported for user." },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error importing data for user." },
+      { status: 500 }
+    );
+  }
+}
 
 export async function GET(request, { params }) {
   const { userId } = params;
   await connectMongoDB();
-  const user = await User.findOne({ _id: userId })
-    .populate("wordsLevel2")
-    .populate("wordsLevel3")
-    .populate("wordsLevel4")
-    .populate("wordsLevel5");
-  const wordsLevel2 = user.wordsLevel2;
-  const wordsLevel3 = user.wordsLevel3;
-  const wordsLevel4 = user.wordsLevel4;
-  const wordsLevel5 = user.wordsLevel5;
-  return NextResponse.json(
-    { wordsLevel2, wordsLevel3, wordsLevel4, wordsLevel5 },
-    { status: 200 }
-  );
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const wordsLevel1 = user.customWords.filter(
+      (word) => word.level == 1
+    ).length;
+    const wordsLevel2 = user.customWords.filter(
+      (word) => word.level == 2
+    ).length;
+    const wordsLevel3 = user.customWords.filter(
+      (word) => word.level == 3
+    ).length;
+    const wordsLevel4 = user.customWords.filter(
+      (word) => word.level == 4
+    ).length;
+    const wordsLevel5 = user.customWords.filter(
+      (word) => word.level == 5
+    ).length;
+
+    return NextResponse.json(
+      { wordsLevel1, wordsLevel2, wordsLevel3, wordsLevel4, wordsLevel5 },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error loading filtered words." },
+      { status: 500 }
+    );
+  }
 }

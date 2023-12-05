@@ -1,6 +1,7 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -10,7 +11,7 @@ export default function Home() {
       <h1 className="text-darkgreen text-3xl font-bold">
         Hallo, {session?.user?.name}!
       </h1>
-      <p>Was möchtest du heute machen?</p>
+      Was möchtest du heute machen?
       <Link
         className="bg-gray-800 flex justify-center gap-2 text-white w-80 font-bold rounded-xl cursor-pointer px-6 py-2"
         href="/wordform"
