@@ -14,10 +14,14 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    wordsLevel2: [{ type: Schema.Types.ObjectId, ref: "Word" }],
-    wordsLevel3: [{ type: Schema.Types.ObjectId, ref: "Word" }],
-    wordsLevel4: [{ type: Schema.Types.ObjectId, ref: "Word" }],
-    wordsLevel5: [{ type: Schema.Types.ObjectId, ref: "Word" }],
+    customWords: [
+      {
+        _id: { type: String, required: true },
+        germanWord: { type: String, required: true },
+        italianWord: { type: String, required: true },
+        level: { type: Number },
+      },
+    ],
   },
   { timestamps: true }
 );

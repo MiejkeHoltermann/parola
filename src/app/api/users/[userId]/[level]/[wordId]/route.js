@@ -11,34 +11,22 @@ export async function POST(req, res) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const wordsLevel = `wordsLevel${level}`;
-    const nextLevel = level + 1;
-    const wordsLevelUp = `wordsLevel${nextLevel}`;
-
-    if (!user[wordsLevelUp].includes(wordId)) {
-      console.log(wordsLevelUp, wordId);
-      user[wordsLevelUp].push(wordId);
-      if (level !== 1) {
-        const index = user[wordsLevel].indexOf(wordId);
-        if (index !== -1) {
-          user[wordsLevel].splice(index, 1);
-        }
-      }
-
-      await user.save();
-      return NextResponse.json(
-        { message: "Word added to WordsLevel1." },
-        { status: 200 }
-      );
-    } else {
-      return NextResponse.json(
-        { message: "Word already in WordsLevel1." },
-        { status: 200 }
-      );
+    const word = user.customWords.find(
+      (word) => word._id.toString() === wordId
+    );
+    console.log(word);
+    if (!word) {
+      return res.status(404).json({ message: "Word not found." });
     }
+    word.level = level + 1;
+    await user.save();
+    return NextResponse.json(
+      { message: "Word added to this level." },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json(
-      { message: "Error updating WordsLevel1." },
+      { message: "Error updating this level." },
       { status: 500 }
     );
   }

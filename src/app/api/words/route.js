@@ -1,19 +1,27 @@
 import { NextResponse } from "next/server";
 import { connectMongoDB } from "@/lib/mongodb";
 import Word from "@/models/Word";
+import User from "@/models/User";
+import { uid } from "uid/secure";
 
-export async function POST(request) {
+export async function POST(req, res) {
+  const { userId, germanWord, italianWord } = await req.json();
+  await connectMongoDB();
   try {
-    const { germanWord, italianWord } = await request.json();
-    await connectMongoDB();
-    await Word.create({ germanWord, italianWord });
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const _id = uid();
+    user.customWords.push({ _id, germanWord, italianWord, level: 1 });
+    await user.save();
     return NextResponse.json(
-      { message: "Erfolgreich hinzugefügt." },
-      { status: 201 }
+      { message: "Word added to WordsLevel1." },
+      { status: 200 }
     );
   } catch (error) {
     return NextResponse.json(
-      { message: "Es ist ein Fehler aufgetreten." },
+      { message: "Error updating WordsLevel1." },
       { status: 500 }
     );
   }

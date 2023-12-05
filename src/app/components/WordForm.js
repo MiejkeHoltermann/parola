@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
+import { getSession, useSession } from "next-auth/react";
 
 export default function WordForm() {
   const [message, setMessage] = useState("");
   const [germanWord, setGermanWord] = useState("");
   const [italianWord, setItalianWord] = useState("");
+  const { data: session } = useSession();
 
   const handleChangeGe = (e) => {
     setGermanWord(e.target.value);
@@ -33,12 +35,18 @@ export default function WordForm() {
       return;
     }
     try {
+      const sessionData = await getSession();
+      if (!sessionData) {
+        console.log("Session data is undefined.");
+        return;
+      }
+      const userId = sessionData.user.id;
       const responseWordExists = await fetch("api/wordExists", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ germanWord, italianWord }),
+        body: JSON.stringify({ userId, germanWord, italianWord }),
       });
       const { word1, word2 } = await responseWordExists.json();
       if (word1 && word2 && word1._id === word2._id) {
@@ -50,7 +58,7 @@ export default function WordForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ germanWord, italianWord }),
+        body: JSON.stringify({ userId, germanWord, italianWord }),
       });
       if (response.ok) {
         e.target.reset();

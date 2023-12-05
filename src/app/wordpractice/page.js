@@ -1,10 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useEffect, useState, useRef } from "react";
-import useSWR from "swr";
 import useLocalStorageState from "use-local-storage-state";
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Practise() {
   const [level, setLevel] = useLocalStorageState("level", {
@@ -16,35 +13,22 @@ export default function Practise() {
   const [hint, setHint] = useState(null);
   const italianWordInputRef = useRef(null);
   const { data: session } = useSession();
-  const { data } = useSWR("/api/words", fetcher);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!activeWord && session && data && level !== null) {
+      if (!activeWord && session && level) {
         const userId = session.user.id;
         try {
-          const response = await fetch(`/api/users/${userId}`, {
+          const response = await fetch(`/api/users/${userId}/${level}`, {
             cache: "no-store",
           });
-          const userData = await response.json();
-          const { wordsLevel2, wordsLevel3, wordsLevel4, wordsLevel5 } =
-            userData;
-          const { words } = data;
-          const user = session.user;
-          const wordsLevel1 = words.filter((word) => {
-            return ![2, 3, 4, 5].some((level) =>
-              userData[`wordsLevel${level}`].some(
-                (levelWord) => levelWord._id === word._id
-              )
-            );
-          });
+          const { customWordsFiltered } = await response.json();
           function provideRandomWords(level) {
-            const wordsLevel = `wordsLevel${level}`;
-            if (userData[wordsLevel].length > 0) {
+            if (customWordsFiltered.length > 0) {
               const index = Math.floor(
-                Math.random() * userData[wordsLevel].length
+                Math.random() * customWordsFiltered.length
               );
-              setActiveWord(userData[wordsLevel][index]);
+              setActiveWord(customWordsFiltered[index]);
               setMessage("");
             } else {
               setMessage(`Du hast alle Wörter auf Level ${level} gelernt.`);
@@ -57,11 +41,7 @@ export default function Practise() {
       }
     };
     fetchData();
-  }, [data, activeWord, session, level]);
-
-  if (!data) {
-    return <p>Loading...</p>;
-  }
+  }, [activeWord, session, level]);
 
   function checkAnswer(e) {
     e.preventDefault();
