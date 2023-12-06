@@ -10,7 +10,7 @@ export default async function Login() {
   }
   return (
     <main>
-      <h1 className="font-bold my-4">Jetzt anmelden.</h1>
+      <h1 className="text-2xl font-bold">Parola</h1>
       <LoginForm />
     </main>
   );

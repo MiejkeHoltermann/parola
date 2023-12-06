@@ -10,7 +10,6 @@ export default async function Register() {
   }
   return (
     <main>
-      <h1 className="font-bold my-4">Jetzt registrieren</h1>
       <RegisterForm />
     </main>
   );

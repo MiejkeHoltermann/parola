@@ -13,6 +13,7 @@ export async function POST(req) {
       email,
       password: hashedPassword,
       customWords: [],
+      activeWords: [],
     });
 
     return NextResponse.json(

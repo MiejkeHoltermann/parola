@@ -22,6 +22,14 @@ const userSchema = new Schema(
         level: { type: Number },
       },
     ],
+    activeWords: [
+      {
+        _id: { type: String, required: true },
+        germanWord: { type: String, required: true },
+        italianWord: { type: String, required: true },
+        level: { type: Number },
+      },
+    ],
   },
   { timestamps: true }
 );

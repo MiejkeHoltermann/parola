@@ -13,7 +13,12 @@ export async function POST(req, res) {
       return res.status(404).json({ message: "User not found" });
     }
     const _id = uid();
-    user.customWords.push({ _id, germanWord, italianWord, level: 1 });
+    user.customWords.push({
+      _id,
+      germanWord,
+      italianWord,
+      level: 1,
+    });
     await user.save();
     return NextResponse.json(
       { message: "Word added to WordsLevel1." },
@@ -31,11 +36,4 @@ export async function GET() {
   await connectMongoDB();
   const words = await Word.find();
   return NextResponse.json({ words });
-}
-
-export async function DELETE(request) {
-  const id = request.nextUrl.searchParams.get("id");
-  await connectMongoDB();
-  await Word.findByIdAndDelete(id);
-  return NextResponse.json({ message: "Word deleted" }, { status: 200 });
 }

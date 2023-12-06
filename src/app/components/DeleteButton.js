@@ -1,22 +1,30 @@
 "use client";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import useSWR, { useSWRConfig } from "swr";
+import { useSWRConfig } from "swr";
 import { HiOutlineTrash } from "react-icons/hi";
+import { useSession } from "next-auth/react";
+import useLocalStorageState from "use-local-storage-state";
+import { useRouter } from "next/navigation";
 
 export default function DeleteButton({ id }) {
   const { mutate } = useSWRConfig();
-  const router = useRouter();
+  const { data: session } = useSession();
+
   const removeWord = async () => {
     const confirmed = confirm("Are you sure?");
 
-    if (confirmed) {
-      const res = await fetch(`http://localhost:3000/api/words?id=${id}`, {
+    if (confirmed && session) {
+      const userId = session.user.id;
+      const wordId = id;
+      const res = await fetch("/api/deleteWord", {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, wordId }),
       });
 
       if (res.ok) {
-        mutate("/api/words");
+        mutate("/api/deleteWords");
       }
     }
   };
