@@ -11,6 +11,7 @@ export default function Practise() {
   const [correct, setCorrect] = useState(null);
   const [message, setMessage] = useState("");
   const [hint, setHint] = useState(null);
+  const [index, setIndex] = useState(0);
   const italianWordInputRef = useRef(null);
   const { data: session } = useSession();
 
@@ -19,29 +20,30 @@ export default function Practise() {
       if (!activeWord && session && level) {
         const userId = session.user.id;
         try {
-          const response = await fetch(`/api/users/${userId}/${level}`, {
-            cache: "no-store",
-          });
-          const { customWordsFiltered } = await response.json();
-          function provideRandomWords(level) {
-            if (customWordsFiltered.length > 0) {
-              const index = Math.floor(
-                Math.random() * customWordsFiltered.length
-              );
-              setActiveWord(customWordsFiltered[index]);
-              setMessage("");
-            } else {
-              setMessage(`Du hast alle Wörter auf Level ${level} gelernt.`);
+          const response = await fetch(
+            `/api/users/${userId}/${level}/activeWords`,
+            {
+              cache: "no-store",
             }
+          );
+          const { activeWords } = await response.json();
+          if (activeWords.length > 0) {
+            function provideNewWord() {
+              setActiveWord(activeWords[index]);
+              setMessage("");
+              setIndex((prevIndex) => (prevIndex + 1) % activeWords.length);
+            }
+            provideNewWord(index);
+          } else {
+            setMessage(`Du hast alle Wörter auf Level ${level} gelernt.`);
           }
-          provideRandomWords(level);
         } catch (error) {
           console.log("Error fetching user data.", error);
         }
       }
     };
     fetchData();
-  }, [activeWord, session, level]);
+  }, [activeWord, session, level, index]);
 
   function checkAnswer(e) {
     e.preventDefault();

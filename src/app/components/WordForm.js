@@ -1,12 +1,12 @@
 "use client";
 import { useState } from "react";
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 
 export default function WordForm() {
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [germanWord, setGermanWord] = useState("");
   const [italianWord, setItalianWord] = useState("");
-  const { data: session } = useSession();
 
   const handleChangeGe = (e) => {
     setGermanWord(e.target.value);
@@ -18,12 +18,14 @@ export default function WordForm() {
 
   const handleFocusGe = () => {
     setGermanWord("");
-    setMessage("");
+    setError("");
+    setSuccessMessage("");
   };
 
   const handleFocusIt = () => {
     setItalianWord("");
-    setMessage("");
+    setError("");
+    setSuccessMessage("");
   };
 
   async function handleSubmit(e) {
@@ -31,7 +33,7 @@ export default function WordForm() {
     const italianWord = e.target.italianWord.value;
     e.preventDefault();
     if (!germanWord || !italianWord) {
-      setMessage("Alle Felder müssen ausgefüllt sein");
+      setError("Alle Felder müssen ausgefüllt sein");
       return;
     }
     try {
@@ -50,7 +52,7 @@ export default function WordForm() {
       });
       const { word1, word2 } = await responseWordExists.json();
       if (word1 && word2 && word1._id === word2._id) {
-        setMessage("Das Wort ist schon vorhanden");
+        setError("Das Wort ist schon vorhanden");
         return;
       }
       const response = await fetch("/api/words", {
@@ -61,8 +63,9 @@ export default function WordForm() {
         body: JSON.stringify({ userId, germanWord, italianWord }),
       });
       if (response.ok) {
-        e.target.reset();
-        setMessage("Erfolgreich hinzugefügt");
+        setGermanWord("");
+        setItalianWord("");
+        setSuccessMessage("Erfolgreich hinzugefügt");
       } else {
         console.log("New word could not be created.");
       }
@@ -102,7 +105,10 @@ export default function WordForm() {
         placeholder="Italienische Übersetzung"
         className="pl-6 w-full min-h-[6rem] border border-gray-300 rounded-xl shadow-lg"
       />
-      {message && <p>{message}</p>}
+      {error && <p className="text-red-600 font-bold">{error}</p>}
+      {successMessage && (
+        <p className="text-green-600 font-bold">{successMessage}</p>
+      )}
       <button
         type="submit"
         className="bg-gray-800 flex justify-center gap-2 text-white w-60 font-bold rounded-xl cursor-pointer px-6 py-2"

@@ -1,7 +1,6 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useEffect } from "react";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -23,12 +22,6 @@ export default function Home() {
         href="/wordlist-levels"
       >
         Vokabeln lernen
-      </Link>
-      <Link
-        className="bg-gray-800 flex justify-center gap-2 text-white w-80 font-bold rounded-xl cursor-pointer px-6 py-2"
-        href="/wordpractice-levels"
-      >
-        Vokabeln prüfen
       </Link>
       <button
         onClick={() => signOut()}
