@@ -14,7 +14,6 @@ export async function DELETE(request) {
     const wordIndex = user.customWords.findIndex(
       (word) => word._id.toString() === wordId
     );
-    console.log(wordIndex);
     if (wordIndex === -1) {
       return res.status(404).json({ message: "Word not found." });
     }

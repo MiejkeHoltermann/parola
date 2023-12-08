@@ -2,9 +2,14 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState, useRef } from "react";
 import useLocalStorageState from "use-local-storage-state";
+import TipingPracticeForm from "../components/TipingPracticeForm";
+import WordSaladPracticeForm from "../components/WordsaladPracticeForm";
 
 export default function Practise() {
   const [level, setLevel] = useLocalStorageState("level", {
+    defaultValue: null,
+  });
+  const [practiceType, setPracticeType] = useLocalStorageState("practiceType", {
     defaultValue: null,
   });
   const [activeWord, setActiveWord] = useState(null);
@@ -13,12 +18,15 @@ export default function Practise() {
   const [hint, setHint] = useState(null);
   const [index, setIndex] = useState(0);
   const italianWordInputRef = useRef(null);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
+    if (status === "loading") {
+      return;
+    }
     const fetchData = async () => {
-      if (!activeWord && session && level) {
-        const userId = session.user.id;
+      const userId = session.user.id;
+      if (!activeWord && userId && level) {
         try {
           const response = await fetch(
             `/api/users/${userId}/${level}/activeWords`,
@@ -43,20 +51,7 @@ export default function Practise() {
       }
     };
     fetchData();
-  }, [activeWord, session, level, index]);
-
-  function checkAnswer(e) {
-    e.preventDefault();
-    if (activeWord.italianWord === e.target.form.italianWord.value) {
-      setCorrect(true);
-      const userId = session.user.id;
-      if (level !== 5) {
-        updateWords(userId, level, activeWord._id);
-      }
-    } else {
-      setCorrect(false);
-    }
-  }
+  }, [activeWord, status, session, level, index]);
 
   const updateWords = async (userId, level, wordId) => {
     try {
@@ -70,17 +65,11 @@ export default function Practise() {
     }
   };
 
-  const clearItalianWordInput = () => {
-    if (italianWordInputRef.current) {
-      italianWordInputRef.current.value = "";
-    }
-  };
-
   function newQuestion() {
     setActiveWord(null);
     setCorrect(null);
     setHint(null);
-    clearItalianWordInput();
+    italianWordInputRef.current.value = "";
   }
 
   function showHint() {
@@ -92,42 +81,28 @@ export default function Practise() {
       {message ? (
         <p>{message}</p>
       ) : (
-        <>
-          <form id="form" className="w-full flex flex-col items-center gap-6">
-            <label htmlFor="germanWord-input" className="text-[0]">
-              deutsches Wort
-            </label>
-            <input
-              type="text"
-              id="germanWord-input"
-              name="germanWord"
-              value={activeWord ? activeWord.germanWord : ""}
-              readOnly
-              className="py-4 px-6 w-full border-gray-400 rounded-xl shadow-xl"
+        <div className="flex flex-col items-center gap-[1.6rem] w-full ">
+          {practiceType === "typing" ? (
+            <TipingPracticeForm
+              activeWord={activeWord}
+              italianWordInputRef={italianWordInputRef}
+              correct={correct}
+              setCorrect={setCorrect}
+              newQuestion={newQuestion}
+              updateWords={updateWords}
+              level={level}
             />
-            <label htmlFor="italianWord-input" className="text-[0]">
-              italienisches Wort
-            </label>
-            <input
-              type="text"
-              id="italianWord-input"
-              name="italianWord"
-              ref={italianWordInputRef}
-              className="py-4 px-6 w-full border-gray-400 rounded-xl shadow-xl"
+          ) : practiceType === "wordsalad" ? (
+            <WordSaladPracticeForm
+              activeWord={activeWord}
+              italianWordInputRef={italianWordInputRef}
+              correct={correct}
+              setCorrect={setCorrect}
+              newQuestion={newQuestion}
+              updateWords={updateWords}
+              level={level}
             />
-            {correct === true ? (
-              <p className="text-green-600">Die Antwort ist richtig.</p>
-            ) : correct === false ? (
-              <p className="text-red-600">Versuch es nochmal.</p>
-            ) : null}
-            <button
-              onClick={correct ? newQuestion : checkAnswer}
-              type="button"
-              className="py-6 px-8 bg-gray-400 w-80"
-            >
-              {correct ? "Nächste Frage" : "Prüfen"}
-            </button>
-          </form>
+          ) : null}
           <button
             onClick={showHint}
             className="w-full underline flex justify-end pointer-events-auto"
@@ -135,8 +110,14 @@ export default function Practise() {
             Lösung anzeigen
           </button>
           {hint ? <p className="w-full flex justify-end">{hint}</p> : null}
-        </>
+        </div>
       )}
     </main>
   );
 }
+
+/* {message ? (
+  <p>{message}</p>
+) : (
+  
+)} */
