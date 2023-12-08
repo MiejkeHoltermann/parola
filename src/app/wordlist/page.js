@@ -6,6 +6,8 @@ import useLocalStorageState from "use-local-storage-state";
 import Link from "next/link";
 import { shuffle } from "fast-shuffle";
 import { useRouter } from "next/navigation";
+import Lottie from "react-lottie-player";
+import lottieJson from "../../../public/loading-animation.json";
 
 export default function WordListPage() {
   const [level, setLevel] = useLocalStorageState("level", {
@@ -15,25 +17,37 @@ export default function WordListPage() {
     defaultValue: null,
   });
   const [customWords, setCustomWords] = useState([]);
-  const { data: session } = useSession();
+  const [loading, setLoading] = useState(true);
+  const { data: session, status } = useSession();
   const router = useRouter();
   const userId = session.user.id;
 
   useEffect(() => {
     const fetchData = async () => {
+      if (status === "loading") {
+        return;
+      }
       if (userId && level && number) {
-        const response = await fetch(`/api/users/${userId}/${level}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-        const { customWordsFiltered } = await response.json();
-        const shuffledWords = shuffle(customWordsFiltered);
-        const activeWords = shuffledWords.slice(0, number);
-        setCustomWords(activeWords);
+        try {
+          const response = await fetch(`/api/users/${userId}/${level}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          });
+          const { customWordsFiltered } = await response.json();
+          const shuffledWords = shuffle(customWordsFiltered);
+          const activeWords = shuffledWords.slice(0, number);
+          setCustomWords(activeWords);
+        } catch (error) {
+          console.error("Error fetching data.", error);
+        } finally {
+          setLoading(false);
+        }
       }
     };
-    fetchData();
-  }, [userId, level, number]);
+    if (status === "authenticated") {
+      fetchData();
+    }
+  }, [status, userId, level, number]);
 
   const handleClick = async () => {
     try {
@@ -43,8 +57,7 @@ export default function WordListPage() {
         body: JSON.stringify({ userId, customWords }),
       });
       if (response.ok) {
-        router.push("/wordpractice");
-        console.log("ok");
+        router.push("/practice-type");
       } else {
         console.log("Error fetching data. Status: ", response.status);
       }
@@ -55,7 +68,11 @@ export default function WordListPage() {
 
   return (
     <main>
-      {customWords.length > 0 ? (
+      {status === "loading" ? (
+        <div className="flex items-center justify-center h-screen">
+          <Lottie loop animationData={lottieJson} play />
+        </div>
+      ) : customWords.length > 0 ? (
         <>
           <p>Klicke auf ein Wort, um dir die Übersetzung anzeigen zu lassen.</p>
           {customWords.map((word) => (
