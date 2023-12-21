@@ -14,6 +14,8 @@ export async function POST(req) {
       password: hashedPassword,
       customWords: [],
       activeWords: [],
+      customVerbs: [],
+      activeVerbs: [],
     });
 
     return NextResponse.json(
