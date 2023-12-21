@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { HiDocumentAdd } from "react-icons/hi";
 import { HiHome } from "react-icons/hi";
+import { HiLightningBolt } from "react-icons/hi";
 import { HiQuestionMarkCircle } from "react-icons/hi";
 
 export default function Footer() {
@@ -16,6 +17,9 @@ export default function Footer() {
         </Link>
         <Link className="w-8 h-8 mx-2 bg-transparent" href="/home">
           <HiHome className="w-10 h-10" />
+        </Link>
+        <Link className="w-8 h-8 mx-2 bg-transparent" href="/verb-form">
+          <HiLightningBolt className="w-10 h-10" />
         </Link>
         <Link className="w-8 h-8 mx-2 bg-transparent" href="/wordlist-levels">
           <HiQuestionMarkCircle className="w-10 h-10" />

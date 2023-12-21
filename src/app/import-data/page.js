@@ -49,7 +49,7 @@ export default function ImportData() {
             checked={importData}
             onChange={handleCheckboxChange}
           />
-          <label htmlFor="import">Wortschatz importieren</label>{" "}
+          <label htmlFor="import">Wortschatz importieren</label>
         </div>
         <button
           type="submit"

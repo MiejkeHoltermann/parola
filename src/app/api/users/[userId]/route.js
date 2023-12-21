@@ -1,6 +1,7 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import Word from "@/models/Word";
+import Verb from "@/models/Verb";
 import { NextResponse } from "next/server";
 
 export async function POST(req, res) {
@@ -14,6 +15,8 @@ export async function POST(req, res) {
     const defaultWords = await Word.find();
     user.customWords.push(...defaultWords);
     user.customWords.map((word) => (word.level = 1));
+    const defaultVerbs = await Verb.find();
+    user.customVerbs.push(...defaultVerbs);
     await user.save();
     return NextResponse.json(
       { message: "Data imported for user." },
