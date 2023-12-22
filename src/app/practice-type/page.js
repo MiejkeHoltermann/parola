@@ -33,7 +33,8 @@ export default function WordListLevels() {
         <label htmlFor="practiceType">Wie möchtest du abgefragt werden?</label>
         <select id="practiceType" name="practiceType">
           <option value="typing">Eintippen</option>
-          <option value="wordsalad">Wortsalat</option>
+          <option value="wordsalad">Wortsalat</option> 
+          <option value="multipleChoice">Multiple Choice</option>
         </select>
         <button
           type="submit"

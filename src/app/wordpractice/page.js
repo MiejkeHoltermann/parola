@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import TipingPracticeForm from "../components/TipingPracticeForm";
 import WordSaladPracticeForm from "../components/WordsaladPracticeForm";
+import MultipleChoicePracticeForm from "../components/MultipleChoicePracticeForm";
+import { shuffle } from "fast-shuffle";
 
 export default function Practise() {
   const [level, setLevel] = useLocalStorageState("level", {
@@ -19,6 +21,7 @@ export default function Practise() {
   const [index, setIndex] = useState(0);
   const italianWordInputRef = useRef(null);
   const { data: session, status } = useSession();
+  const [answers, setAnswers] = useState(null);
 
   useEffect(() => {
     if (status === "loading") {
@@ -34,10 +37,19 @@ export default function Practise() {
               cache: "no-store",
             }
           );
-          const { activeWords } = await response.json();
+          const { activeWords, multipleChoiceAnswers } = await response.json();
           if (activeWords.length > 0) {
             function provideNewWord() {
-              setActiveWord(activeWords[index]);
+              const newWord = activeWords[index];
+              const alreadyExists = multipleChoiceAnswers.find(
+                (answer) => answer === newWord.italianWord
+              );
+              if (alreadyExists) {
+                return;
+              }
+              setActiveWord(newWord);
+              const answers = [newWord.italianWord, ...multipleChoiceAnswers];
+              setAnswers(shuffle(answers));
               setMessage("");
               setIndex((prevIndex) => (prevIndex + 1) % activeWords.length);
             }
@@ -69,7 +81,9 @@ export default function Practise() {
     setActiveWord(null);
     setCorrect(null);
     setHint(null);
-    italianWordInputRef.current.value = "";
+    if (italianWordInputRef.current !== null) {
+      italianWordInputRef.current.value = "";
+    }
   }
 
   function showHint() {
@@ -95,6 +109,18 @@ export default function Practise() {
           ) : practiceType === "wordsalad" ? (
             <WordSaladPracticeForm
               activeWord={activeWord}
+              italianWordInputRef={italianWordInputRef}
+              correct={correct}
+              setCorrect={setCorrect}
+              newQuestion={newQuestion}
+              updateWords={updateWords}
+              level={level}
+            />
+          ) : practiceType === "multipleChoice" ? (
+            <MultipleChoicePracticeForm
+              activeWord={activeWord}
+              answers={answers}
+              setAnswers={setAnswers}
               italianWordInputRef={italianWordInputRef}
               correct={correct}
               setCorrect={setCorrect}

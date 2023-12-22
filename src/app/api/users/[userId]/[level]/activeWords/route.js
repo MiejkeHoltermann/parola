@@ -11,7 +11,13 @@ export async function GET(request, { params }) {
       return response.status(404).json({ message: "User not found" });
     }
     const activeWords = user.activeWords;
-    return NextResponse.json({ activeWords }, { status: 200 });
+    const customAnswers = user.customWords.map((word) => word.italianWord);
+    const shuffledAnswers = [...customAnswers].sort(() => Math.random() - 0.5);
+    const multipleChoiceAnswers = shuffledAnswers.slice(0, 3);
+    return NextResponse.json(
+      { activeWords, multipleChoiceAnswers },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json(
       { message: "Error loading filtered words." },
