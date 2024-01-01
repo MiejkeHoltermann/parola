@@ -16,7 +16,7 @@ export default function ImportData() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (session) {
+      if (session && importData === true) {
         const userId = session.user.id;
         await fetch("api/users/${userId}", {
           method: "POST",

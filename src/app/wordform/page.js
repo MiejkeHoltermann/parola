@@ -109,6 +109,28 @@ export default function WordFormPage() {
     setWordForm(true);
   };
 
+  const importWords = async () => {
+    if (!session) {
+      return;
+    } else {
+      const userId = session.user.id;
+      try {
+        const response = await fetch("api/importWords", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId }),
+        });
+        const { customWords } = await response.json();
+        setCustomWords(customWords);
+        setFilteredWords(customWords);
+      } catch (error) {
+        console.error("Error fetching data.", error);
+      }
+    }
+  };
+
   return (
     <main>
       {wordForm ? (
@@ -204,11 +226,18 @@ export default function WordFormPage() {
           filteredWords.length === 0 &&
           customWords &&
           customWords.length === 0 ? (
-          <p>
-            Du hast keine Wörter gespeichert. Füge im Formular oben neue Wörter
-            hinzu oder importiere <button className="underline">hier</button>{" "}
-            den Grundwortschatz der App.
-          </p>
+          <div className="flex flex-col items-center">
+            <p className="text-center">
+              Du hast keine Wörter gespeichert. Füge im Formular oben neue
+              Wörter hinzu oder importiere den Grundwortschatz der App.
+            </p>
+            <button
+              onClick={importWords}
+              className="my-[1rem] bg-darkmint flex justify-center gap-2 text-white w-40 font-bold rounded-xl cursor-pointer px-6 py-2"
+            >
+              Importieren
+            </button>
+          </div>
         ) : null}
       </div>
     </main>
