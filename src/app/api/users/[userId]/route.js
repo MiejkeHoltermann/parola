@@ -38,6 +38,7 @@ export async function GET(request, { params }) {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+    const customWords = user.customWords;
     const wordsLevel1 = user.customWords.filter(
       (word) => word.level == 1
     ).length;
@@ -53,9 +54,15 @@ export async function GET(request, { params }) {
     const wordsLevel5 = user.customWords.filter(
       (word) => word.level == 5
     ).length;
-
     return NextResponse.json(
-      { wordsLevel1, wordsLevel2, wordsLevel3, wordsLevel4, wordsLevel5 },
+      {
+        customWords,
+        wordsLevel1,
+        wordsLevel2,
+        wordsLevel3,
+        wordsLevel4,
+        wordsLevel5,
+      },
       { status: 200 }
     );
   } catch (error) {
