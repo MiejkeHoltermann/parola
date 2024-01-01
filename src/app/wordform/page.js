@@ -9,6 +9,7 @@ import FilterOptions from "../components/FilterOptions";
 import Image from "next/image";
 import { HiDocumentAdd } from "react-icons/hi";
 import WordForm from "../components/WordForm";
+import SearchBar from "../components/SearchBar";
 
 export default function WordFormPage() {
   const [customWords, setCustomWords] = useState();
@@ -130,8 +131,8 @@ export default function WordFormPage() {
       ) : (
         <div>
           {filteredWords && filteredWords.length > 0 ? (
-            <>
-              <h2 className="text-xl font-bold text-center">
+            <div className="flex flex-col items-center">
+              <h2 className="text-xl font-bold">
                 Vokabelliste (
                 {filteredWords.length === 1
                   ? `${filteredWords.length} Wort`
@@ -141,12 +142,16 @@ export default function WordFormPage() {
               <p className="text-center">
                 Doppelklicke auf ein Wort, um es zu bearbeiten.
               </p>
-            </>
+            </div>
           ) : (
             <h2 className="mt-[2rem] text-xl font-bold">Vokabelliste</h2>
           )}
         </div>
       )}
+      <SearchBar
+        customWords={customWords}
+        setFilteredWords={setFilteredWords}
+      />
       <div className="relative w-[90%]">
         <button
           onClick={() => (setFilter(!filter), setDropdown(false))}
@@ -190,15 +195,20 @@ export default function WordFormPage() {
         />
       ))}
       <div>
-        {filteredWords && filteredWords.length === 0 ? (
-          <>
-            <p>
-              Du hast keine Wörter gespeichert. Füge im Formular oben neue
-              Wörter hinzu oder importiere{" "}
-              <button className="underline">hier</button> den Grundwortschatz
-              der App.
-            </p>
-          </>
+        {filteredWords &&
+        filteredWords.length === 0 &&
+        customWords &&
+        customWords.length > 0 ? (
+          <p>Es konnten keine passenden Wörter gefunden werden.</p>
+        ) : filteredWords &&
+          filteredWords.length === 0 &&
+          customWords &&
+          customWords.length === 0 ? (
+          <p>
+            Du hast keine Wörter gespeichert. Füge im Formular oben neue Wörter
+            hinzu oder importiere <button className="underline">hier</button>{" "}
+            den Grundwortschatz der App.
+          </p>
         ) : null}
       </div>
     </main>
