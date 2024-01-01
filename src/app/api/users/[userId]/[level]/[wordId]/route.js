@@ -41,7 +41,6 @@ export async function POST(req, res) {
 export async function GET(request, { params }) {
   const { userId, wordId } = params;
   await connectMongoDB();
-  console.log("ok");
   try {
     const user = await User.findById(userId);
     if (!user) {

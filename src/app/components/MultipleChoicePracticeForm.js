@@ -31,7 +31,6 @@ export default function MultipleChoicePracticeForm({
     } else {
       setCorrect(false);
       setClickedIndex(index);
-      console.log(index);
     }
   }
 

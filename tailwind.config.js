@@ -4,11 +4,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        darkgreen: "#1d5902",
-        orange: "#ba7609",
-        lemon: "#f2f231",
-        lightlemon: "#f9f49d",
-        superlightlemon: "#f9f4c5",
+        darkmint: "#027863",
+        mint: "#027863",
+        lightmint: "#00d7b1",
+        darkblue: "#023536",
+        blue: "#08979a",
+        lightblue: "#08e7eb",
+        superlightblue: "#c6eee7",
       },
     },
   },

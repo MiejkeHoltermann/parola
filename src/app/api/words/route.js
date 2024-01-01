@@ -13,17 +13,18 @@ export async function POST(req, res) {
       return res.status(404).json({ message: "User not found" });
     }
     const _id = uid();
-    user.customWords.push({
+    user.customWords.unshift({
       _id,
       germanWord,
       italianWord,
       level: 1,
+      isFavorite: false,
+      newWord: true,
     });
+    const wordId = _id;
     await user.save();
-    return NextResponse.json(
-      { message: "Word added to WordsLevel1." },
-      { status: 200 }
-    );
+    const newWords = user.customWords;
+    return NextResponse.json({ wordId, newWords }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { message: "Error updating WordsLevel1." },
