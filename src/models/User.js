@@ -78,6 +78,7 @@ const userSchema = new Schema(
         },
       },
     ],
+    wordsImported: { type: Boolean, required: true, default: false },
   },
   { timestamps: true }
 );

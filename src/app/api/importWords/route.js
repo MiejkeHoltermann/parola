@@ -17,9 +17,9 @@ export async function POST(req) {
     user.customWords.map((word) => (word.level = 1));
     const defaultVerbs = await Verb.find();
     user.customVerbs.push(...defaultVerbs);
+    user.wordsImported = true;
     await user.save();
     const customWords = user.customWords;
-    console.log(customWords);
     return NextResponse.json({ customWords }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
