@@ -16,6 +16,7 @@ export async function POST(req) {
       activeWords: [],
       customVerbs: [],
       activeVerbs: [],
+      wordsImported: false,
     });
 
     return NextResponse.json(

@@ -1,7 +1,6 @@
 "use client";
 
 import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -41,6 +40,14 @@ export default function Header() {
                 </li>
                 <li>
                   <a
+                    href="/profile"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Profil
+                  </a>
+                </li>
+                <li>
+                  <a
                     href="/wordform"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >
@@ -67,7 +74,7 @@ export default function Header() {
             </div>
           )}
         </div>
-        <p>{session.user.name}</p>
+        <Link href="/profile">{session.user.name}</Link>
       </header>
     )
   );

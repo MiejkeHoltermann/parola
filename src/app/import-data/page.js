@@ -38,7 +38,8 @@ export default function ImportData() {
         <p className="w-80">
           Diese App stellt einen umfangreichen Grundwortschatz zur Verfügung.
           Entferne das Häkchen, wenn du stattdessen deine eigenen Vokabeln
-          hinzufügen möchtest.
+          hinzufügen möchtest. Du kannst den Grundwortschatz auch später
+          hinzufügen, wenn du noch unsicher bist.
         </p>
         <div className="flex gap-2">
           <input
