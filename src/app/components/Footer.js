@@ -21,7 +21,7 @@ export default function Footer() {
         <Link className="w-8 h-8 mx-2 bg-transparent" href="/verb-form">
           <HiLightningBolt className="w-10 h-10" />
         </Link>
-        <Link className="w-8 h-8 mx-2 bg-transparent" href="/wordlist-levels">
+        <Link className="w-8 h-8 mx-2 bg-transparent" href="/wordpractice">
           <HiQuestionMarkCircle className="w-10 h-10" />
         </Link>
       </footer>
