@@ -90,11 +90,12 @@ export default function VerbConjugator() {
       ) : (
         <>
           {activeVerb ? (
-            <p>
-              {activeVerb.name}
-              {" - "}
-              {timeform}
-            </p>
+            <div className="flex flex-col gap-1">
+              <p className="text-xl text-darkmint font-bold">
+                {activeVerb.name}
+              </p>
+              <p className="font-bold">{timeform}</p>
+            </div>
           ) : (
             ""
           )}
@@ -109,7 +110,12 @@ export default function VerbConjugator() {
                 isCorrect={isCorrect}
               />
             ))}
-            {message2 && <p>{message2}</p>}
+            {message2 && (
+              <p className="text-green-600">
+                {message2}
+                {isCorrect}
+              </p>
+            )}
             <button
               onClick={
                 isCorrect.every((correct) => correct)
@@ -117,7 +123,7 @@ export default function VerbConjugator() {
                   : checkAnswer
               }
               type="button"
-              className="bg-gray-400 py-6 px-8 w-80"
+              className="mt-4 bg-gray-800 flex justify-center gap-2 text-white w-60 font-bold rounded-xl cursor-pointer px-6 py-2"
             >
               {message2 ? "Nächstes Verb" : "Prüfen"}
             </button>
