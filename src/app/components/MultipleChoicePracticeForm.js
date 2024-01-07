@@ -4,12 +4,13 @@ import { useState } from "react";
 export default function MultipleChoicePracticeForm({
   activeWord,
   answers,
-  italianWordInputRef,
   correct,
   setCorrect,
   newQuestion,
   updateWords,
   level,
+  customWords,
+  setCustomWords,
 }) {
   const { data: session, status } = useSession();
   const [clickedIndex, setClickedIndex] = useState();
@@ -27,6 +28,10 @@ export default function MultipleChoicePracticeForm({
       const userId = session.user.id;
       if (level !== 5) {
         updateWords(userId, level, activeWord._id);
+        const newCustomWords = customWords.filter(
+          (word) => word._id != activeWord._id
+        );
+        setCustomWords(newCustomWords);
       }
     } else {
       setCorrect(false);
@@ -38,18 +43,16 @@ export default function MultipleChoicePracticeForm({
     <>
       <form id="form" className="w-full flex flex-col items-center gap-6">
         <label htmlFor="germanWord-input" className="text-[0]">
-          eutsches Wort
+          deutsches Wort
         </label>
-
         <input
           type="text"
           id="germanWord-input"
           name="germanWord"
           value={activeWord ? activeWord.germanWord : ""}
           readOnly
-          className="py-4 px-6 w-full border-gray-400 rounded-xl shadow-xl"
+          className="w-[90%] flex flex-col rounded-xl shadow-[2px_2px_rgba(0,215,177,1)] px-4 py-4 focus:outline-none"
         />
-
         {answers ? (
           <>
             {answers.map((answer, index) => (
@@ -57,12 +60,12 @@ export default function MultipleChoicePracticeForm({
                 key={index}
                 onClick={() => checkAnswer(answer, index)}
                 type="button"
-                className={`py-3 px-8 w-60 rounded-lg ${
+                className={`w-[90%] flex flex-col rounded-xl px-4 py-4 focus:outline-none ${
                   correct && activeWord.italianWord === answer
-                    ? "bg-green-600"
+                    ? "bg-green-600 shadow-none"
                     : clickedIndex === index
-                    ? "bg-red-600"
-                    : "bg-gray-300"
+                    ? "bg-red-600 shadow-none"
+                    : "bg-gray-300 shadow-[2px_2px_rgba(0,215,177,1)]"
                 }`}
               >
                 {answer}
@@ -72,22 +75,21 @@ export default function MultipleChoicePracticeForm({
         ) : (
           ""
         )}
-
         {correct === true ? (
           <p className="text-green-600">Die Antwort ist richtig.</p>
         ) : correct === false ? (
           <p className="text-red-600">Versuch es nochmal.</p>
         ) : null}
-
-        {correct && (
-          <button
-            onClick={newQuestion}
-            type="button"
-            className="py-6 px-8 bg-gray-400 w-80"
-          >
-            Nächste Frage
-          </button>
-        )}
+        <button
+          onClick={newQuestion}
+          type="button"
+          disabled={!correct}
+          className={`mt-4 bg-gray-800 flex justify-center gap-2 w-60 font-bold rounded-xl cursor-pointer px-6 py-2 ${
+            correct ? "text-white" : "text-gray-600"
+          } `}
+        >
+          Nächste Frage
+        </button>
       </form>
     </>
   );
