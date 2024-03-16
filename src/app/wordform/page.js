@@ -33,7 +33,7 @@ export default function WordForm() {
         return;
       }
       const userId = sessionData.user.id;
-      const responseWordExists = await fetch("api/wordExists", {
+      const responseWordExists = await fetch(`api/users/${userId}/words`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
