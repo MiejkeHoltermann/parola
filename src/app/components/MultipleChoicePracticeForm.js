@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import DefaultButton from "./DefaultButton";
 
 export default function MultipleChoicePracticeForm({
   activeWord,
@@ -42,17 +43,7 @@ export default function MultipleChoicePracticeForm({
   return (
     <>
       <form id="form" className="w-full flex flex-col items-center gap-6">
-        <label htmlFor="germanWord-input" className="text-[0]">
-          deutsches Wort
-        </label>
-        <input
-          type="text"
-          id="germanWord-input"
-          name="germanWord"
-          value={activeWord ? activeWord.germanWord : ""}
-          readOnly
-          className="w-[90%] flex flex-col rounded-xl shadow-[2px_2px_rgba(0,215,177,1)] px-4 py-4 focus:outline-none"
-        />
+        <p>{activeWord && activeWord.germanWord}</p>
         {answers ? (
           <>
             {answers.map((answer, index) => (
@@ -64,8 +55,8 @@ export default function MultipleChoicePracticeForm({
                   correct && activeWord.italianWord === answer
                     ? "bg-green-600 shadow-none"
                     : clickedIndex === index
-                    ? "bg-red-600 shadow-none"
-                    : "bg-gray-300 shadow-[2px_2px_rgba(0,215,177,1)]"
+                    ? "bg-red-500 shadow-none"
+                    : "shadow-[2px_2px_rgba(0,215,177,1)]"
                 }`}
               >
                 {answer}
@@ -75,20 +66,14 @@ export default function MultipleChoicePracticeForm({
         ) : (
           ""
         )}
-        {correct === true ? (
-          <p className="text-green-600">Die Antwort ist richtig.</p>
-        ) : correct === false ? (
-          <p className="text-red-600">Versuch es nochmal.</p>
-        ) : null}
         <button
           onClick={newQuestion}
-          type="button"
           disabled={!correct}
-          className={`mt-4 bg-gray-800 flex justify-center gap-2 w-60 font-bold rounded-xl cursor-pointer px-6 py-2 ${
-            correct ? "text-white" : "text-gray-600"
-          } `}
+          className={`text-${
+            correct ? "white" : "gray-600"
+          } bg-mint min-w-[8rem] font-bold cursor-pointer rounded-lg px-6 py-2 mt-[2rem] `}
         >
-          Nächste Frage
+          Weiter
         </button>
       </form>
     </>

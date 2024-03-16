@@ -16,66 +16,93 @@ export default function Header() {
     router.push("/");
   };
 
+  const closeDropdown = () => {
+    setDropdown(false);
+  };
+
+  const openDropdown = (e) => {
+    setDropdown(!dropdown);
+    e.stopPropagation();
+  };
+
   return (
     session && (
-      <header className="bg-white fixed top-0 left-0 h-16 w-full flex items-center gap-6 px-5 z-10">
-        <div className="flex flex-col">
-          <button
-            onClick={() => setDropdown(!dropdown)}
-            type="button"
-            className="w-8 h-8 mx-2 bg-transparent"
-          >
-            <FaUser className="w-6 h-6 " />
-          </button>
-          {dropdown && (
-            <div className="absolute top-14 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-              <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                <li>
-                  <a
-                    href="/home"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Home
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/profile"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Profil
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/wordform"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Hinzufügen
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/wordlist-levels"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Lernen
-                  </a>
-                </li>
-                <li>
-                  <button
-                    onClick={signOutUser}
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Abmelden
-                  </button>
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
-        <Link href="/profile">{session.user.name}</Link>
-      </header>
+      <div onClick={closeDropdown} className="w-full h-full">
+        <header className="bg-white fixed top-0 left-0 h-[4rem] w-full flex items-center gap-6 px-5 z-10">
+          <div className="flex flex-col">
+            <button
+              onClick={openDropdown}
+              type="button"
+              className="w-8 h-8 mx-2 bg-transparent"
+            >
+              <FaUser className="w-6 h-6 " />
+            </button>
+            {dropdown && (
+              <div className="absolute top-14 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                  <li>
+                    <Link
+                      href="/home"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/profile"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Profil
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/my-words"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Meine Vokabeln
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/wordpractice"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Vokabeltrainer
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Meine Verben
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      href="/verb-form"
+                    >
+                      Verbtrainer
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={signOutUser}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Abmelden
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+          <Link href="/profile">{session.user.name}</Link>
+        </header>
+      </div>
     )
   );
 }

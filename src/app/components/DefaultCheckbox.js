@@ -1,30 +1,31 @@
-export default function Checkbox({
+export default function DefaultCheckbox({
   checkboxId,
   checkboxName,
   checkboxValue,
   checkboxLabel,
+  defaultChecked,
   onChange,
-  favorite,
+  checked,
 }) {
   return (
-    <div className="flex items-center gap-1">
+    <div className="w-[10rem] flex items-center gap-[1rem]">
       <input
         type="checkbox"
         id={checkboxId}
         name={checkboxName}
         value={checkboxValue}
-        defaultChecked={false}
+        defaultChecked={defaultChecked}
         onChange={onChange}
-        className={`relative peer appearance-none w-5 h-5 rounded-md ${
-          favorite
+        className={`relative peer appearance-none w-[1.8rem] h-[1.8rem] rounded-md ${
+          checked
             ? "bg-[rgba(2,120,99,1)] border-0"
             : "bg-white border-[1px] border-gray-400"
         }`}
       />
       <label htmlFor={checkboxId}>{checkboxLabel}</label>
       <svg
-        className={`absolute ml-[2px] w-4 h-4 peer ${
-          favorite ? "block" : "hidden"
+        className={`absolute ml-[0.2rem] w-[1.4rem] peer ${
+          checked ? "block" : "hidden"
         } pointer-events-none`}
         viewBox="0 0 24 24"
         fill="none"

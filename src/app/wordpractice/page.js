@@ -9,12 +9,13 @@ import PracticeForm from "../components/PracticeForm";
 import Lottie from "react-lottie-player";
 import lottieJson from "../../../public/loading-animation.json";
 import PracticeList from "../components/PracticeList";
+import DefaultButton from "../components/DefaultButton";
 
 export default function Practise() {
   const [level, setLevel] = useState(null);
   const [activeWord, setActiveWord] = useState(null);
   const [correct, setCorrect] = useState(null);
-  const [message2, setMessage2] = useState("");
+  const [alert, setAlert] = useState("");
   const [hint, setHint] = useState(null);
   const [index, setIndex] = useState(0);
   const italianWordInputRef = useRef(null);
@@ -23,7 +24,7 @@ export default function Practise() {
   const [number, setNumber] = useState(0);
   const [favoriteWords, setFavoriteWords] = useState(false);
   const [customWords, setCustomWords] = useState([]);
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const [checked, setChecked] = useState(false);
   const [practiceForm, setPracticeForm] = useState(true);
   const [practiceList, setPracticeList] = useState(false);
@@ -50,11 +51,14 @@ export default function Practise() {
       italianWordInputRef.current.value = "";
     }
     provideNewWord();
+    setError("");
   }
 
   function showHint() {
     setHint(`${activeWord.germanWord} = ${activeWord.italianWord}`);
   }
+
+  console.log(customWords);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,7 +69,7 @@ export default function Practise() {
     setLevel(level);
     setPracticeType(practiceType);
     if ((number < 1 || number > 100) && !favoriteWords) {
-      setMessage("Wähle aus, wie viele Wörter du lernen möchtest.");
+      setError("Wähle zwischen 1 und 100 Wörtern für diese Lerneinheit aus.");
       return;
     }
     if (status === "authenticated" && level && (number || favoriteWords)) {
@@ -123,6 +127,7 @@ export default function Practise() {
   const provideNewWord = () => {
     if (customWords.length > 0) {
       const newWord = customWords[index];
+      console.log(newWord);
       setActiveWord(newWord);
       const correctAnswer = newWord.italianWord;
       const correctAnswerIndex = multipleChoiceAnswers.indexOf(correctAnswer);
@@ -140,9 +145,9 @@ export default function Practise() {
       setTipingPracticeForm(true);
     } else {
       if (level === "all") {
-        setMessage2(`Du hast alle Wörter gelernt.`);
+        setAlert(`Du hast alle Wörter gelernt.`);
       } else {
-        setMessage2(`Du hast alle Wörter auf Level ${level} gelernt.`);
+        setAlert(`Du hast alle Wörter auf Level ${level} gelernt.`);
       }
     }
   };
@@ -150,7 +155,7 @@ export default function Practise() {
   const reload = () => {
     setPracticeForm(true);
     setPracticeList(false);
-    setMessage2("");
+    setAlert("");
     setNumber(0);
   };
 
@@ -164,8 +169,8 @@ export default function Practise() {
         <PracticeForm
           checked={checked}
           setChecked={setChecked}
-          message={message}
-          setMessage={setMessage}
+          error={error}
+          setError={setError}
           number={number}
           setNumber={setNumber}
           handleSubmit={handleSubmit}
@@ -181,15 +186,14 @@ export default function Practise() {
         />
       ) : tipingPracticeForm === true ? (
         <div className="flex flex-col items-center gap-[1.6rem] w-full ">
-          {message2 ? (
+          {alert ? (
             <>
-              <p>{message2}</p>
-              <button
-                onClick={reload}
-                className="bg-gray-800 flex justify-center gap-2 text-white w-60 font-bold rounded-xl cursor-pointer px-6 py-2"
-              >
-                Zurück
-              </button>
+              <p className="text-center">{alert}</p>
+              <DefaultButton
+                buttonFunction={reload}
+                buttonType="button"
+                buttonText="Zurück"
+              />
             </>
           ) : practiceType === "typing" ? (
             <TipingPracticeForm
@@ -202,6 +206,8 @@ export default function Practise() {
               newQuestion={newQuestion}
               updateWords={updateWords}
               level={level}
+              error={error}
+              setError={setError}
             >
               <button
                 onClick={showHint}
@@ -221,6 +227,8 @@ export default function Practise() {
               level={level}
               customWords={customWords}
               setCustomWords={setCustomWords}
+              error={error}
+              setError={setError}
             />
           ) : practiceType === "multipleChoice" ? (
             <MultipleChoicePracticeForm

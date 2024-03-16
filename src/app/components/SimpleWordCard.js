@@ -1,11 +1,7 @@
 import Image from "next/image";
 import { FaHeart } from "react-icons/fa";
 
-export default function SimpleWordCard({
-  isFavorite,
-  germanWord,
-  italianWord,
-}) {
+export default function SimpleWordCard({ germanWord, italianWord }) {
   return (
     <>
       <div className="w-[90%] flex flex-col rounded-xl shadow-[2px_2px_rgba(0,215,177,1)] px-4 py-2">
@@ -18,12 +14,6 @@ export default function SimpleWordCard({
             className="w-6 h-6"
           />
           <p className="w-full break-all">{germanWord}</p>
-          <FaHeart
-            size={28}
-            style={{
-              color: isFavorite ? "rgba(2,120,99,1)" : "lightgray",
-            }}
-          />
         </div>
         <hr className="border-gray-300 w-full" />
         <div className="relative w-full flex gap-4 pt-2">

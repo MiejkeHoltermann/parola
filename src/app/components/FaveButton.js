@@ -20,9 +20,9 @@ export default function FaveButton({ wordId, isFavorite }) {
       });
 
       if (res.ok) {
-        console.log("Successfully added to favorites.");
+        console.log("Successfully updated favorite settings.");
       } else {
-        console.log("Error adding to favorites.");
+        console.log("Error updating favorite settings.");
       }
     }
   };

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Madimi+One&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,11 +17,9 @@
 
 html,
 body {
-  max-width: 100vw;
   overflow-x: hidden;
   background: #c6eee7;
   width: 100vw;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -38,7 +37,8 @@ main {
   align-items: center;
   padding: 1rem;
   gap: 1.6rem;
-  margin: 6rem 0 6rem 0;
+  margin: 4.4rem 0 6rem 0;
+  padding: 2rem 0;
 }
 
 a {

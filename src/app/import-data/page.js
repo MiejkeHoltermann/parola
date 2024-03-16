@@ -2,14 +2,18 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import DefaultButton from "../components/DefaultButton";
+import DefaultCheckbox from "../components/DefaultCheckbox";
 
 export default function ImportData() {
   const [importData, setImportData] = useState(true);
+  const [checked, setChecked] = useState(true);
   const { data: session } = useSession();
 
   const router = useRouter();
 
   const handleCheckboxChange = (e) => {
+    setChecked(e.target.checked);
     setImportData(e.target.checked);
   };
 
@@ -34,30 +38,26 @@ export default function ImportData() {
 
   return (
     <main>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-80">
-        <p className="w-80">
-          Diese App stellt einen umfangreichen Grundwortschatz zur Verfügung.
-          Entferne das Häkchen, wenn du stattdessen deine eigenen Vokabeln
-          hinzufügen möchtest. Du kannst den Grundwortschatz auch später
-          hinzufügen, wenn du noch unsicher bist.
-        </p>
-        <div className="flex gap-2">
-          <input
-            type="checkbox"
-            id="import"
-            name="import"
-            value="importData"
-            checked={importData}
-            onChange={handleCheckboxChange}
-          />
-          <label htmlFor="import">Wortschatz importieren</label>
-        </div>
-        <button
-          type="submit"
-          className="bg-green-600 text-white font-bold cursor-pointer px-6 py-2"
-        >
-          Fortfahren
-        </button>
+      <p className="w-full text-center bg-blue-500 text-blue-500">
+        Diese App stellt einen umfangreichen Grundwortschatz zur Verfügung.
+        <br />
+        Entferne das Häkchen, wenn du stattdessen deine eigenen Vokabeln
+        hinzufügen möchtest. <br />
+        <br />
+        Du kannst den Grundwortschatz auch später hinzufügen, wenn du noch
+        unsicher bist.
+      </p>
+      <form className="w-[100%] flex flex-col items-center mt-[1rem] gap-[4rem]">
+        <DefaultCheckbox
+          checkboxId="importData"
+          checkboxName="importData"
+          checkboxValue="importData"
+          checkboxLabel="Wortschatz importieren"
+          onChange={handleCheckboxChange}
+          checked={checked}
+          defaultChecked={true}
+        />
+        <DefaultButton buttonFunction={handleSubmit} buttonText="OK" />
       </form>
     </main>
   );
