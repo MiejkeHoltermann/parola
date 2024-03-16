@@ -4,6 +4,9 @@ import User from "@/models/User";
 import Word from "@/models/Word";
 import Verb from "@/models/Verb";
 
+/* when a user first registers they can import the default vocabulary into their user account,
+alternatively they can choose to do this later from their profile */
+
 export async function POST(req) {
   const { userId } = await req.json();
   await connectMongoDB();

@@ -66,7 +66,7 @@ export default function WordCard({
       return <div>You are not logged in.</div>;
     } else {
       const userId = session.user.id;
-      const res = await fetch("/api/deleteWord", {
+      const res = await fetch(`api/users/${userId}/words`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
