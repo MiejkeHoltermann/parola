@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import { shuffle } from "fast-shuffle";
 import { useEffect, useState } from "react";
 import { RxReset } from "react-icons/rx";
+import DefaultError from "./DefaultError";
 
 export default function WordSaladPracticeForm({
   activeWord,
@@ -9,10 +10,12 @@ export default function WordSaladPracticeForm({
   correct,
   setCorrect,
   newQuestion,
-  updateWords,
   level,
   customWords,
   setCustomWords,
+  error,
+  setError,
+  updateWords,
 }) {
   const [initialShuffledArray, setInitialShuffledArray] = useState([]);
   const [shuffledArray, setShuffledArray] = useState([]);
@@ -22,7 +25,7 @@ export default function WordSaladPracticeForm({
     if (status === "loading") {
       return;
     }
-    const wordArray = activeWord ? activeWord.italianWord.split("") : [];
+    const wordArray = activeWord ? activeWord.italianWord.split("").trim() : [];
     setInitialShuffledArray(shuffle(wordArray));
     setShuffledArray(shuffle(wordArray));
   }, [status, activeWord]);
@@ -38,6 +41,7 @@ export default function WordSaladPracticeForm({
 
     if (italianWordInputRef.current.value === activeWord.italianWord) {
       setCorrect(true);
+      setError("Das ist richtig.");
       const userId = session.user.id;
       if (level !== 5) {
         updateWords(userId, level, activeWord._id);
@@ -53,8 +57,13 @@ export default function WordSaladPracticeForm({
 
   const resetWord = (e) => {
     e.preventDefault();
-    italianWordInputRef.current.value = "";
-    setShuffledArray([...initialShuffledArray]);
+    const currentValue = italianWordInputRef.current.value;
+    const newValue = currentValue.slice(0, -1);
+    italianWordInputRef.current.value = newValue;
+    setShuffledArray((prevArray) => {
+      const lastLetter = currentValue[currentValue.length - 1];
+      return [...prevArray, lastLetter];
+    });
   };
 
   return (
@@ -103,20 +112,16 @@ export default function WordSaladPracticeForm({
           </button>
         </div>
       ) : null}
-      {correct === true ? (
-        <p className="text-green-600">Die Antwort ist richtig.</p>
-      ) : correct === false && shuffledArray.length === 0 ? (
-        <p className="text-red-600">Versuch es nochmal.</p>
-      ) : null}
+      {error && <DefaultError errorMessage={error} correct={correct} />}
       <button
         onClick={newQuestion}
         type="button"
-        disabled={shuffledArray.length > 0}
-        className={`mt-4 bg-gray-800 flex justify-center gap-2 w-60 font-bold rounded-xl cursor-pointer px-6 py-2 ${
-          shuffledArray.length > 0 ? "text-gray-600" : "text-white"
-        } `}
+        disabled={!correct}
+        className={`text-${
+          correct ? "white" : "gray-600"
+        } bg-mint min-w-[8rem] font-bold cursor-pointer rounded-lg px-6 py-2 mt-[2rem] `}
       >
-        Nächste Frage
+        Weiter
       </button>
     </form>
   );

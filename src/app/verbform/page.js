@@ -10,19 +10,29 @@ import DefaultError from "../components/DefaultError";
 
 export default function WordForm() {
   const [error, setError] = useState("");
-  const [germanWord, setGermanWord] = useState("");
-  const [italianWord, setItalianWord] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    presente01: "",
+    presente02: "",
+    presente03: "",
+    presente04: "",
+    presente05: "",
+    presente06: "",
+  });
+  const presenteLabels = ["Name", "io", "tu", "lui/lei", "noi", "voi", "loro"];
 
   const router = useRouter();
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const germanWord = e.target.germanWord.value.trim();
-    const italianWord = e.target.italianWord.value.trim();
-    if (!germanWord || !italianWord) {
+    const trimmedFormData = Object.fromEntries(
+      Object.entries(formData).map(([key, value]) => [key, value.trim()])
+    );
+    const { name, presente01 } = trimmedFormData;
+    if (!name || !presente01) {
       setError("Alle Felder müssen ausgefüllt sein");
       return;
-    } else if (germanWord.length > 50 || italianWord.length > 50) {
+    } else if (name.length > 50 || presente01.length > 50) {
       setError("Keines der Wörter darf mehr als 50 Zeichen betragen.");
       return;
     }
@@ -33,30 +43,41 @@ export default function WordForm() {
         return;
       }
       const userId = sessionData.user.id;
-      const responseWordExists = await fetch("api/wordExists", {
+      const responseVerbExists = await fetch("api/verbExists", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId, germanWord, italianWord }),
+        body: JSON.stringify({ userId, name }),
       });
-      const { word1, word2 } = await responseWordExists.json();
-      if (word1 && word2 && word1._id === word2._id) {
-        setError("Das Wort ist schon vorhanden");
+      const { verb } = await responseVerbExists.json();
+      if (verb) {
+        setError("Das Verb ist schon vorhanden");
         return;
       }
-      const response = await fetch("/api/words", {
+      const response = await fetch("/api/verbs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId, germanWord, italianWord }),
+        body: JSON.stringify({
+          userId,
+          ...trimmedFormData,
+        }),
       });
-      const { newWords } = await response.json();
+      const { newVerbs } = await response.json();
       if (response.ok) {
-        setGermanWord("");
-        setItalianWord("");
-        router.push("/my-words");
+        setFormData({
+          name: "",
+          presente01: "",
+          presente02: "",
+          presente03: "",
+          presente04: "",
+          presente05: "",
+          presente06: "",
+        });
+        console.log(newVerbs.length);
+        router.push("/my-verbs");
       } else {
         console.log("New word could not be created.");
       }
@@ -72,7 +93,7 @@ export default function WordForm() {
         className=" w-full h-full flex flex-col items-center gap-[0.6rem]"
       >
         <Link
-          href="/my-words"
+          href="/my-verbs"
           className="ml-auto bg-darkmint flex justify-center items-center text-white w-[1.8rem] h-[1.8rem] rounded-md"
         >
           <Image
@@ -83,26 +104,24 @@ export default function WordForm() {
             className="w-[1.5rem] h-[1.5rem]"
           ></Image>
         </Link>
-        <h1 className="mt-[2rem]">Füge ein neues Wort hinzu</h1>
-        <label htmlFor="germanWord" className="text-[0]">
-          Deutsch
-        </label>
-        <DefaultInput
-          value={germanWord}
-          setValue={setGermanWord}
-          setError={setError}
-          inputId="germanWord"
-          inputName="germanWord"
-          placeholder="Deutsch"
-        />
-        <DefaultInput
-          value={italianWord}
-          setValue={setItalianWord}
-          setError={setError}
-          inputId="italianWord"
-          inputName="italianWord"
-          placeholder="Italienisch"
-        />
+        <h1 className="mt-[2rem]">Füge ein neues Verb hinzu</h1>
+        {Object.entries(formData).map(([key, value], index) => (
+          <div key={key} className="w-[80%] flex justify-between items-center">
+            <p>{presenteLabels[index]}</p>
+            <DefaultInput
+              value={value}
+              setValue={(newValue) =>
+                setFormData((prevFormData) => ({
+                  ...prevFormData,
+                  [key]: newValue,
+                }))
+              }
+              setError={setError}
+              inputId={key}
+              inputName={key}
+            />
+          </div>
+        ))}
         {error && <DefaultError errorMessage={error} />}
         <DefaultButton buttonType="submit" buttonText="Hinzufügen" />
       </form>

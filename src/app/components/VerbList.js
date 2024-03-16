@@ -1,26 +1,19 @@
 import DefaultButton from "./DefaultButton";
-import SimpleWordCard from "./SimpleWordCard";
+import VerbCard from "./VerbCard";
 
-export default function PracticeList({
-  level,
-  customWords,
-  provideNewWord,
-  reload,
-}) {
+export default function VerbList({ provideNewVerb, customVerbs, reload }) {
   return (
     <>
-      {customWords.length > 0 ? (
+      {customVerbs.length > 0 ? (
         <>
-          <p className="text-center">Präge dir diese Wörter gut ein.</p>
-          {customWords.map((word) => (
-            <SimpleWordCard
-              key={word._id}
-              germanWord={word.germanWord}
-              italianWord={word.italianWord}
-            />
+          <p className="text-center">
+            Präge dir die Verben und ihre Zeitformen gut ein.
+          </p>
+          {customVerbs.map((verb) => (
+            <VerbCard key={verb._id} verb={verb} />
           ))}
           <DefaultButton
-            buttonFunction={provideNewWord}
+            buttonFunction={provideNewVerb}
             buttonType="button"
             buttonText="Jetzt abfragen"
           />
@@ -31,7 +24,7 @@ export default function PracticeList({
             <p>{`Du hast kein Level ausgewählt.`}</p>
           ) : (
             <p className="text-center">
-              Du hast keine Vokabeln, die diese Kriterien erfüllen.
+              Du hast keine Verben, die diese Kriterien erfüllen.
             </p>
           )}
           <DefaultButton

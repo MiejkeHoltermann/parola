@@ -1,4 +1,4 @@
-import Checkbox from "../components/Checkbox";
+import DefaultCheckbox from "../components/DefaultCheckbox";
 
 export default function FilterOptions({
   favorite,
@@ -7,13 +7,13 @@ export default function FilterOptions({
 }) {
   return (
     <form className="w-full mt-4 border-2 border-mint rounded-lg p-2">
-      <Checkbox
+      <DefaultCheckbox
         checkboxId="favorites"
         checkboxName="favorites"
         checkboxValue="favorites"
         checkboxLabel="nur Favoriten"
         onChange={handleChange}
-        favorite={favorite}
+        checked={favorite}
       />
       <button onClick={resetFilters} className="mt-4 mx-2 py-1 underline">
         Zurücksetzen

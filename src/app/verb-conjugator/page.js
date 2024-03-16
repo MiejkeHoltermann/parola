@@ -3,64 +3,34 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import VerbInputField from "../components/VerbInputField";
+import { useRouter } from "next/navigation";
+import DefaultButton from "../components/DefaultButton";
+import Lottie from "react-lottie-player";
+import lottieJson from "../../../public/loading-animation.json";
+import VerbForm from "../components/VerbForm";
+import VerbList from "../components/VerbList";
+import { shuffle } from "fast-shuffle";
+import VerbPractice from "../components/VerbPractice";
 
 export default function VerbConjugator() {
-  const [timeform, setTimeform] = useLocalStorageState("timeform", {
-    defaultValue: null,
-  });
-  const [number, setNumber] = useLocalStorageState("number", {
-    defaultValue: null,
-  });
   const { data: session, status } = useSession();
   const [activeVerb, setActiveVerb] = useState(null);
   const [index, setIndex] = useState(0);
-  const [isCorrect, setIsCorrect] = useState(Array(6).fill(null));
+  const [answers, setAnswers] = useState(Array(6).fill(null));
   const [presenteValues, setPresenteValues] = useState(Array(6).fill(""));
   const userId = session?.user?.id;
   const [message1, setMessage1] = useState("");
   const [message2, setMessage2] = useState("");
-
-  useEffect(() => {
-    if (status === "loading") {
-      return;
-    }
-    const fetchData = async () => {
-      if (!activeVerb && userId) {
-        try {
-          const response = await fetch(`/api/users/${userId}/verbs`, {
-            cache: "no-store",
-          });
-          const { activeVerbs } = await response.json();
-          if (activeVerbs.length > 0) {
-            setActiveVerb(activeVerbs[index]);
-            setIndex((prevIndex) => (prevIndex + 1) % activeVerbs.length);
-          } else {
-            setMessage1(`Du hast alle Verben gelernt.`);
-          }
-        } catch (error) {
-          console.error("Error fetching data.", error);
-        }
-      }
-    };
-    if (status === "authenticated") {
-      fetchData();
-    }
-  }, [activeVerb, index, status, userId]);
-
-  const checkAnswer = (e) => {
-    e.preventDefault();
-
-    const newIsCorrect = presenteValues.map(
-      (value, i) => value === activeVerb[timeform][`${timeform}0${i + 1}`]
-    );
-
-    setIsCorrect(newIsCorrect);
-
-    if (newIsCorrect.every((correct) => correct)) {
-      setMessage2("Das war richtig.");
-      updateVerbs(userId, activeVerb._id);
-    }
-  };
+  const router = useRouter();
+  const [verbForm, setVerbForm] = useState(true);
+  const [verbList, setVerbList] = useState(false);
+  const [verbPractice, setVerbPractice] = useState(false);
+  const [error, setError] = useState("");
+  const [number, setNumber] = useState(0);
+  const [timeform, setTimeform] = useState("");
+  const [customVerbs, setCustomVerbs] = useState([]);
+  const [correct, setCorrect] = useState(false);
+  const [alert, setAlert] = useState("");
 
   const updateVerbs = async (userId, verbId) => {
     try {
@@ -75,61 +45,116 @@ export default function VerbConjugator() {
   };
 
   const newQuestion = () => {
+    console.log("test new");
+    setCorrect(null);
     setActiveVerb(null);
     setPresenteValues(Array(6).fill(""));
-    setIsCorrect(Array(6).fill(null));
-    setMessage2("");
+    setAnswers(Array(6).fill(null));
+    provideNewVerb();
+    setError("");
   };
 
   const presenteLabels = ["io", "tu", "lui/lei", "noi", "voi", "loro"];
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const numberOfVerbs = e.target.elements.numberOfVerbs.value;
+    const verbsTimeform = e.target.elements.verbsTimeform.value;
+    setNumber(numberOfVerbs);
+    setTimeform(verbsTimeform);
+    if (number < 1 || number > 10) {
+      setError("Wähle zwischen 1 und 10 Verben für diese Lerneinheit aus.");
+      return;
+    }
+    if (status === "authenticated" && number && timeform) {
+      try {
+        const userId = session.user.id;
+        const response = await fetch(`/api/users/${userId}/verbs`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        let { customVerbs } = await response.json();
+        const shuffledVerbs = shuffle(customVerbs);
+        const activeVerbs = shuffledVerbs.slice(0, number);
+        setCustomVerbs(activeVerbs);
+        setVerbForm(false);
+        setVerbList(true);
+      } catch (error) {
+        console.error("Error fetching data.", error);
+      }
+    }
+  };
+
+  const provideNewVerb = () => {
+    console.log("test", customVerbs.length);
+    if (customVerbs.length > 0) {
+      const newVerb = customVerbs[index];
+      setActiveVerb(newVerb);
+      setVerbList(false);
+      setVerbPractice(true);
+    } else {
+      setAlert(`Du hast alle Verben gelernt.`);
+    }
+  };
+
+  const reload = () => {
+    setVerbForm(true);
+    setVerbList(false);
+    setAlert("");
+    setNumber(0);
+  };
+
   return (
     <main>
-      {message1 ? (
-        <p>{message1}</p>
-      ) : (
+      {status === "loading" ? (
+        <div className="flex items-center justify-center h-screen">
+          <Lottie loop animationData={lottieJson} play />
+        </div>
+      ) : verbForm === true ? (
+        <VerbForm
+          error={error}
+          setError={setError}
+          number={number}
+          setNumber={setNumber}
+          handleSubmit={handleSubmit}
+        />
+      ) : verbList === true ? (
+        <VerbList
+          provideNewVerb={provideNewVerb}
+          customVerbs={customVerbs}
+          reload={reload}
+        />
+      ) : verbPractice === true ? (
         <>
-          {activeVerb ? (
-            <div className="flex flex-col gap-1">
-              <p className="text-xl text-darkmint font-bold">
-                {activeVerb.name}
-              </p>
-              <p className="font-bold">{timeform}</p>
-            </div>
-          ) : (
-            ""
-          )}
-          <form className="flex flex-col items-center gap-[1.6rem] w-full">
-            {presenteLabels.map((label, i) => (
-              <VerbInputField
-                key={i}
-                i={i}
-                label={label}
-                presenteValues={presenteValues}
-                setPresenteValues={setPresenteValues}
-                isCorrect={isCorrect}
+          {alert ? (
+            <>
+              <p className="text-center">{alert}</p>
+              <DefaultButton
+                buttonFunction={reload}
+                buttonType="button"
+                buttonText="Zurück"
               />
-            ))}
-            {message2 && (
-              <p className="text-green-600">
-                {message2}
-                {isCorrect}
-              </p>
-            )}
-            <button
-              onClick={
-                isCorrect.every((correct) => correct)
-                  ? newQuestion
-                  : checkAnswer
-              }
-              type="button"
-              className="mt-4 bg-gray-800 flex justify-center gap-2 text-white w-60 font-bold rounded-xl cursor-pointer px-6 py-2"
-            >
-              {message2 ? "Nächstes Verb" : "Prüfen"}
-            </button>
-          </form>
+            </>
+          ) : (
+            <VerbPractice
+              customVerbs={customVerbs}
+              setCustomVerbs={setCustomVerbs}
+              activeVerb={activeVerb}
+              setActiveVerb={setActiveVerb}
+              answers={answers}
+              setAnswers={setAnswers}
+              newQuestion={newQuestion}
+              updateVerbs={updateVerbs}
+              correct={correct}
+              setCorrect={setCorrect}
+              error={error}
+              setError={setError}
+              number={number}
+              timeform={timeform}
+            />
+          )}
         </>
-      )}
+      ) : null}
     </main>
   );
 }

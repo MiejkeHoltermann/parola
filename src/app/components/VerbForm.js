@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import DefaultError from "./DefaultError";
 import DefaultButton from "./DefaultButton";
 
-export default function PracticeForm({
+export default function VerbForm({
   error,
   setError,
   number,
@@ -55,9 +55,9 @@ export default function PracticeForm({
       setChecked(false);
     } else {
       setNumber(number);
-      if (number < 1 || number > 100) {
+      if (number < 1 || number > 10) {
         setInvalid(true);
-        setError("Wähle zwischen 1 und 100 Wörtern für diese Lerneinheit aus.");
+        setError("Wähle zwischen 1 und 10 Verben für diese Lerneinheit aus.");
       } else {
         setInvalid(false);
         setError("");
@@ -65,60 +65,30 @@ export default function PracticeForm({
     }
   };
 
-  const handleFavoritesChange = (e) => {
-    const { checked } = e.target;
-    if (checked === true) {
-      setNumber(0);
-      setInvalid(false);
-      setError("");
-    }
-    setChecked(checked);
-  };
-
   return (
     <form
       onSubmit={handleSubmit}
       className="relative w-[90%] flex flex-col items-center p-4 gap-6"
     >
-      <label htmlFor="numberOfWords" className="text-center">
-        Wie viele Wörter möchtest du heute lernen?
+      <label htmlFor="numberOfVerbs" className="text-center">
+        Wie viele Verben möchtest du heute lernen?
       </label>
       <input
         type="number"
-        id="numberOfWords"
-        name="numberOfWords"
+        id="numberOfVerbs"
+        name="numberOfVerbs"
         value={number}
         onChange={handleNumberChange}
         className={`w-[40%] focus:outline-none focus:outline-[1px] focus:outline-gray-300 focus:p-1 focus:rounded-md ${
           invalid ? "text-red-500" : ""
         }`}
       />
-      <DefaultCheckbox
-        checkboxId="favoriteWords"
-        checkboxName="favoriteWords"
-        checkboxValue="favoriteWords"
-        checkboxLabel="Alle Favoriten lernen"
-        onChange={handleFavoritesChange}
-        checked={checked}
-      />
-      <label htmlFor="wordsLevel" className="text-center">
-        Wähle ein Level aus
+      <label htmlFor="verbsTimeform" className="text-center">
+        Welche Zeitformen möchtest du lernen?
       </label>
-      <select id="wordsLevel" name="wordsLevel">
-        <option value="all">Alle ({allWords} Wörter)</option>
-        {wordsLevels.map((count, index) => (
-          <option key={index + 1} value={index + 1}>
-            Level {index + 1} ({count} Wörter)
-          </option>
-        ))}
-      </select>
-      <label htmlFor="practiceType" className="text-center">
-        Wie möchtest du abgefragt werden?
-      </label>
-      <select id="practiceType" name="practiceType">
-        <option value="typing">Eintippen</option>
-        <option value="wordsalad">Wortsalat</option> 
-        <option value="multipleChoice">Multiple Choice</option>
+      <select id="verbsTimeform" name="verbsTimeform">
+        <option value="presente">Presente</option>
+        <option value="imperfetto">Imperfetto</option>
       </select>
       {error && <DefaultError errorMessage={error} />}
       <DefaultButton buttonType="submit" buttonText="Los geht's" />
