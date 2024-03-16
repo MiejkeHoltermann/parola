@@ -39,7 +39,7 @@ export default function WordCard({
       return;
     } else {
       const userId = session.user.id;
-      const res = await fetch("/api/updateWord", {
+      const res = await fetch(`api/users/${userId}/words`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
