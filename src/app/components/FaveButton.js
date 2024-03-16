@@ -11,7 +11,7 @@ export default function FaveButton({ wordId, isFavorite }) {
   const addToFavorites = async () => {
     if (session) {
       setFavorite((prevFavorite) => !prevFavorite);
-      const res = await fetch("/api/favoriteWord", {
+      const res = await fetch(`api/users/${userId}/words`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
