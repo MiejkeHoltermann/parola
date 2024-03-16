@@ -40,24 +40,18 @@ export default function RegisterForm() {
       return;
     }
     try {
-      const responseUserExists = await fetch("api/userExists", {
+      const responseUserExists = await fetch("api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ name, email, password }),
       });
       const { user } = await responseUserExists.json();
       if (user) {
         setError("E-mail schon vorhanden");
         return;
-      }
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-      if (res.ok) {
+      } else {
         await signIn("credentials", {
           email: email,
           password: password,
@@ -65,8 +59,6 @@ export default function RegisterForm() {
           callbackUrl: "/import-data",
         });
         router.push("/import-data");
-      } else {
-        console.log("User registration failed.");
       }
     } catch (error) {
       console.log("Error during registration.", error);
@@ -80,19 +72,25 @@ export default function RegisterForm() {
         className="flex flex-col items-center my-[2rem] gap-[2rem]"
       >
         <DefaultInput
-          onChange={(e) => setName(e.target.value)}
+          value={name}
+          setValue={setName}
+          setError={setError}
           inputId="name"
           inputName="name"
           placeholder="Name"
         />
         <DefaultInput
-          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+          setValue={setEmail}
+          setError={setError}
           inputId="email"
           inputName="email"
           placeholder="E-mail"
         />
         <DefaultInput
-          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+          setValue={setPassword}
+          setError={setError}
           inputId="password"
           inputName="password"
           placeholder="Passwort"
