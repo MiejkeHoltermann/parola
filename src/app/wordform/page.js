@@ -40,25 +40,16 @@ export default function WordForm() {
         },
         body: JSON.stringify({ userId, germanWord, italianWord }),
       });
-      const { word1, word2 } = await responseWordExists.json();
+      const { word1, word2, verb } = await responseWordExists.json();
       if (word1 && word2 && word1._id === word2._id) {
         setError("Das Wort ist schon vorhanden");
         return;
-      }
-      const response = await fetch("/api/words", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId, germanWord, italianWord }),
-      });
-      const { newWords } = await response.json();
-      if (response.ok) {
+      } else if (verb) {
+        setError("Das VErb ist schon vorhanden.");
+      } else {
         setGermanWord("");
         setItalianWord("");
         router.push("/my-words");
-      } else {
-        console.log("New word could not be created.");
       }
     } catch (error) {
       console.log(error);

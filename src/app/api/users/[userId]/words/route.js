@@ -1,6 +1,8 @@
 import { connectMongoDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import { NextResponse } from "next/server";
+import { AbortedDeferredError } from "react-router";
+import { uid } from "uid/secure";
 
 export async function GET() {
   await connectMongoDB();
@@ -87,25 +89,35 @@ export async function DELETE(request) {
 
 export async function POST(request) {
   const { userId, germanWord, italianWord, name } = await request.json();
-
   await connectMongoDB();
   try {
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    if (germanWord && italianWord) {
-      const word1 = await user.customWords.find(
-        (word) => word.germanWord === germanWord
-      );
-      const word2 = await user.customWords.find(
-        (word) => word.italianWord === italianWord
-      );
+    const word1 = await user.customWords.find(
+      (word) => word.germanWord === germanWord
+    );
+    const word2 = await user.customWords.find(
+      (word) => word.italianWord === italianWord
+    );
+    if (word1 && word2 && word1._id === word2._id) {
       return NextResponse.json({ word1, word2 });
     } else {
-      const verb = await user.customVerbs.find((verb) => verb.name === name);
+      const newWord = {
+        _id: uid(),
+        germanWord,
+        italianWord,
+        level: 1,
+        isFavorite: false,
+      };
+      user.customWords.unshift(newWord);
+      await user.save();
+      return NextResponse.json(
+        { message: "Word successfully added." },
+        { status: 200 }
+      );
     }
-    return NextResponse.json({ verb });
   } catch (error) {
     console.log(error);
   }
