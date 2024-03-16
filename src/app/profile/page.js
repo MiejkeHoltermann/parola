@@ -121,7 +121,7 @@ export default function Profile() {
                 </div>
                 <div className="flex justify-end w-[50%]">
                   <Image
-                    src="/profile-pic2.jpg"
+                    src="/profile-pic.jpg"
                     alt="profile-picture"
                     width={100}
                     height={100}

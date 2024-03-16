@@ -92,7 +92,7 @@ export default function WordCard({
         >
           <div className="relative w-full flex gap-4 pb-2">
             <Image
-              src="/german-flag-round.svg"
+              src="/german-flag.svg"
               alt="german flag"
               width={100}
               height={100}
@@ -104,7 +104,7 @@ export default function WordCard({
           <hr className="border-gray-300 w-full" />
           <div className="relative w-full flex gap-4 pt-2">
             <Image
-              src="/italian-flag-round.svg"
+              src="/italian-flag.svg"
               alt="italian flag"
               width={100}
               height={100}

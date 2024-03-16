@@ -146,7 +146,7 @@ export default function MyVerbs() {
           className="text-darkmint w-[1.6rem] h-[1.6rem] rounded-[50%] flex justify-center items-center mb-1"
         >
           <Image
-            src="/plus3.svg"
+            src="/plus.svg"
             alt="add button"
             width={80}
             height={80}

@@ -7,7 +7,7 @@ export default function SimpleWordCard({ germanWord, italianWord }) {
       <div className="w-[90%] flex flex-col rounded-xl shadow-[2px_2px_rgba(0,215,177,1)] px-4 py-2">
         <div className="relative w-full flex gap-4 pb-2">
           <Image
-            src="/german-flag-round.svg"
+            src="/german-flag.svg"
             alt="german flag"
             width={100}
             height={100}
@@ -18,7 +18,7 @@ export default function SimpleWordCard({ germanWord, italianWord }) {
         <hr className="border-gray-300 w-full" />
         <div className="relative w-full flex gap-4 pt-2">
           <Image
-            src="/italian-flag-round.svg"
+            src="/italian-flag.svg"
             alt="italian flag"
             width={100}
             height={100}
