@@ -34,10 +34,10 @@ export default function Practise() {
 
   const updateWords = async (userId, level, wordId) => {
     try {
-      await fetch(`/api/users/${userId}/${level}/${wordId}`, {
-        method: "POST",
+      await fetch(`/api/users/${userId}/words`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, wordId }),
+        body: JSON.stringify({ userId, wordId, level }),
       });
     } catch (error) {
       console.error("Error updating practiced words.", error);
@@ -58,8 +58,6 @@ export default function Practise() {
     setHint(`${activeWord.germanWord} = ${activeWord.italianWord}`);
   }
 
-  console.log(customWords);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const number = e.target.elements.numberOfWords.value;
@@ -75,13 +73,10 @@ export default function Practise() {
     if (status === "authenticated" && level && (number || favoriteWords)) {
       try {
         const userId = session.user.id;
-        const response = await fetch(
-          `/api/users/${userId}/${level}?favoriteWords=${favoriteWords}`,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          }
-        );
+        const response = await fetch(`/api/users/${userId}/words`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
         let { customWords } = await response.json();
         if (favoriteWords) {
           const favoriteWords = customWords.filter(
@@ -127,7 +122,6 @@ export default function Practise() {
   const provideNewWord = () => {
     if (customWords.length > 0) {
       const newWord = customWords[index];
-      console.log(newWord);
       setActiveWord(newWord);
       const correctAnswer = newWord.italianWord;
       const correctAnswerIndex = multipleChoiceAnswers.indexOf(correctAnswer);

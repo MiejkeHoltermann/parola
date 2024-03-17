@@ -22,7 +22,7 @@ export default function ImportData() {
     try {
       if (session && importData === true) {
         const userId = session.user.id;
-        await fetch("api/users/${userId}", {
+        await fetch("api/importWords", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -32,18 +32,6 @@ export default function VerbConjugator() {
   const [correct, setCorrect] = useState(false);
   const [alert, setAlert] = useState("");
 
-  const updateVerbs = async (userId, verbId) => {
-    try {
-      await fetch(`/api/users/${userId}/verbs/${verbId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, verbId }),
-      });
-    } catch (error) {
-      console.error("Error updating practiced verbs.", error);
-    }
-  };
-
   const newQuestion = () => {
     console.log("test new");
     setCorrect(null);
@@ -144,7 +132,6 @@ export default function VerbConjugator() {
               answers={answers}
               setAnswers={setAnswers}
               newQuestion={newQuestion}
-              updateVerbs={updateVerbs}
               correct={correct}
               setCorrect={setCorrect}
               error={error}

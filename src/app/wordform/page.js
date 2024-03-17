@@ -40,12 +40,10 @@ export default function WordForm() {
         },
         body: JSON.stringify({ userId, germanWord, italianWord }),
       });
-      const { word1, word2, verb } = await responseWordExists.json();
-      if (word1 && word2 && word1._id === word2._id) {
-        setError("Das Wort ist schon vorhanden");
+      const { message } = await responseWordExists.json();
+      if (message === "Word already exists") {
+        setError("Das Wort ist schon vorhanden.");
         return;
-      } else if (verb) {
-        setError("Das VErb ist schon vorhanden.");
       } else {
         setGermanWord("");
         setItalianWord("");

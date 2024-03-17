@@ -11,14 +11,6 @@ const verbSchema = new Schema(
       presente05: { type: String, required: true },
       presente06: { type: String, required: true },
     },
-    imperfetto: {
-      imperfetto01: { type: String, required: true },
-      imperfetto02: { type: String, required: true },
-      imperfetto03: { type: String, required: true },
-      imperfetto04: { type: String, required: true },
-      imperfetto05: { type: String, required: true },
-      imperfetto06: { type: String, required: true },
-    },
   },
   { timestamps: true }
 );

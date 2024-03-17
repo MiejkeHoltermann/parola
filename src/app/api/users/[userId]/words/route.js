@@ -1,109 +1,62 @@
 import { connectMongoDB } from "@/lib/mongodb";
-import User from "@/models/User";
 import { NextResponse } from "next/server";
-import { AbortedDeferredError } from "react-router";
 import { uid } from "uid/secure";
+import User from "@/models/User";
 
-export async function GET() {
-  await connectMongoDB();
-  const words = await Word.find();
-  return NextResponse.json({ words });
-}
+// my-words
+// retrieves all words from the user's account
 
-export async function PUT(request) {
-  const { userId, wordId, editedGermanWord, editedItalianWord } =
-    await request.json();
+export async function GET(request, { params }) {
+  const { userId } = params;
   await connectMongoDB();
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return NextResponse.status(404).json({ message: "User not found" });
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-    if (editedGermanWord && editedItalianWord) {
-      const activeWord = user.customWords.id(wordId);
-      activeWord.germanWord = editedGermanWord;
-      activeWord.italianWord = editedItalianWord;
-      await user.save();
-      return NextResponse.json(
-        { message: "Word is now favorite." },
-        { status: 200 }
-      );
-    } else {
-      const wordIndex = user.customWords.findIndex(
-        (word) => word._id.toString() === wordId
-      );
-      if (wordIndex !== -1) {
-        user.customWords[wordIndex].isFavorite =
-          !user.customWords[wordIndex].isFavorite;
-      } else {
-        const verbIndex = user.customVerbs.findIndex(
-          (verb) => verb._id.toString() === wordId
-        );
-        if (verbIndex !== -1) {
-          user.customVerbs[verbIndex].isFavorite =
-            !user.customVerbs[verbIndex].isFavorite;
-        } else {
-          return NextResponse.status(404).json({ message: "Word not found." });
-        }
-      }
-      await user.save();
-      return NextResponse.json(
-        { message: "Word is now favorite." },
-        { status: 200 }
-      );
-    }
+    const customWords = user.customWords;
+    return NextResponse.json({ customWords }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { message: "Error setting word as favorite." },
+      { message: "Error retrieving words" },
       { status: 500 }
     );
   }
 }
 
-export async function DELETE(request) {
-  const { userId, wordId } = await request.json();
-  await connectMongoDB();
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const wordIndex = user.customWords.findIndex(
-      (word) => word._id.toString() === wordId
-    );
-    if (wordIndex === -1) {
-      return res.status(404).json({ message: "Word not found." });
-    }
-    user.customWords.splice(wordIndex, 1);
-    await user.save();
-    const newWords = user.customWords;
-    return NextResponse.json({ newWords }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(
-      { message: "Error deleting word." },
-      { status: 500 }
-    );
-  }
-}
+// wordform
+// checks whether a word already exists in the database
+// if not a new word is created
 
 export async function POST(request) {
-  const { userId, germanWord, italianWord, name } = await request.json();
+  const { userId, germanWord, italianWord } = await request.json();
   await connectMongoDB();
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-    const word1 = await user.customWords.find(
+    // does the German word already exist?
+    const germanWordExists = await user.customWords.find(
       (word) => word.germanWord === germanWord
     );
-    const word2 = await user.customWords.find(
+    // does the Italian word already exist?
+    const italianWordExists = await user.customWords.find(
       (word) => word.italianWord === italianWord
     );
-    if (word1 && word2 && word1._id === word2._id) {
-      return NextResponse.json({ word1, word2 });
-    } else {
+    // do they belong together?
+    if (
+      germanWordExists &&
+      italianWordExists &&
+      germanWordExists._id === italianWordExists._id
+    ) {
+      return NextResponse.json(
+        { message: "Word already exists" },
+        { status: 409 }
+      );
+    }
+    // if the word doesn't exist yet it is created
+    else {
       const newWord = {
         _id: uid(),
         germanWord,
@@ -114,11 +67,124 @@ export async function POST(request) {
       user.customWords.unshift(newWord);
       await user.save();
       return NextResponse.json(
-        { message: "Word successfully added." },
+        {
+          message: "Word added successfully",
+        },
         { status: 200 }
       );
     }
   } catch (error) {
     console.log(error);
+  }
+}
+
+// WordCard, wordpractice, FaveButton
+/* depending on the parameters it receives the function either
+updates the German and Italian word, updates the word's level or toggles the favorite state */
+
+export async function PUT(request) {
+  const { userId, wordId, newGermanWord, newItalianWord, level } =
+    await request.json();
+  await connectMongoDB();
+  console.log(level);
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+    // if the parameters newGermanWord and newItalianWord are passed on, the function is used to edit the existing word
+    if (newGermanWord && newItalianWord) {
+      const updatedWord = user.customWords.id(wordId);
+      updatedWord.germanWord = newGermanWord;
+      updatedWord.italianWord = newItalianWord;
+      await user.save();
+      return NextResponse.json(
+        {
+          message: "Word updated successfully",
+        },
+        { status: 200 }
+      );
+    }
+    // if the parameter level is passed on, the word's level is updated
+    else if (level) {
+      const word = user.customWords.find(
+        (word) => word._id.toString() === wordId
+      );
+      if (word) {
+        if (word.level !== 5) {
+          word.level += 1;
+        }
+        await user.save();
+        return NextResponse.json(
+          { message: "Level updated successfully" },
+          { status: 200 }
+        );
+      } else {
+        return NextResponse.json(
+          { message: "Word not found" },
+          { status: 404 }
+        );
+      }
+    }
+    // if none of these parameters are passed on, the function toggles the word's favorite state
+    else {
+      const currentWord = user.customWords.find(
+        (word) => word._id.toString() === wordId
+      );
+      if (currentWord) {
+        currentWord.isFavorite = !currentWord.isFavorite;
+      } else {
+        return NextResponse.json(
+          {
+            message: "Word not found",
+          },
+          { status: 404 }
+        );
+      }
+      await user.save();
+      return NextResponse.json(
+        {
+          message: "Favorite state updated successfully",
+        },
+        { status: 200 }
+      );
+    }
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: "Error updating favorite state",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// WordCard
+// removes a word from the database
+
+export async function DELETE(request) {
+  const { userId, wordId } = await request.json();
+  await connectMongoDB();
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+    const wordIndex = user.customWords.findIndex(
+      (word) => word._id.toString() === wordId
+    );
+    if (wordIndex !== -1) {
+      user.customWords.splice(wordIndex, 1);
+      await user.save();
+      const newCustomWords = user.customWords;
+      return NextResponse.json({ newCustomWords }, { status: 200 });
+    } else {
+      return NextResponse.json({ message: "Word not found" }, { status: 404 });
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error deleting word" },
+      { status: 500 }
+    );
   }
 }

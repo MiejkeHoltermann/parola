@@ -12,7 +12,6 @@ export default function VerbPractice({
   setActiveVerb,
   answers,
   setAnswers,
-  updateVerbs,
   level,
   correct,
   setCorrect,
@@ -42,7 +41,6 @@ export default function VerbPractice({
     if (newIsCorrect.every((correct) => correct)) {
       setCorrect(true);
       setError("Das war richtig.");
-      updateVerbs(userId, activeVerb._id);
       const newCustomVerbs = customVerbs.filter(
         (verb) => verb._id != activeVerb._id
       );

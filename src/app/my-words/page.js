@@ -25,7 +25,7 @@ export default function MyWords() {
       } else {
         const userId = session.user.id;
         try {
-          const response = await fetch(`/api/users/${userId}`, {
+          const response = await fetch(`/api/users/${userId}/words`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
           });

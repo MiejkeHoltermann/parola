@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 
-export default function FaveButton({ wordId, isFavorite }) {
+export default function FaveButton({ wordId, isFavorite, category }) {
   const [favorite, setFavorite] = useState(isFavorite);
   const { data: session, status } = useSession();
   const userId = session.user.id;
@@ -11,7 +11,7 @@ export default function FaveButton({ wordId, isFavorite }) {
   const addToFavorites = async () => {
     if (session) {
       setFavorite((prevFavorite) => !prevFavorite);
-      const res = await fetch(`api/users/${userId}/words`, {
+      const res = await fetch(`api/users/${userId}/${category}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -9,10 +9,10 @@ export default function EditModal({
   setEditMode,
   germanWord,
   italianWord,
-  setEditedGermanWord,
-  setEditedItalianWord,
-  editedGermanWord,
-  editedItalianWord,
+  setNewGermanWord,
+  setNewItalianWord,
+  newGermanWord,
+  newItalianWord,
   deleteModal,
   setDeleteModal,
   removeWord,
@@ -24,12 +24,12 @@ export default function EditModal({
   const userId = session.user.id;
 
   const handleGermanInputChange = (e) => {
-    setEditedGermanWord(e.target.value.trim());
+    setNewGermanWord(e.target.value.trim());
     setError("");
   };
 
   const handleItalianInputChange = (e) => {
-    setEditedItalianWord(e.target.value.trim());
+    setNewItalianWord(e.target.value.trim());
     setError("");
   };
 
@@ -38,8 +38,8 @@ export default function EditModal({
   };
 
   const cancelEdit = () => {
-    setEditedGermanWord(germanWord);
-    setEditedItalianWord(italianWord);
+    setNewGermanWord(germanWord);
+    setNewItalianWord(italianWord);
     setError("");
     setEditMode(false);
   };
@@ -68,8 +68,8 @@ export default function EditModal({
           <input
             onChange={handleGermanInputChange}
             autoFocus
-            onDoubleClick={() => setEditedGermanWord("")}
-            value={editedGermanWord}
+            onDoubleClick={() => setNewGermanWord("")}
+            value={newGermanWord}
             type="text"
             id="germanWordInput"
             name="germanWordInput"
@@ -78,8 +78,8 @@ export default function EditModal({
           />
           <input
             onChange={handleItalianInputChange}
-            onDoubleClick={() => setEditedItalianWord("")}
-            value={editedItalianWord}
+            onDoubleClick={() => setNewItalianWord("")}
+            value={newItalianWord}
             type="text"
             id="italianWordInput"
             name="italianWordInput"

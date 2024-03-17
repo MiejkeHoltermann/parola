@@ -4,16 +4,16 @@ import User from "@/models/User";
 import Word from "@/models/Word";
 import Verb from "@/models/Verb";
 
-/* when a user first registers they can import the default vocabulary into their user account,
-alternatively they can choose to do this later from their profile */
+// import-data, profile, my-words, my-verbs
+// imports the default vocabulary into the user's account
 
-export async function POST(req) {
+export async function POST(req, res) {
   const { userId } = await req.json();
   await connectMongoDB();
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
     const defaultWords = await Word.find();
     user.customWords.push(...defaultWords);
@@ -22,11 +22,17 @@ export async function POST(req) {
     user.customVerbs.push(...defaultVerbs);
     user.wordsImported = true;
     await user.save();
-    const customWords = user.customWords;
-    return NextResponse.json({ customWords }, { status: 200 });
+    return NextResponse.json(
+      {
+        message: "Data imported successfully",
+      },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json(
-      { message: "Error importing data for user." },
+      {
+        message: "Error importing data",
+      },
       { status: 500 }
     );
   }

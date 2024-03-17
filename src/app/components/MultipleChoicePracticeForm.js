@@ -28,7 +28,7 @@ export default function MultipleChoicePracticeForm({
       setClickedIndex(null);
       const userId = session.user.id;
       if (level !== 5) {
-        updateWords(userId, level, activeWord._id);
+        updateWords(userId, activeWord.level, activeWord._id);
         const newCustomWords = customWords.filter(
           (word) => word._id != activeWord._id
         );

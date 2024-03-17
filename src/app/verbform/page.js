@@ -43,30 +43,22 @@ export default function WordForm() {
         return;
       }
       const userId = sessionData.user.id;
-      const responseVerbExists = await fetch("api/verbExists", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId, name }),
-      });
-      const { verb } = await responseVerbExists.json();
-      if (verb) {
-        setError("Das Verb ist schon vorhanden");
-        return;
-      }
-      const response = await fetch("/api/verbs", {
+      const response = await fetch(`api/users/${userId}/verbs`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           userId,
+          name,
           ...trimmedFormData,
         }),
       });
-      const { newVerbs } = await response.json();
-      if (response.ok) {
+      const { verb } = await response.json();
+      if (verb) {
+        setError("Das Verb ist schon vorhanden");
+        return;
+      } else {
         setFormData({
           name: "",
           presente01: "",
@@ -76,10 +68,7 @@ export default function WordForm() {
           presente05: "",
           presente06: "",
         });
-        console.log(newVerbs.length);
         router.push("/my-verbs");
-      } else {
-        console.log("New word could not be created.");
       }
     } catch (error) {
       console.log(error);

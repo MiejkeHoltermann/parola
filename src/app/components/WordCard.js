@@ -16,8 +16,8 @@ export default function WordCard({
   newWord,
   setFilteredWords,
 }) {
-  const [editedGermanWord, setEditedGermanWord] = useState(germanWord);
-  const [editedItalianWord, setEditedItalianWord] = useState(italianWord);
+  const [newGermanWord, setNewGermanWord] = useState(germanWord);
+  const [newItalianWord, setNewItalianWord] = useState(italianWord);
   const [error, setError] = useState("");
   const { data: session } = useSession();
 
@@ -31,10 +31,7 @@ export default function WordCard({
   const updateWord = async () => {
     if (!session) {
       return <div>You are not logged in.</div>;
-    } else if (
-      editedGermanWord.length === 0 ||
-      editedItalianWord.length === 0
-    ) {
+    } else if (newGermanWord.length === 0 || newItalianWord.length === 0) {
       setError("Alle Felder müssen ausgefüllt sein.");
       return;
     } else {
@@ -47,8 +44,8 @@ export default function WordCard({
         body: JSON.stringify({
           userId,
           wordId,
-          editedGermanWord,
-          editedItalianWord,
+          newGermanWord,
+          newItalianWord,
         }),
       });
       if (res.ok) {
@@ -73,9 +70,9 @@ export default function WordCard({
         },
         body: JSON.stringify({ userId, wordId }),
       });
-      const { newWords } = await res.json();
+      const { newCustomWords } = await res.json();
       if (res.ok) {
-        setFilteredWords(newWords);
+        setFilteredWords(newCustomWords);
       }
       setDeleteModal(false);
       setEditMode(false);
@@ -98,8 +95,12 @@ export default function WordCard({
               height={100}
               className="w-6 h-6"
             />
-            <p className="w-full">{editedGermanWord}</p>
-            <FaveButton wordId={wordId} isFavorite={isFavorite} />
+            <p className="w-full">{newGermanWord}</p>
+            <FaveButton
+              wordId={wordId}
+              isFavorite={isFavorite}
+              category="words"
+            />
           </div>
           <hr className="border-gray-300 w-full" />
           <div className="relative w-full flex gap-4 pt-2">
@@ -110,7 +111,7 @@ export default function WordCard({
               height={100}
               className="w-6 h-6"
             />
-            <p className="w-full">{editedItalianWord}</p>
+            <p className="w-full">{newItalianWord}</p>
             <button onClick={() => setEditMode(true)}>
               <RiEdit2Fill size={20} />
             </button>
@@ -123,10 +124,10 @@ export default function WordCard({
             setEditMode={setEditMode}
             germanWord={germanWord}
             italianWord={italianWord}
-            editedGermanWord={editedGermanWord}
-            setEditedGermanWord={setEditedGermanWord}
-            editedItalianWord={editedItalianWord}
-            setEditedItalianWord={setEditedItalianWord}
+            newGermanWord={newGermanWord}
+            setNewGermanWord={setNewGermanWord}
+            newItalianWord={newItalianWord}
+            setNewItalianWord={setNewItalianWord}
             deleteModal={deleteModal}
             setDeleteModal={setDeleteModal}
             removeWord={removeWord}
