@@ -4,7 +4,7 @@ import User from "@/models/User";
 import Word from "@/models/Word";
 import Verb from "@/models/Verb";
 
-// import-data, profile, my-words, my-verbs
+// import-data, profile, words, my-verbs
 // imports the default vocabulary into the user's account
 
 export async function POST(req, res) {

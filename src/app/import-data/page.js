@@ -7,20 +7,14 @@ import DefaultCheckbox from "../components/DefaultCheckbox";
 
 export default function ImportData() {
   const [importData, setImportData] = useState(true);
-  const [checked, setChecked] = useState(true);
+
   const { data: session } = useSession();
-
   const router = useRouter();
-
-  const handleCheckboxChange = (e) => {
-    setChecked(e.target.checked);
-    setImportData(e.target.checked);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (session && importData === true) {
+      if (session && importData) {
         const userId = session.user.id;
         await fetch("api/importWords", {
           method: "POST",
@@ -38,7 +32,7 @@ export default function ImportData() {
 
   return (
     <main>
-      <p className="w-full text-center bg-blue-500 text-blue-500">
+      <p className="w-full text-center">
         Diese App stellt einen umfangreichen Grundwortschatz zur Verfügung.
         <br />
         Entferne das Häkchen, wenn du stattdessen deine eigenen Vokabeln
@@ -47,17 +41,19 @@ export default function ImportData() {
         Du kannst den Grundwortschatz auch später hinzufügen, wenn du noch
         unsicher bist.
       </p>
-      <form className="w-[100%] flex flex-col items-center mt-[1rem] gap-[4rem]">
+      <form
+        onSubmit={handleSubmit}
+        className="w-[90%] flex flex-col items-center mt-[1rem] gap-[4rem]"
+      >
         <DefaultCheckbox
+          setValue={setImportData}
+          defaultChecked
           checkboxId="importData"
           checkboxName="importData"
           checkboxValue="importData"
           checkboxLabel="Wortschatz importieren"
-          onChange={handleCheckboxChange}
-          checked={checked}
-          defaultChecked={true}
         />
-        <DefaultButton buttonFunction={handleSubmit} buttonText="OK" />
+        <DefaultButton buttonType="submit" buttonText="OK" />
       </form>
     </main>
   );

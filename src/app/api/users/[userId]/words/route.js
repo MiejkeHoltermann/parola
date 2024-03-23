@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { uid } from "uid/secure";
 import User from "@/models/User";
 
-// my-words
+// words
 // retrieves all words from the user's account
 
 export async function GET(request, { params }) {
@@ -24,7 +24,7 @@ export async function GET(request, { params }) {
   }
 }
 
-// wordform
+// WordForm
 // checks whether a word already exists in the database
 // if not a new word is created
 
@@ -66,9 +66,10 @@ export async function POST(request) {
       };
       user.customWords.unshift(newWord);
       await user.save();
+      const customWords = user.customWords;
       return NextResponse.json(
         {
-          message: "Word added successfully",
+          customWords,
         },
         { status: 200 }
       );
@@ -86,7 +87,6 @@ export async function PUT(request) {
   const { userId, wordId, newGermanWord, newItalianWord, level } =
     await request.json();
   await connectMongoDB();
-  console.log(level);
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -142,12 +142,8 @@ export async function PUT(request) {
         );
       }
       await user.save();
-      return NextResponse.json(
-        {
-          message: "Favorite state updated successfully",
-        },
-        { status: 200 }
-      );
+      const newCustomWords = user.customWords;
+      return NextResponse.json({ newCustomWords }, { status: 200 });
     }
   } catch (error) {
     return NextResponse.json(

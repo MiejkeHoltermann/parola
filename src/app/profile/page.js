@@ -5,6 +5,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Lottie from "react-lottie-player";
 import lottieJson from "../../../public/loading-animation.json";
+import CloseLink from "../components/CloseLink";
 
 export default function Profile() {
   const { data: session, status } = useSession();
@@ -111,6 +112,7 @@ export default function Profile() {
         <>
           {session && registrationDate && customWords ? (
             <>
+              <CloseLink href="/home" />
               <div className="flex w-[80%] mb-4">
                 <div className="w-[50%] ">
                   <p className="font-bold text-lg text-mint mb-4">

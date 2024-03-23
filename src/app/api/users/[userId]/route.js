@@ -14,7 +14,7 @@ export async function GET(request, { params }) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
     const registrationDate = user.createdAt;
-    const customWords = user.customWords;
+    const customWords = user.customWords.length;
     const wordsLevel1 = user.customWords.filter(
       (word) => word.level == 1
     ).length;

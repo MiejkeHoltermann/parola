@@ -1,5 +1,5 @@
 export default function DefaultInput({
-  onDoubleClick,
+  readOnly,
   value,
   setValue,
   setError,
@@ -9,19 +9,15 @@ export default function DefaultInput({
 }) {
   const handleChange = (e) => {
     setValue(e.target.value);
-  };
-
-  const handleFocus = () => {
-    setValue("");
     setError("");
   };
 
   return (
     <>
       <input
+        readOnly={readOnly}
         onChange={handleChange}
-        onFocus={handleFocus}
-        onDoubleClick={onDoubleClick}
+        onDoubleClick={() => setValue("")}
         value={value}
         type="text"
         id={inputId}

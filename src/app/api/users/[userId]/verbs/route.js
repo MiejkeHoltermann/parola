@@ -24,13 +24,13 @@ export async function GET(request, { params }) {
   }
 }
 
-// verbform
+// VerbForm
 // checks whether a verb already exists in the database
 // if not a new verb is created
 
 export async function POST(request) {
+  const { userId, trimmedVerbData } = await request.json();
   const {
-    userId,
     name,
     presente01,
     presente02,
@@ -38,7 +38,7 @@ export async function POST(request) {
     presente04,
     presente05,
     presente06,
-  } = await request.json();
+  } = trimmedVerbData;
   await connectMongoDB();
   try {
     const user = await User.findById(userId);
@@ -54,7 +54,7 @@ export async function POST(request) {
     else {
       const newVerb = {
         _id: uid(),
-        name,
+        name: name,
         isFavorite: false,
         presente: {
           presente01: presente01,
@@ -64,20 +64,13 @@ export async function POST(request) {
           presente05: presente05,
           presente06: presente06,
         },
-        imperfetto: {
-          imperfetto01: "asdf",
-          imperfetto02: "asdf",
-          imperfetto03: "saf",
-          imperfetto04: "asdf",
-          imperfetto05: "sadf",
-          imperfetto06: "adsf",
-        },
       };
       user.customVerbs = [newVerb, ...user.customVerbs];
       await user.save();
+      const customVerbs = user.customVerbs;
       return NextResponse.json(
         {
-          message: "Verb added successfully",
+          customVerbs,
         },
         { status: 200 }
       );
@@ -94,7 +87,6 @@ updates the verb or toggles the favorite state */
 export async function PUT(request) {
   const {
     userId,
-    wordId,
     verbId,
     newName,
     newPresente01,
@@ -121,9 +113,10 @@ export async function PUT(request) {
       updatedVerb.presente.presente05 = newPresente05;
       updatedVerb.presente.presente06 = newPresente06;
       await user.save();
+      const newCustomVerbs = user.customVerbs;
       return NextResponse.json(
         {
-          message: "Verb updated successfully",
+          newCustomVerbs,
         },
         { status: 200 }
       );
@@ -131,7 +124,7 @@ export async function PUT(request) {
     // if none of these parameters are passed on, the function toggles the verb's favorite state
     else {
       const currentVerb = user.customVerbs.find(
-        (verb) => verb._id.toString() === wordId
+        (verb) => verb._id.toString() === verbId
       );
       if (currentVerb) {
         currentVerb.isFavorite = !currentVerb.isFavorite;
@@ -144,12 +137,8 @@ export async function PUT(request) {
         );
       }
       await user.save();
-      return NextResponse.json(
-        {
-          message: "Favorite state updated successfully",
-        },
-        { status: 200 }
-      );
+      const newCustomVerbs = user.customVerbs;
+      return NextResponse.json({ newCustomVerbs }, { status: 200 });
     }
   } catch (error) {
     return NextResponse.json(
