@@ -81,7 +81,7 @@ export async function POST(request) {
 
 // WordCard, wordpractice, FaveButton
 /* depending on the parameters it receives the function either
-updates the German and Italian word, updates the word's level or toggles the favorite state */
+updates the word, updates the word's level or toggles the favorite state */
 
 export async function PUT(request) {
   const { userId, wordId, newGermanWord, newItalianWord, level } =
@@ -92,15 +92,16 @@ export async function PUT(request) {
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-    // if the parameters newGermanWord and newItalianWord are passed on, the function is used to edit the existing word
+    // if the parameters newGermanWord and newItalianWord are passed on, the function updates the existing word
     if (newGermanWord && newItalianWord) {
       const updatedWord = user.customWords.id(wordId);
       updatedWord.germanWord = newGermanWord;
       updatedWord.italianWord = newItalianWord;
       await user.save();
+      const newCustomWords = user.customWords;
       return NextResponse.json(
         {
-          message: "Word updated successfully",
+          newCustomWords,
         },
         { status: 200 }
       );
@@ -172,8 +173,8 @@ export async function DELETE(request) {
     if (wordIndex !== -1) {
       user.customWords.splice(wordIndex, 1);
       await user.save();
-      const newCustomWords = user.customWords;
-      return NextResponse.json({ newCustomWords }, { status: 200 });
+      const customWords = user.customWords;
+      return NextResponse.json({ customWords }, { status: 200 });
     } else {
       return NextResponse.json({ message: "Word not found" }, { status: 404 });
     }

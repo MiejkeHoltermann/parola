@@ -10,56 +10,64 @@ import ImportButton from "../components/ImportButton";
 import WordForm from "../components/Words/WordForm";
 import AddButton from "../components/Words/AddButton";
 import CloseLink from "../components/CloseLink";
+import DefaultError from "../components/DefaultError";
+import DefaultButton from "../components/DefaultButton";
 
 export default function Words() {
   const [customWords, setCustomWords] = useState([]);
   const [filteredWords, setFilteredWords] = useState([]);
   const [filterDialogue, setFilterDialogue] = useState(false);
-  const [sortingDialogue, setSortingDialogue] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState("all");
+  const [sortingDialogue, setSortingDialogue] = useState(false);
   const [addModal, setAddModal] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { data: session, status } = useSession();
 
   useEffect(() => {
+    // loads all words that are saved in the user account
     const fetchData = async () => {
-      if (!session) {
-        return;
-      } else {
+      if (session) {
         const userId = session.user.id;
+        setError("");
+        setLoading(true);
         try {
           const response = await fetch(`/api/users/${userId}/words`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
           });
           const { customWords } = await response.json();
-          setCustomWords(customWords);
-          setFilteredWords(customWords);
+          if (customWords) {
+            setCustomWords(customWords);
+            setFilteredWords(customWords);
+          } else {
+            setError("Error retrieving words");
+          }
         } catch (error) {
-          console.error("Error fetching data.", error);
+          setError("Error retrieving words");
         }
+        setLoading(false);
       }
     };
-    if (status === "authenticated") {
-      fetchData();
-    }
-  }, [session, status]);
-
-  const resetFilters = async () => {
-    setFilteredWords(customWords);
-    setFilterDialogue(false);
-    setSelectedLevel("all");
-  };
+    fetchData();
+  }, [session]);
 
   const toggleAddModal = () => {
     setAddModal(!addModal);
+  };
+
+  const resetFilters = () => {
+    setFilteredWords(customWords);
+    setFilterDialogue(false);
+    setSelectedLevel("all");
   };
 
   return (
     <main>
       {status === "loading" ? (
         <LoadingAnimation />
-      ) : customWords ? (
+      ) : (
         <>
           {addModal ? (
             <WordForm
@@ -71,15 +79,18 @@ export default function Words() {
             <>
               <CloseLink href="/home" />
               <h1 className="text-xl font-bold">
-                Meine Vokabeln ({customWords.length})
+                Meine Vokabeln {customWords && `(${customWords.length})`}
               </h1>
-              <AddButton toggleAddModal={toggleAddModal} />{" "}
-              {customWords.length > 0 ? (
+              {error && <DefaultError errorMessage={error} />}
+              <AddButton toggleAddModal={toggleAddModal} />
+              {customWords && customWords.length > 0 ? (
                 <>
                   <SearchBar
                     customWords={customWords}
                     setFilteredWords={setFilteredWords}
                     placeholder="Vokabeln suchen"
+                    setSortingDialogue={setSortingDialogue}
+                    setFilterDialogue={setFilterDialogue}
                   />
                   <div className="relative w-[90%]">
                     <FilterOptions
@@ -112,21 +123,30 @@ export default function Words() {
                           italianWord={word.italianWord}
                           setFilteredWords={setFilteredWords}
                           setCustomWords={setCustomWords}
+                          setError={setError}
                         />
                       ))}
+                      {filteredWords.length !== customWords.length ? (
+                        <DefaultButton
+                          buttonFunction={resetFilters}
+                          buttonType="button"
+                          buttonText="Zurücksetzen"
+                        />
+                      ) : null}
                     </>
                   ) : (
                     <>
-                      <p className="text-center">Keine Treffer</p>
-                      <button
-                        onClick={() => resetFilters()}
-                        className="underline"
-                      >
-                        Zurücksetzen
-                      </button>
+                      <p className="text-center mt-[2rem]">Keine Treffer</p>
+                      <DefaultButton
+                        buttonFunction={resetFilters}
+                        buttonType="button"
+                        buttonText="Zurücksetzen"
+                      />
                     </>
                   )}
                 </>
+              ) : loading ? (
+                <LoadingAnimation small />
               ) : (
                 <>
                   <p className="text-center mt-[2rem]">
@@ -137,13 +157,14 @@ export default function Words() {
                   <ImportButton
                     setCustomWords={setCustomWords}
                     setFilteredWords={setFilteredWords}
+                    setError={setError}
                   />
                 </>
               )}
             </>
           )}
         </>
-      ) : null}
+      )}
     </main>
   );
 }

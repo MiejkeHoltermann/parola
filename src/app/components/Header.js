@@ -8,12 +8,6 @@ import Link from "next/link";
 export default function Header() {
   const { data: session } = useSession();
   const [dropdown, setDropdown] = useState(false);
-  const router = useRouter();
-
-  const signOutUser = () => {
-    signOut();
-    router.push("/");
-  };
 
   const toggleDropdown = () => {
     setDropdown(!dropdown);
@@ -59,7 +53,7 @@ export default function Header() {
                 </li>
                 <li className="py-[0.3rem]">
                   <button
-                    onClick={signOutUser}
+                    onClick={() => signOut()}
                     className="text-mint font-bold mt-[0.4rem]"
                   >
                     Abmelden

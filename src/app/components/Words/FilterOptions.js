@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import DefaultButton from "../DefaultButton";
 
 export default function FilterOptions({
@@ -15,6 +15,8 @@ export default function FilterOptions({
     setFilterDialogue(!filterDialogue);
     setSortingDialogue(false);
   };
+
+  // filters all words for the ones marked as favorite or the words of a certain level
 
   const filterWords = () => {
     let filteredWords;
@@ -87,11 +89,7 @@ export default function FilterOptions({
               >
                 Zurücksetzen
               </button>
-              <DefaultButton
-                buttonType="submit"
-                buttonText="OK"
-                smallSize="4rem"
-              />
+              <DefaultButton buttonType="submit" buttonText="OK" size="4rem" />
             </div>
           </form>
         </>

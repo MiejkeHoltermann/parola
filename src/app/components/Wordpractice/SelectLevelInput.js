@@ -1,14 +1,53 @@
-import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function SelectLevelInput({
   setLevel,
   defaultOption,
   setDefaultOption,
-  options,
-  wordsLevels,
+  setError,
 }) {
   const [dropdown, setDropdown] = useState(false);
+  const [wordsLevels, setWordsLevels] = useState(Array(6).fill(0));
+  const [options, setOptions] = useState(Array(6).fill(""));
+
+  const { data: session } = useSession();
+
+  // fetches the information of how many words are on each level
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (session) {
+        const userId = session.user.id;
+        try {
+          const response = await fetch(`/api/users/${userId}`, {
+            cache: "no-store",
+          });
+          const { wordsLevels } = await response.json();
+          if (wordsLevels) {
+            setWordsLevels((prevWordsLevels) => {
+              return wordsLevels;
+            });
+            setDefaultOption(`Alle (${wordsLevels[5]} Wörter)`);
+            setOptions([
+              `Alle (${wordsLevels[5]} Wörter)`,
+              `Level 1 (${wordsLevels[0]} Wörter)`,
+              `Level 2 (${wordsLevels[1]} Wörter)`,
+              `Level 3 (${wordsLevels[2]} Wörter)`,
+              `Level 4 (${wordsLevels[3]} Wörter)`,
+              `Level 5 (${wordsLevels[4]} Wörter)`,
+            ]);
+          } else {
+            setError("Form could not be loaded");
+          }
+        } catch (error) {
+          setError("Form could not be loaded");
+        }
+      }
+    };
+    fetchData();
+  }, [session, setDefaultOption, setOptions, setError]);
 
   const toggleDropdown = () => {
     setDropdown(!dropdown);

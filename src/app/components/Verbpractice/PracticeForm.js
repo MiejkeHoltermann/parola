@@ -1,74 +1,63 @@
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { shuffle } from "fast-shuffle";
 import DefaultError from "../DefaultError";
 import DefaultButton from "../DefaultButton";
 
-export default function VerbPracticeForm({
+// enables the user to select how many verbs they want to practice
+
+export default function PracticeForm({
   numberOfVerbs,
   setNumberOfVerbs,
-  error,
   setError,
+  error2,
+  setError2,
   setCustomVerbs,
   setPracticeStatus,
 }) {
-  const [checked, setChecked] = useState(false);
   const [invalid, setInvalid] = useState(false);
 
-  const { data: session, status } = useSession();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (session) {
-        const userId = session.user.id;
-        try {
-          const response = await fetch(`/api/users/${userId}`, {
-            cache: "no-store",
-          });
-          const { customWords } = await response.json();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-    fetchData();
-  }, [session]);
+  const { data: session } = useSession();
 
   const handleNumberChange = (e) => {
     let numberOfVerbs = parseInt(e.target.value, 10);
-    setChecked(false);
     setNumberOfVerbs(numberOfVerbs);
-    if (numberOfVerbs < 1 || numberOfVerbs > 20) {
+    if (numberOfVerbs < 1 || numberOfVerbs > 10) {
       setInvalid(true);
-      setError("Wähle zwischen 1 und 20 Verben für diese Lerneinheit aus.");
+      setError2("Wähle zwischen 1 und 10 Verben für diese Lerneinheit aus.");
     } else {
       setInvalid(false);
-      setError("");
+      setError2("");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // checks whether the input field for numberOfVerbs is valid
     const numberOfVerbs = e.target.elements.numberOfVerbs.value;
-    setNumberOfVerbs(numberOfVerbs);
-    if (numberOfVerbs < 1 || numberOfVerbs > 20) {
-      setError("Wähle zwischen 1 und 20 Verben für diese Lerneinheit aus.");
+    if (numberOfVerbs < 1 || numberOfVerbs > 10) {
+      setError2("Wähle zwischen 1 und 10 Verben für diese Lerneinheit aus.");
       return;
-    }
-    if (status === "authenticated") {
+    } else if (session) {
+      const userId = session.user.id;
+      // fetches all verbs
       try {
-        const userId = session.user.id;
         const response = await fetch(`/api/users/${userId}/verbs`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
-        let { customVerbs } = await response.json();
-        const shuffledVerbs = shuffle(customVerbs);
-        const activeVerbs = shuffledVerbs.slice(0, numberOfVerbs);
-        setCustomVerbs(activeVerbs);
-        setPracticeStatus("practice list");
+        const { customVerbs } = await response.json();
+        // limits the verbs to the number of verbs that the user picked
+        if (customVerbs) {
+          const shuffledVerbs = shuffle(customVerbs);
+          const activeVerbs = shuffledVerbs.slice(0, numberOfVerbs);
+          setCustomVerbs(activeVerbs);
+          setPracticeStatus("practice list");
+        } else {
+          setError("Error retrieving verbs");
+        }
       } catch (error) {
-        console.error("Error fetching data.", error);
+        setError("Error retrieving verbs");
       }
     }
   };
@@ -91,8 +80,8 @@ export default function VerbPracticeForm({
           invalid ? "text-red-500" : ""
         }`}
       />
-      {error && <DefaultError errorMessage={error} />}
-      <DefaultButton buttonType="submit" buttonText="Los geht's" />
+      {error2 && <DefaultError errorMessage={error2} />}
+      <DefaultButton buttonType="submit" buttonText="Los geht's" size="8rem" />
     </form>
   );
 }

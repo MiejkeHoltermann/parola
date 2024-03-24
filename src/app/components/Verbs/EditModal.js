@@ -1,32 +1,82 @@
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 import Image from "next/image";
-import { HiOutlineTrash } from "react-icons/hi";
 import DeleteModal from "./DeleteModal";
 import DefaultError from "../DefaultError";
-import { useState } from "react";
+import { HiOutlineTrash } from "react-icons/hi";
 
 export default function EditModal({
   verb,
-  setEditMode,
-  formData,
-  setFormData,
-  deleteModal,
-  setDeleteModal,
-  removeVerb,
-  updateVerb,
+  setCustomVerbs,
+  setFilteredVerbs,
+  setEditModal,
   error,
   setError,
 }) {
-  const presenteLabels = ["Name", "io", "tu", "lei/lui", "noi", "voi", "loro"];
+  const [formData, setFormData] = useState({
+    newName: verb.name,
+    newPresente01: verb.presente.presente01,
+    newPresente02: verb.presente.presente02,
+    newPresente03: verb.presente.presente03,
+    newPresente04: verb.presente.presente04,
+    newPresente05: verb.presente.presente05,
+    newPresente06: verb.presente.presente06,
+  });
   const [initialFormData, setInitialFormData] = useState(formData);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [error2, setError2] = useState("");
+  const presenteLabels = ["Name", "io", "tu", "lei/lui", "noi", "voi", "loro"];
 
-  const toggleDeleteModal = () => {
-    setDeleteModal(!deleteModal);
-  };
+  const { data: session } = useSession();
 
+  // if the user cancels editing the verb is reset to its initial value
   const cancelEdit = () => {
     setFormData(initialFormData);
     setError("");
-    setEditMode(false);
+    setEditModal(false);
+  };
+
+  const updateVerb = async () => {
+    // checks whether all input fields are valid
+    if (Object.values(formData).some((value) => value.trim() === "")) {
+      setError2("Alle Felder müssen ausgefüllt sein.");
+      return;
+    } else if (Object.values(formData).some((value) => value.length > 20)) {
+      setError2("Keines der Wörter darf länger als 20 Zeichen sein.");
+      return;
+    } else if (session) {
+      const userId = session.user.id;
+      const verbId = verb._id;
+      // updates the edited verb in the database
+      try {
+        const response = await fetch(`api/users/${userId}/verbs`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId,
+            verbId,
+            ...formData,
+          }),
+        });
+        const { customVerbs } = await response.json();
+        if (customVerbs) {
+          setCustomVerbs(customVerbs);
+          setFilteredVerbs(customVerbs);
+          setError("");
+        }
+        // if an error occurs during the update, the verb is reset to its initial value
+        else {
+          setFormData(initialFormData);
+          setError("Error updating verb");
+        }
+      } catch (error) {
+        setFormData(initialFormData);
+        setError("Error updating verb");
+      }
+    }
+    setEditModal(false);
   };
 
   const handleInputChange = (e) => {
@@ -36,6 +86,7 @@ export default function EditModal({
       [name]: value,
     });
     setError("");
+    setError2("");
   };
 
   const handleDoubleClick = (fieldName) => {
@@ -47,7 +98,7 @@ export default function EditModal({
       {!deleteModal ? (
         <div className="flex flex-col items-center gap-[1rem]">
           <div className="w-full flex justify-between">
-            <button onClick={toggleDeleteModal} className="self-start">
+            <button onClick={() => setDeleteModal(true)} className="self-start">
               <HiOutlineTrash size={28} style={{ color: "#027863" }} />
             </button>
             <button
@@ -68,9 +119,9 @@ export default function EditModal({
             const fieldValue =
               index === 0
                 ? formData.newName || ""
-                : formData[fieldName] ||
-                  verb.presente[`presente0${index}`] ||
-                  "";
+                : formData[fieldName] !== undefined
+                ? formData[fieldName]
+                : verb.presente[`presente0${index}`] || "";
             return (
               <div key={index} className="grid grid-cols-4">
                 <p>{label}</p>
@@ -87,7 +138,7 @@ export default function EditModal({
               </div>
             );
           })}
-          {error && <DefaultError errorMessage={error} />}
+          {error2 && <DefaultError errorMessage={error2} />}
           <button
             onClick={() => updateVerb()}
             type="button"
@@ -98,9 +149,12 @@ export default function EditModal({
         </div>
       ) : (
         <DeleteModal
-          closeDeleteModal={toggleDeleteModal}
-          removeWord={removeVerb}
-          wordId={verb._id}
+          verbId={verb._id}
+          setCustomVerbs={setCustomVerbs}
+          setFilteredVerbs={setFilteredVerbs}
+          setDeleteModal={setDeleteModal}
+          setEditModal={setEditModal}
+          setError={setError}
         />
       )}
     </>

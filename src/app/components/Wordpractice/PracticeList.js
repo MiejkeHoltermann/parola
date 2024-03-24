@@ -1,6 +1,8 @@
 import DefaultButton from "../DefaultButton";
 import SimpleWordCard from "./SimpleWordCard";
 
+// simply shows a list of all selected words so the user can memorize them
+
 export default function PracticeList({ customWords, provideNewWord, reload }) {
   return (
     <>
@@ -22,7 +24,7 @@ export default function PracticeList({ customWords, provideNewWord, reload }) {
         </>
       ) : (
         <>
-          <p className="text-center mt-[2rem]">
+          <p className="text-center">
             Du hast keine Vokabeln, die diese Kriterien erfüllen.
           </p>
           <DefaultButton

@@ -2,31 +2,40 @@ import { useSession } from "next-auth/react";
 import DefaultButton from "../DefaultButton";
 
 export default function DeleteModal({
-  wordId,
-  setFilteredWords,
-  toggleDeleteModal,
-  setEditMode,
+  verbId,
+  setCustomVerbs,
+  setFilteredVerbs,
+  setEditModal,
+  setDeleteModal,
+  setError,
 }) {
   const { data: session } = useSession();
 
-  const removeWord = async (wordId) => {
-    if (!session) {
-      return <div>You are not logged in.</div>;
-    } else {
+  const removeVerb = async (verbId) => {
+    if (session) {
       const userId = session.user.id;
-      const response = await fetch(`api/users/${userId}/words`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId, wordId }),
-      });
-      const { newCustomWords } = await response.json();
-      if (newCustomWords) {
-        setFilteredWords(newCustomWords);
+      try {
+        // deletes a verb from the database
+        const response = await fetch(`api/users/${userId}/verbs`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId, verbId }),
+        });
+        const { customVerbs } = await response.json();
+        if (customVerbs) {
+          setCustomVerbs(customVerbs);
+          setFilteredVerbs(customVerbs);
+          setError("");
+        } else {
+          setError("Error deleting verb");
+        }
+      } catch (error) {
+        setError("Error deleting verb");
       }
-      toggleDeleteModal;
-      setEditMode(false);
+      setDeleteModal(false);
+      setEditModal(false);
     }
   };
 
@@ -37,17 +46,17 @@ export default function DeleteModal({
       </p>
       <div className="flex justify-center gap-[1rem] mt-[0.6rem]">
         <DefaultButton
-          buttonFunction={toggleDeleteModal}
+          buttonFunction={() => setDeleteModal(false)}
           buttonType="button"
           buttonText="Nein"
-          smallSize="6rem"
+          size="6rem"
           color="red"
         />
         <DefaultButton
-          buttonFunction={() => removeWord(wordId)}
+          buttonFunction={() => removeVerb(verbId)}
           buttonType="button"
           buttonText="Ja"
-          smallSize="6rem"
+          size="6rem"
         />
       </div>
     </div>

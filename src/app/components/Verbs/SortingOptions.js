@@ -13,6 +13,8 @@ export default function SortingOptions({
     setFilterDialogue(false);
   };
 
+  // sorts all verbs alphabetically either in ascending or descending order
+
   const sortVerbs = (order) => {
     const sortedVerbs = filteredVerbs ? [...filteredVerbs] : [...customVerbs];
     sortedVerbs.sort((a, b) => {

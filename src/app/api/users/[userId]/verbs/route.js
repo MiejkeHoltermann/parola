@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { uid } from "uid/secure";
 import User from "@/models/User";
 
-// my-verbs, verb-conjugator
+// verbs
 // retrieves all verbs from the user's account
 
 export async function GET(request, { params }) {
@@ -102,7 +102,7 @@ export async function PUT(request) {
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-    // if the parameter newName is passed on, the function is used to edit the existing verb
+    // if the parameter newName is passed on, the function updates the existing verb
     if (newName) {
       const updatedVerb = user.customVerbs.id(verbId);
       updatedVerb.name = newName;
@@ -113,15 +113,15 @@ export async function PUT(request) {
       updatedVerb.presente.presente05 = newPresente05;
       updatedVerb.presente.presente06 = newPresente06;
       await user.save();
-      const newCustomVerbs = user.customVerbs;
+      const customVerbs = user.customVerbs;
       return NextResponse.json(
         {
-          newCustomVerbs,
+          customVerbs,
         },
         { status: 200 }
       );
     }
-    // if none of these parameters are passed on, the function toggles the verb's favorite state
+    // if the parameter ist not passed on, the function toggles the verb's favorite state
     else {
       const currentVerb = user.customVerbs.find(
         (verb) => verb._id.toString() === verbId
@@ -167,9 +167,8 @@ export async function DELETE(request) {
     if (verbIndex !== -1) {
       user.customVerbs.splice(verbIndex, 1);
       await user.save();
-      const newCustomVerbs = user.customVerbs;
-      console.log(newCustomVerbs);
-      return NextResponse.json({ newCustomVerbs }, { status: 200 });
+      const customVerbs = user.customVerbs;
+      return NextResponse.json({ customVerbs }, { status: 200 });
     } else {
       return NextResponse.json({ message: "Verb not found" }, { status: 404 });
     }

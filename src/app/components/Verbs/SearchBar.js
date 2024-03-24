@@ -5,9 +5,13 @@ export default function SearchBar({
   customVerbs,
   setFilteredVerbs,
   placeholder,
+  setSortingDialogue,
+  setFilterDialogue,
 }) {
   const [searchWord, setSearchWord] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+
+  // looks for any matches
 
   const handleSearch = () => {
     const matches = customVerbs.filter((verb) => {
@@ -26,15 +30,14 @@ export default function SearchBar({
       }
       return false;
     });
-    if (matches.length > 0) {
+    if (matches) {
       setFilteredVerbs(matches);
       setSearchWord("");
     }
   };
 
-  const handleChange = (e) => {
-    setSearchWord(e.target.value);
-  };
+  /* in addition to clicking the search button
+  the search function is also triggered by hitting the Enter key */
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -44,10 +47,8 @@ export default function SearchBar({
 
   const handleFocus = () => {
     setIsFocused(true);
-  };
-
-  const handleBlur = () => {
-    setIsFocused(false);
+    setSortingDialogue(false);
+    setFilterDialogue(false);
   };
 
   return (
@@ -60,12 +61,12 @@ export default function SearchBar({
         id="searchbar"
         name="searchbar"
         value={searchWord}
-        onChange={handleChange}
+        onChange={(e) => setSearchWord(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={isFocused ? "" : placeholder}
         className="pl-[1.2rem] w-full min-h-[2.4rem] border border-gray-300 rounded-xl shadow-lg focus:outline-none "
         onFocus={handleFocus}
-        onBlur={handleBlur}
+        onBlur={() => setIsFocused(false)}
       />
       <button
         onClick={handleSearch}

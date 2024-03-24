@@ -4,7 +4,7 @@ import User from "@/models/User";
 import Word from "@/models/Word";
 import Verb from "@/models/Verb";
 
-// import-data, profile, words, my-verbs
+// import-data, profile, words, verbs
 // imports the default vocabulary into the user's account
 
 export async function POST(req, res) {
@@ -22,9 +22,10 @@ export async function POST(req, res) {
     user.customVerbs.push(...defaultVerbs);
     user.wordsImported = true;
     await user.save();
+    const customWords = user.customWords;
     return NextResponse.json(
       {
-        message: "Data imported successfully",
+        customWords,
       },
       { status: 200 }
     );

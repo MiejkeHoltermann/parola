@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
 import VerbInput from "../VerbInput";
 import DefaultError from "../DefaultError";
 import DefaultButton from "../DefaultButton";
-import Hint from "./Hint";
 import LoadingAnimation from "../LoadingAnimation";
+import Hint from "./Hint";
 
 export default function VerbPractice({
   activeVerb,
@@ -11,30 +10,36 @@ export default function VerbPractice({
   setVerbData,
   correct,
   setCorrect,
-  error,
-  setError,
-  answers,
-  setAnswers,
+  error2,
+  setError2,
   hint,
   setHint,
-  loading,
   newQuestion,
+  loading,
 }) {
   const checkAnswer = (e) => {
     e.preventDefault();
+    // checks whether all input fields are valid
     const formData = new FormData(e.target);
     const trimmedInputs = Array.from(formData.values()).map((value) =>
       value.trim()
     );
     if (trimmedInputs.some((input) => !input)) {
-      setError("Alle Felder müssen ausgefüllt sein.");
-    } else {
-      const isCorrect = trimmedInputs.every(
+      setError2("Alle Felder müssen ausgefüllt sein.");
+    }
+
+    // checks whether the inputs are correct
+    else {
+      const correctAnswers = trimmedInputs.every(
         (input, index) =>
           input === Object.values(activeVerb.presente)[index].trim()
       );
-      setCorrect(isCorrect);
-      setError(isCorrect ? "Das ist richtig." : "Versuch es nochmal.");
+      setCorrect(correctAnswers);
+      setError2(
+        correctAnswers
+          ? "Die Antwort ist richtig."
+          : "Das ist nicht die richtige Antwort."
+      );
     }
   };
 
@@ -61,12 +66,12 @@ export default function VerbPractice({
               short
             />
           ))}
-          {error && <DefaultError errorMessage={error} correct={correct} />}
-          {!correct ? (
-            <DefaultButton buttonType="submit" buttonText="Prüfen" />
-          ) : (
-            <DefaultButton buttonType="submit" buttonText="Weiter" />
-          )}
+          {error2 && <DefaultError errorMessage={error2} correct={correct} />}{" "}
+          <DefaultButton
+            buttonType="submit"
+            buttonText={!correct ? "Prüfen" : "Weiter"}
+            size="8rem"
+          />
           <Hint hint={hint} setHint={setHint} activeVerb={activeVerb} />
         </>
       )}

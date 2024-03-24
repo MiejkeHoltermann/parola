@@ -3,9 +3,11 @@ import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Lottie from "react-lottie-player";
-import lottieJson from "../../../public/loading-animation.json";
 import CloseLink from "../components/CloseLink";
+import DefaultError from "../components/DefaultError";
+import ImportButton from "../components/ImportButton";
+import DefaultButton from "../components/DefaultButton";
+import LoadingAnimation from "../components/LoadingAnimation";
 
 export default function Profile() {
   const { data: session, status } = useSession();
@@ -16,14 +18,14 @@ export default function Profile() {
   const [customVerbs, setCustomVerbs] = useState([]);
   const [verbFavorites, setVerbFavorites] = useState([]);
   const [wordsImported, setWordsImported] = useState(false);
+  const [error, setError] = useState("");
+  const [error2, setError2] = useState("");
 
   const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!session) {
-        return;
-      } else {
+      if (session) {
         const userId = session.user.id;
         try {
           const response = await fetch(`/api/users/${userId}`, {
@@ -43,28 +45,43 @@ export default function Profile() {
             verbFavorites,
             wordsImported,
           } = await response.json();
-          formatRegistrationDate(registrationDate);
-          setCustomWords(customWords);
-          setWordsLevels([
-            wordsLevel1,
-            wordsLevel2,
-            wordsLevel3,
-            wordsLevel4,
-            wordsLevel5,
-          ]);
-          setFavorites(favorites);
-          setCustomVerbs(customVerbs);
-          setVerbFavorites(verbFavorites);
-          setWordsImported(wordsImported);
+          if (
+            registrationDate !== undefined &&
+            customWords !== undefined &&
+            wordsLevel1 !== undefined &&
+            wordsLevel2 !== undefined &&
+            wordsLevel3 !== undefined &&
+            wordsLevel4 !== undefined &&
+            wordsLevel5 !== undefined &&
+            favorites !== undefined &&
+            customVerbs !== undefined &&
+            verbFavorites !== undefined &&
+            wordsImported !== undefined
+          ) {
+            formatRegistrationDate(registrationDate);
+            setCustomWords(customWords);
+            setWordsLevels([
+              wordsLevel1,
+              wordsLevel2,
+              wordsLevel3,
+              wordsLevel4,
+              wordsLevel5,
+            ]);
+            setFavorites(favorites);
+            setCustomVerbs(customVerbs);
+            setVerbFavorites(verbFavorites);
+            setWordsImported(wordsImported);
+            setError("");
+          } else {
+            setError("Error retrieving user data2");
+          }
         } catch (error) {
-          console.error("Error fetching data.", error);
+          setError("Error retrieving user data");
         }
       }
     };
-    if (status === "authenticated") {
-      fetchData();
-    }
-  }, [status, session]);
+    fetchData();
+  }, [session]);
 
   const formatRegistrationDate = (registrationDate) => {
     const formattedYear = registrationDate.slice(0, 4);
@@ -80,37 +97,15 @@ export default function Profile() {
     }
   };
 
-  const importWords = async () => {
-    if (!session) {
-      return;
-    } else {
-      const userId = session.user.id;
-      try {
-        const response = await fetch("api/importWords", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId }),
-        });
-        if (response.ok) {
-          console.log("Successfully imported default words.");
-        }
-      } catch (error) {
-        console.error("Error fetching data.", error);
-      }
-    }
-  };
-
   return (
     <main>
       {status === "loading" ? (
-        <div className="flex items-center justify-center h-screen">
-          <Lottie loop animationData={lottieJson} play />
-        </div>
+        <LoadingAnimation />
+      ) : error ? (
+        <>{error && <DefaultError errorMessage={error} />}</>
       ) : (
         <>
-          {session && registrationDate && customWords ? (
+          {session && registrationDate !== undefined ? (
             <>
               <CloseLink href="/home" />
               <div className="flex w-[80%] mb-4">
@@ -170,26 +165,26 @@ export default function Profile() {
                   </li>
                 </ul>
               </div>
-              {!wordsImported ? (
+              <>{error2 && <DefaultError errorMessage={error2} />}</>
+              {!wordsImported && customWords.length === 0 ? (
                 <>
                   <p className="text-center">
-                    Möchtest du den umfangreichen Grundwortschatz der App
-                    hinzufügen?
+                    Du hast noch keine Vokabeln gespeichert. Möchtest du den
+                    Grundwortschatz der App hinzufügen?
                   </p>
-                  <button
-                    onClick={importWords}
-                    className=" bg-darkmint flex justify-center gap-2 text-white w-40 font-bold rounded-xl cursor-pointer px-6 py-2"
+                  <ImportButton
+                    setError={setError2}
+                    setCustomWords={setCustomWords}
                   >
                     Importieren
-                  </button>
+                  </ImportButton>
                 </>
               ) : null}
-              <button
-                onClick={signOutUser}
-                className="my-[1rem] bg-darkmint flex justify-center gap-2 text-white w-40 font-bold rounded-xl cursor-pointer px-6 py-2"
-              >
-                Abmelden
-              </button>
+              <DefaultButton
+                buttonFunction={signOutUser}
+                buttonType="button"
+                buttonText="Abmelden"
+              />
             </>
           ) : null}
         </>

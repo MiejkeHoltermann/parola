@@ -1,18 +1,21 @@
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { shuffle } from "fast-shuffle";
 import { RxReset } from "react-icons/rx";
 import DefaultError from "../DefaultError";
 import DefaultButton from "../DefaultButton";
-import Hint from "./Hint";
 import LoadingAnimation from "../LoadingAnimation";
+import Hint from "./Hint";
+
+/* with this practice type the user is presented with a little button
+for each letter of the correct answer, mixed up in random order,
+they have to click the buttons in the right order to answer the questions correctly*/
 
 export default function WordSaladPracticeForm({
   activeWord,
   correct,
   setCorrect,
-  error,
-  setError,
+  error2,
+  setError2,
   answer,
   setAnswer,
   hint,
@@ -23,7 +26,7 @@ export default function WordSaladPracticeForm({
   const [shuffledArray, setShuffledArray] = useState([]);
   const [originalLength, setOriginalLength] = useState();
 
-  const { data: session, status } = useSession();
+  // the correct Italian word is split between each character to create a number of buttons in random orrder
 
   useEffect(() => {
     const trimmedItalianWord = activeWord.italianWord.trim();
@@ -32,7 +35,9 @@ export default function WordSaladPracticeForm({
       .map((char) => (char === " " ? "\u00A0" : char));
     setShuffledArray(shuffle(wordArray));
     setOriginalLength(wordArray.length);
-  }, [status, activeWord]);
+  }, [activeWord]);
+
+  // when the user clicks on one of those buttons the letter is added to the answer
 
   const addToWord = (e, letter, index) => {
     e.preventDefault();
@@ -44,9 +49,11 @@ export default function WordSaladPracticeForm({
     });
   };
 
+  // if they made a mistake the user can click the reset button to remove the last letter
+
   const resetWord = (e) => {
     e.preventDefault();
-    setError("");
+    setError2("");
     const newAnswer = answer.slice(0, -1);
     setAnswer(newAnswer);
     setShuffledArray((prevArray) => {
@@ -55,18 +62,21 @@ export default function WordSaladPracticeForm({
     });
   };
 
+  /* React uses different versions of the space character
+  so both the user's answer and the correct Italian word have to be normalized before they can be compared */
+
   useEffect(() => {
     if (shuffledArray.length === 0) {
       const normalizedAnswer = answer.replace(/\u00A0/g, " ").trim();
       const normalizedItalianWord = activeWord.italianWord.trim();
       if (normalizedAnswer === normalizedItalianWord) {
         setCorrect(true);
-        setError("Die Antwort ist richtig.");
+        setError2("Die Antwort ist richtig.");
       } else {
         setCorrect(false);
       }
     }
-  }, [shuffledArray, answer, activeWord, setCorrect, setError]);
+  }, [shuffledArray, answer, activeWord, setCorrect, setError2]);
 
   return (
     <form
@@ -110,12 +120,14 @@ export default function WordSaladPracticeForm({
               </button>
             </div>
           ) : null}
-          {error && <DefaultError errorMessage={error} correct={correct} />}
+          {error2 && <DefaultError errorMessage={error2} correct={correct} />}
+          {/* the button for the next question is only enabled when the user gives the right answer */}
           <DefaultButton
             buttonFunction={updateLevel}
-            buttonType="submit"
+            buttonType="button"
             buttonText="Weiter"
             disabled={!correct}
+            size="8rem"
           />
           <Hint hint={hint} setHint={setHint} activeWord={activeWord} />
         </>

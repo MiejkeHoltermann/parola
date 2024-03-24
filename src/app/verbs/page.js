@@ -10,6 +10,8 @@ import ImportButton from "../components/ImportButton";
 import VerbForm from "../components/Verbs/VerbForm";
 import AddButton from "../components/Verbs/AddButton";
 import CloseLink from "../components/CloseLink";
+import DefaultError from "../components/DefaultError";
+import DefaultButton from "../components/DefaultButton";
 
 export default function MyVerbs() {
   const [customVerbs, setCustomVerbs] = useState();
@@ -17,47 +19,53 @@ export default function MyVerbs() {
   const [filterDialogue, setFilterDialogue] = useState(false);
   const [sortingDialogue, setSortingDialogue] = useState(false);
   const [addModal, setAddModal] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { data: session, status } = useSession();
 
   useEffect(() => {
+    // loads all verbs that are saved in the user account
     const fetchData = async () => {
-      if (!session) {
-        return;
-      } else {
+      if (session) {
         const userId = session.user.id;
+        setError("");
+        setLoading(true);
         try {
           const response = await fetch(`/api/users/${userId}/verbs`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
           });
           const { customVerbs } = await response.json();
-          setCustomVerbs(customVerbs);
-          setFilteredVerbs(customVerbs);
+          if (customVerbs) {
+            setCustomVerbs(customVerbs);
+            setFilteredVerbs(customVerbs);
+          } else {
+            setError("Error retrieving verbs");
+          }
         } catch (error) {
-          console.error("Error fetching data.", error);
+          setError("Error retrieving verbs");
         }
+        setLoading(false);
       }
     };
-    if (status === "authenticated") {
-      fetchData();
-    }
-  }, [session, status]);
+    fetchData();
+  }, [session]);
+
+  const toggleAddModal = () => {
+    setAddModal(!addModal);
+  };
 
   const resetFilters = async () => {
     setFilteredVerbs(customVerbs);
     setFilterDialogue(false);
   };
 
-  const toggleAddModal = () => {
-    setAddModal(!addModal);
-  };
-
   return (
     <main>
       {status === "loading" ? (
         <LoadingAnimation />
-      ) : customVerbs ? (
+      ) : (
         <>
           {addModal ? (
             <VerbForm
@@ -69,15 +77,18 @@ export default function MyVerbs() {
             <>
               <CloseLink href="/home" />
               <h1 className="text-xl font-bold">
-                Meine Verben ({customVerbs.length})
+                Meine Verben {customVerbs && `(${customVerbs.length})`}
               </h1>
-              <AddButton toggleAddModal={toggleAddModal} />{" "}
-              {customVerbs.length > 0 ? (
+              {error && <DefaultError errorMessage={error} />}
+              <AddButton toggleAddModal={toggleAddModal} />
+              {customVerbs && customVerbs.length > 0 ? (
                 <>
                   <SearchBar
                     customVerbs={customVerbs}
                     setFilteredVerbs={setFilteredVerbs}
                     placeholder="Verben suchen"
+                    setSortingDialogue={setSortingDialogue}
+                    setFilterDialogue={setFilterDialogue}
                   />
                   <div className="relative w-[90%]">
                     <FilterOptions
@@ -105,21 +116,30 @@ export default function MyVerbs() {
                           verb={verb}
                           setFilteredVerbs={setFilteredVerbs}
                           setCustomVerbs={setCustomVerbs}
+                          setError={setError}
                         />
                       ))}
+                      {filteredVerbs.length !== customVerbs.length ? (
+                        <DefaultButton
+                          buttonFunction={resetFilters}
+                          buttonType="button"
+                          buttonText="Zurücksetzen"
+                        />
+                      ) : null}
                     </>
                   ) : (
                     <>
-                      <p className="text-center">Keine Treffer</p>
-                      <button
-                        onClick={() => resetFilters()}
-                        className="underline"
-                      >
-                        Zurücksetzen
-                      </button>
+                      <p className="text-center mt-[2rem]">Keine Treffer</p>
+                      <DefaultButton
+                        buttonFunction={resetFilters}
+                        buttonType="button"
+                        buttonText="Zurücksetzen"
+                      />
                     </>
                   )}
                 </>
+              ) : loading ? (
+                <LoadingAnimation small />
               ) : (
                 <>
                   <p className="text-center mt-[2rem]">
@@ -130,13 +150,14 @@ export default function MyVerbs() {
                   <ImportButton
                     setCustomVerbs={setCustomVerbs}
                     setFilteredVerbs={setFilteredVerbs}
+                    setError={setError}
                   />
                 </>
               )}
             </>
           )}
         </>
-      ) : null}
+      )}
     </main>
   );
 }

@@ -6,11 +6,8 @@ import LoginForm from "./components/LoginForm";
 
 // Alles kommentieren
 // Ins Englische übersetzen
-// utils Ordner mit Backend Funktionen
-// Filter zurücksetzen
-// SignOut reparieren
-// GitHub Login hinzufügen
-// Loading animations
+
+// by default the user is directed to the Login page
 
 export default async function Login() {
   const session = await getServerSession(authOptions);

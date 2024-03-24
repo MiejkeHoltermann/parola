@@ -7,6 +7,8 @@ import DefaultButton from "./DefaultButton";
 import DefaultInput from "./DefaultInput";
 import DefaultError from "./DefaultError";
 
+// page.js
+
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,12 +18,14 @@ export default function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // checks whether email and password input fields are valid
     const email = e.target.email.value.trim();
     const password = e.target.password.value.trim();
     if (!email || !password) {
       setError("Alle Felder müssen ausgefüllt sein.");
       return;
     }
+    // checks the credentials in the database and performs login if email and password are correct
     try {
       const response = await signIn("credentials", {
         email,
@@ -29,12 +33,12 @@ export default function LoginForm() {
         redirect: false,
       });
       if (response.ok) {
-        router.replace("home");
+        router.push("/home");
       } else {
-        setError("Die Anmeldedaten sind ungültig.");
+        setError("Login failed");
       }
     } catch (error) {
-      console.log(error);
+      setError("Login failed");
     }
   };
 

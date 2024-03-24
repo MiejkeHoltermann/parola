@@ -3,6 +3,8 @@ import { signOut, useSession } from "next-auth/react";
 import DefaultLink from "../components/DefaultLink";
 import DefaultButton from "../components/DefaultButton";
 
+// default page when the user is logged in
+
 export default function Home() {
   const { data: session } = useSession();
 
@@ -17,7 +19,11 @@ export default function Home() {
       <DefaultLink link="/wordpractice" linkText="Vokabeltrainer" />
       <DefaultLink link="/verbs" linkText="Meine Verben" />
       <DefaultLink link="/verbpractice" linkText="Verbtrainer" />
-      <DefaultButton buttonFunction={() => signOut()} buttonText="Abmelden" />
+      <DefaultButton
+        buttonFunction={() => signOut()}
+        buttonType="button"
+        buttonText="Abmelden"
+      />
     </main>
   );
 }

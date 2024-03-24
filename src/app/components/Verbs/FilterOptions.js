@@ -1,3 +1,4 @@
+import { useState } from "react";
 import DefaultButton from "../DefaultButton";
 
 export default function FilterOptions({
@@ -8,19 +9,29 @@ export default function FilterOptions({
   setSortingDialogue,
   resetFilters,
 }) {
+  const [checked, setChecked] = useState(false);
+
   const handleFilterDialogue = () => {
     setFilterDialogue(!filterDialogue);
     setSortingDialogue(false);
   };
+
+  // filters all verbs for the ones marked as favorite
 
   const filterVerbs = (e) => {
     e.preventDefault();
     let filteredVerbs = [];
     if (e.target.elements.favorites.checked) {
       filteredVerbs = customVerbs.filter((verb) => verb.isFavorite);
+      setFilteredVerbs(filteredVerbs);
+    } else {
+      setFilteredVerbs(customVerbs);
     }
-    setFilteredVerbs(filteredVerbs);
     setFilterDialogue(false);
+  };
+
+  const handleCheckboxChange = (e) => {
+    setChecked(e.target.checked);
   };
 
   return (
@@ -44,6 +55,8 @@ export default function FilterOptions({
               <input
                 type="checkbox"
                 id="favorites"
+                checked={checked}
+                onChange={handleCheckboxChange}
                 className="accent-mint w-[1.4rem] h-[1.4rem]"
               />
               <label htmlFor="favorites">nur Favoriten</label>
@@ -56,11 +69,7 @@ export default function FilterOptions({
               >
                 Zurücksetzen
               </button>
-              <DefaultButton
-                buttonType="submit"
-                buttonText="OK"
-                smallSize="4rem"
-              />
+              <DefaultButton buttonType="submit" buttonText="OK" size="4rem" />
             </div>
           </form>
         </>

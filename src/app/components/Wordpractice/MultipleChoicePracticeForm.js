@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DefaultButton from "../DefaultButton";
-import Hint from "./Hint";
 import LoadingAnimation from "../LoadingAnimation";
+import Hint from "./Hint";
 
 export default function MultipleChoicePracticeForm({
   activeWord,
@@ -14,6 +14,9 @@ export default function MultipleChoicePracticeForm({
   loading,
 }) {
   const [clickedIndex, setClickedIndex] = useState();
+
+  /* checks whether the user clicked the button with the correct answer,
+  this button will be displayed green while all wrong buttons are displayed red when clicked */
 
   function checkAnswer(answer, index) {
     if (activeWord.italianWord === answer) {
@@ -58,11 +61,13 @@ export default function MultipleChoicePracticeForm({
                 ))}
               </>
             )}
+            {/* the button for the next question is only enabled when the user gives the right answer */}
             <DefaultButton
               buttonFunction={updateLevel}
               buttonType="submit"
               buttonText="Weiter"
               disabled={!correct}
+              size="8rem"
             />
             <Hint hint={hint} setHint={setHint} activeWord={activeWord} />
           </>

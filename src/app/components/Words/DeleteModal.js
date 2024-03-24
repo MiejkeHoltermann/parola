@@ -3,30 +3,40 @@ import DefaultButton from "../DefaultButton";
 
 export default function DeleteModal({
   wordId,
+  setCustomWords,
   setFilteredWords,
-  toggleDeleteModal,
-  setEditMode,
+  setDeleteModal,
+  setEditModal,
+  setError,
 }) {
   const { data: session } = useSession();
 
   const removeWord = async (wordId) => {
-    if (!session) {
-      return <div>You are not logged in.</div>;
-    } else {
+    if (session) {
       const userId = session.user.id;
-      const response = await fetch(`api/users/${userId}/words`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId, wordId }),
-      });
-      const { newCustomWords } = await response.json();
-      if (newCustomWords) {
-        setFilteredWords(newCustomWords);
+      try {
+        // deletes a word from the database
+        const response = await fetch(`api/users/${userId}/words`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId, wordId }),
+        });
+        const { customWords } = await response.json();
+        console.log(customWords);
+        if (customWords) {
+          setCustomWords(customWords);
+          setFilteredWords(customWords);
+          setError("");
+        } else {
+          setError("Error deleting word");
+        }
+      } catch (error) {
+        setError("Error deleting word");
       }
-      toggleDeleteModal;
-      setEditMode(false);
+      setDeleteModal(false);
+      setEditModal(false);
     }
   };
 
@@ -37,17 +47,17 @@ export default function DeleteModal({
       </p>
       <div className="flex justify-center gap-[1rem] mt-[0.6rem]">
         <DefaultButton
-          buttonFunction={toggleDeleteModal}
+          buttonFunction={() => setDeleteModal(false)}
           buttonType="button"
           buttonText="Nein"
-          smallSize="6rem"
+          size="6rem"
           color="red"
         />
         <DefaultButton
           buttonFunction={() => removeWord(wordId)}
           buttonType="button"
           buttonText="Ja"
-          smallSize="6rem"
+          size="6rem"
         />
       </div>
     </div>

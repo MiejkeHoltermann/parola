@@ -10,8 +10,9 @@ import WordSaladPracticeForm from "../components/Wordpractice/WordsaladPracticeF
 import MultipleChoicePracticeForm from "../components/Wordpractice/MultipleChoicePracticeForm";
 import LoadingAnimation from "../components/LoadingAnimation";
 import CloseLink from "../components/CloseLink";
+import DefaultError from "../components/DefaultError";
 
-export default function Wordpractise() {
+export default function Wordpractice() {
   const [practiceStatus, setPracticeStatus] = useState("practice form");
   const [practiceType, setPracticeType] = useState("Eintippen");
   const [activeWord, setActiveWord] = useState(null);
@@ -23,6 +24,7 @@ export default function Wordpractise() {
   const [correct, setCorrect] = useState(false);
   const [index, setIndex] = useState(0);
   const [error, setError] = useState("");
+  const [error2, setError2] = useState("");
   const [hint, setHint] = useState(false);
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,30 +32,41 @@ export default function Wordpractise() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const updateLevel = async (e) => {
-    e.preventDefault();
-    const userId = session.user.id;
-    const wordId = activeWord._id;
+  // if a user gives the correct translation for a word, this word is automatically raised up one level
+
+  const updateLevel = async () => {
     setLoading(true);
-    if (level !== 5) {
-      const response = await fetch(`/api/users/${userId}/words`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, wordId, level }),
-      });
-      if (response.ok) {
-        console.log("Updated level successfully.");
+    if (session && level !== 5) {
+      const userId = session.user.id;
+      const wordId = activeWord._id;
+      try {
+        const response = await fetch(`/api/users/${userId}/words`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, wordId, level }),
+        });
+        if (response.ok) {
+          setCorrect(false);
+          setHint();
+          setAnswer("");
+          setError("");
+          setError2("");
+          setLoading(false);
+          provideNewWord(wordId);
+        } else {
+          setError("Error updating level");
+        }
+      } catch (error) {
+        setError("Error updating level");
       }
-    } else {
-      console.log("Error updating level.");
     }
-    setCorrect(false);
-    setHint();
-    setAnswer("");
-    setError("");
-    setLoading(false);
-    provideNewWord(wordId);
   };
+
+  // after the user gave a correct answer and the level was updated the next word is provided
+  /* if the practice type is multiple choice
+  it is checked whether the correct answer is already one of the 4 randomly chosen answers,
+  if not one of the wrong answers is replaced by the correct answer,
+  the correct answer is given a random index so it might be any of the 4 options*/
 
   const provideNewWord = (wordId) => {
     setCustomWords((prevCustomWords) => {
@@ -84,15 +97,23 @@ export default function Wordpractise() {
     });
   };
 
+  // in case the user choses criteria which match none of their words they can reload the page and try again
+
   const reload = () => {
     setPracticeStatus("practice form");
     setNumberOfWords(10);
+    setLevel(6);
   };
 
   return (
     <main>
       {status === "loading" ? (
         <LoadingAnimation />
+      ) : error ? (
+        <>
+          <CloseLink href="/home" />
+          {error && <DefaultError errorMessage={error} correct={correct} />}
+        </>
       ) : (
         <>
           <CloseLink href="/home" />
@@ -102,6 +123,8 @@ export default function Wordpractise() {
               setNumberOfWords={setNumberOfWords}
               error={error}
               setError={setError}
+              error2={error2}
+              setError2={setError2}
               level={level}
               setLevel={setLevel}
               practiceType={practiceType}
@@ -134,8 +157,8 @@ export default function Wordpractise() {
                   activeWord={activeWord}
                   correct={correct}
                   setCorrect={setCorrect}
-                  error={error}
-                  setError={setError}
+                  error2={error2}
+                  setError2={setError2}
                   answer={answer}
                   setAnswer={setAnswer}
                   hint={hint}
@@ -148,8 +171,8 @@ export default function Wordpractise() {
                   activeWord={activeWord}
                   correct={correct}
                   setCorrect={setCorrect}
-                  error={error}
-                  setError={setError}
+                  error2={error2}
+                  setError2={setError2}
                   answer={answer}
                   setAnswer={setAnswer}
                   hint={hint}
@@ -176,5 +199,3 @@ export default function Wordpractise() {
     </main>
   );
 }
-
-<CloseLink href="/home" />;

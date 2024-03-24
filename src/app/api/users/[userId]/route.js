@@ -14,7 +14,7 @@ export async function GET(request, { params }) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
     const registrationDate = user.createdAt;
-    const customWords = user.customWords.length;
+    const customWords = user.customWords;
     const wordsLevel1 = user.customWords.filter(
       (word) => word.level == 1
     ).length;
@@ -38,6 +38,14 @@ export async function GET(request, { params }) {
       (verb) => verb.isFavorite === true
     ).length;
     const wordsImported = user.wordsImported;
+    const wordsLevels = [
+      wordsLevel1,
+      wordsLevel2,
+      wordsLevel3,
+      wordsLevel4,
+      wordsLevel5,
+      customWords.length,
+    ];
     return NextResponse.json(
       {
         registrationDate,
@@ -51,6 +59,7 @@ export async function GET(request, { params }) {
         customVerbs,
         verbFavorites,
         wordsImported,
+        wordsLevels,
       },
       { status: 200 }
     );

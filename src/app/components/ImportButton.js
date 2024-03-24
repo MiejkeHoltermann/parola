@@ -1,13 +1,15 @@
 import { useSession } from "next-auth/react";
 import DefaultButton from "./DefaultButton";
 
-export default function ImportButton({ setCustomWords, setFilteredWords }) {
+export default function ImportButton({
+  setCustomWords,
+  setFilteredWords,
+  setError,
+}) {
   const { data: session, status } = useSession();
 
   const importWords = async () => {
-    if (!session) {
-      return;
-    } else {
+    if (session) {
       const userId = session.user.id;
       try {
         const response = await fetch("api/importWords", {
@@ -18,10 +20,15 @@ export default function ImportButton({ setCustomWords, setFilteredWords }) {
           body: JSON.stringify({ userId }),
         });
         const { customWords } = await response.json();
-        setCustomWords(customWords);
-        setFilteredWords(customWords);
+        if (customWords) {
+          setCustomWords(customWords);
+          setFilteredWords(customWords);
+          setError("");
+        } else {
+          setError("Error importing data");
+        }
       } catch (error) {
-        console.error("Error fetching data.", error);
+        setError("Error importing data");
       }
     }
   };

@@ -2,26 +2,24 @@
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import VerbPracticeForm from "../components/Verbpractice/VerbPracticeForm";
-import VerbPracticeList from "../components/Verbpractice/VerbPracticeList";
+import PracticeForm from "../components/Verbpractice/PracticeForm";
+import PracticeList from "../components/Verbpractice/PracticeList";
 import VerbPractice from "../components/Verbpractice/VerbPractice";
 import DefaultButton from "../components/DefaultButton";
 import LoadingAnimation from "../components/LoadingAnimation";
 import CloseLink from "../components/CloseLink";
+import DefaultError from "../components/DefaultError";
 
 export default function Verbpractice() {
   const [practiceStatus, setPracticeStatus] = useState("practice form");
   const [activeVerb, setActiveVerb] = useState(null);
   const [numberOfVerbs, setNumberOfVerbs] = useState(1);
   const [customVerbs, setCustomVerbs] = useState([]);
-  const [answers, setAnswers] = useState(Array(6).fill(null));
   const [correct, setCorrect] = useState(false);
-  const [presenteValues, setPresenteValues] = useState(Array(6).fill(""));
-  const [isCorrect, setIsCorrect] = useState(Array(6).fill(null));
   const [index, setIndex] = useState(0);
   const [error, setError] = useState("");
+  const [error2, setError2] = useState("");
   const [hint, setHint] = useState(false);
-  const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
   const [verbData, setVerbData] = useState({
     presente01: "",
@@ -35,12 +33,14 @@ export default function Verbpractice() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  // if a user fills out all input fields for a verb correctly, a new verb is loaded
+
   const newQuestion = async (e) => {
     e.preventDefault();
     const verbId = activeVerb._id;
     setCorrect(false);
     setHint(false);
-    setError("");
+    setError2("");
     setVerbData({
       presente01: "",
       presente02: "",
@@ -49,9 +49,10 @@ export default function Verbpractice() {
       presente05: "",
       presente06: "",
     });
-    setLoading(false);
     provideNewVerb(verbId);
   };
+
+  // after the user gave a correct answer the next verb is provided
 
   const provideNewVerb = (verbId) => {
     setCustomVerbs((prevCustomVerbs) => {
@@ -67,6 +68,8 @@ export default function Verbpractice() {
     });
   };
 
+  // in case the user choses criteria which match none of their verbs they can reload the page and try again
+
   const reload = () => {
     setPracticeStatus("practice form");
     setNumberOfVerbs(1);
@@ -76,20 +79,27 @@ export default function Verbpractice() {
     <main>
       {status === "loading" ? (
         <LoadingAnimation />
+      ) : error ? (
+        <>
+          <CloseLink href="/home" />
+          {error && <DefaultError errorMessage={error} correct={correct} />}
+        </>
       ) : (
         <>
           <CloseLink href="/home" />
           {practiceStatus === "practice form" ? (
-            <VerbPracticeForm
+            <PracticeForm
               numberOfVerbs={numberOfVerbs}
               setNumberOfVerbs={setNumberOfVerbs}
               error={error}
               setError={setError}
+              error2={error2}
+              setError2={setError2}
               setCustomVerbs={setCustomVerbs}
               setPracticeStatus={setPracticeStatus}
             />
           ) : practiceStatus === "practice list" ? (
-            <VerbPracticeList
+            <PracticeList
               customVerbs={customVerbs}
               provideNewVerb={provideNewVerb}
               reload={reload}
@@ -114,14 +124,12 @@ export default function Verbpractice() {
                   setVerbData={setVerbData}
                   correct={correct}
                   setCorrect={setCorrect}
-                  error={error}
-                  setError={setError}
-                  answers={answers}
-                  setAnswers={setAnswers}
+                  error2={error2}
+                  setError2={setError2}
                   hint={hint}
                   setHint={setHint}
-                  loading={loading}
                   newQuestion={newQuestion}
+                  loading={loading}
                 />
               )}
             </div>
