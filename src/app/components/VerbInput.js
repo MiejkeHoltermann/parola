@@ -1,42 +1,45 @@
-import { useState } from "react";
-
 export default function DefaultInput({
+  index,
+  value,
+  verbData,
+  setVerbData,
   inputId,
   inputName,
-  presenteValues,
-  setPresenteValues,
-  isCorrect,
-  index,
-  label,
+  short,
 }) {
-  const [value, setValue] = useState("");
+  const presenteLabels = ["Name", "io", "tu", "lui/lei", "noi", "voi", "loro"];
+
+  if (short) {
+    presenteLabels.shift();
+  }
 
   const handleChange = (e) => {
-    setValue(e.target.value);
-    const newValues = [...presenteValues];
-    newValues[index] = e.target.value;
-    setPresenteValues(newValues);
+    const { name, value } = e.target;
+    setVerbData({
+      ...verbData,
+      [name]: value,
+    });
   };
 
-  const handleDoubleClick = () => {
-    setValue("");
+  const handleDoubleClick = (e) => {
+    const { name } = e.target;
+    setVerbData({
+      ...verbData,
+      [name]: "",
+    });
   };
 
   return (
-    <div className="w-[80%] flex justify-between">
-      <label htmlFor={`presente${index + 1}`}>{label}</label>
+    <div className="w-[80%] grid grid-cols-4 items-center">
+      <p>{presenteLabels[index]}</p>
       <input
         onChange={handleChange}
         onDoubleClick={handleDoubleClick}
-        value={presenteValues[index]}
+        value={value}
         type="text"
         id={inputId}
         name={inputName}
-        className={`pl-6 w-[10rem] min-h-[2.8rem] border border-gray-300 rounded-xl shadow-lg focus:outline-none focus:border-2 focus:border-lightblue ${
-          isCorrect[index] === false
-            ? "border-2 border-red-500 text-red-700 shadow-none"
-            : "border-1 shadow-[2px_2px_rgba(0,215,177,1)]"
-        }`}
+        className="pl-6 min-h-[2.8rem] col-span-3 border border-gray-300 rounded-xl shadow-lg focus:outline-none focus:border-2 focus:border-lightblue"
       />
     </div>
   );

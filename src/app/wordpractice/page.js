@@ -1,252 +1,201 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { useState, useRef } from "react";
-import TipingPracticeForm from "../components/TipingPracticeForm";
-import WordSaladPracticeForm from "../components/WordsaladPracticeForm";
-import MultipleChoicePracticeForm from "../components/MultipleChoicePracticeForm";
-import { shuffle } from "fast-shuffle";
-import PracticeForm from "../components/PracticeForm";
-import Lottie from "react-lottie-player";
-import lottieJson from "../../../public/loading-animation.json";
-import PracticeList from "../components/PracticeList";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import PracticeForm from "../components/Wordpractice/PracticeForm";
+import PracticeList from "../components/Wordpractice/PracticeList";
 import DefaultButton from "../components/DefaultButton";
+import TipingPracticeForm from "../components/Wordpractice/TipingPracticeForm";
+import WordSaladPracticeForm from "../components/Wordpractice/WordsaladPracticeForm";
+import MultipleChoicePracticeForm from "../components/Wordpractice/MultipleChoicePracticeForm";
+import LoadingAnimation from "../components/LoadingAnimation";
+import CloseLink from "../components/CloseLink";
+import DefaultError from "../components/DefaultError";
 
-export default function Practise() {
-  const [level, setLevel] = useState(null);
+export default function Wordpractice() {
+  const [practiceStatus, setPracticeStatus] = useState("practice form");
+  const [practiceType, setPracticeType] = useState("Eintippen");
   const [activeWord, setActiveWord] = useState(null);
-  const [correct, setCorrect] = useState(null);
-  const [alert, setAlert] = useState("");
-  const [hint, setHint] = useState(null);
-  const [index, setIndex] = useState(0);
-  const italianWordInputRef = useRef(null);
-  const { data: session, status } = useSession();
-  const [answers, setAnswers] = useState(null);
-  const [number, setNumber] = useState(0);
-  const [favoriteWords, setFavoriteWords] = useState(false);
+  const [numberOfWords, setNumberOfWords] = useState(10);
   const [customWords, setCustomWords] = useState([]);
-  const [error, setError] = useState("");
-  const [checked, setChecked] = useState(false);
-  const [practiceForm, setPracticeForm] = useState(true);
-  const [practiceList, setPracticeList] = useState(false);
-  const [tipingPracticeForm, setTipingPracticeForm] = useState(false);
-  const [practiceType, setPracticeType] = useState(null);
+  const [level, setLevel] = useState(6);
+  const [answers, setAnswers] = useState(null);
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState([]);
+  const [correct, setCorrect] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [error, setError] = useState("");
+  const [error2, setError2] = useState("");
+  const [hint, setHint] = useState(false);
+  const [answer, setAnswer] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const updateWords = async (userId, level, wordId) => {
-    try {
-      await fetch(`/api/users/${userId}/${level}/${wordId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, wordId }),
-      });
-    } catch (error) {
-      console.error("Error updating practiced words.", error);
-    }
-  };
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
-  function newQuestion() {
-    setCorrect(null);
-    setHint(null);
-    if (italianWordInputRef.current !== null) {
-      italianWordInputRef.current.value = "";
-    }
-    provideNewWord();
-    setError("");
-  }
+  // if a user gives the correct translation for a word, this word is automatically raised up one level
 
-  function showHint() {
-    setHint(`${activeWord.germanWord} = ${activeWord.italianWord}`);
-  }
-
-  console.log(customWords);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const number = e.target.elements.numberOfWords.value;
-    const favoriteWords = e.target.elements.favoriteWords.checked;
-    const level = e.target.elements.wordsLevel.value;
-    const practiceType = e.target.elements.practiceType.value;
-    setLevel(level);
-    setPracticeType(practiceType);
-    if ((number < 1 || number > 100) && !favoriteWords) {
-      setError("Wähle zwischen 1 und 100 Wörtern für diese Lerneinheit aus.");
-      return;
-    }
-    if (status === "authenticated" && level && (number || favoriteWords)) {
+  const updateLevel = async () => {
+    setLoading(true);
+    if (session && level !== 5) {
+      const userId = session.user.id;
+      const wordId = activeWord._id;
       try {
-        const userId = session.user.id;
-        const response = await fetch(
-          `/api/users/${userId}/${level}?favoriteWords=${favoriteWords}`,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        let { customWords } = await response.json();
-        if (favoriteWords) {
-          const favoriteWords = customWords.filter(
-            (word) => word.isFavorite === true
-          );
-          if (level !== "all") {
-            const favoriteWordsFilteredByLevel = favoriteWords.filter(
-              (word) => word.level == level
-            );
-            customWords = favoriteWordsFilteredByLevel;
-          } else {
-            customWords = favoriteWords;
-          }
-          setCustomWords(customWords);
-          setPracticeForm(false);
-          setPracticeList(true);
+        const response = await fetch(`/api/users/${userId}/words`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, wordId, level }),
+        });
+        if (response.ok) {
+          setCorrect(false);
+          setHint();
+          setAnswer("");
+          setError("");
+          setError2("");
+          setLoading(false);
+          provideNewWord(wordId);
         } else {
-          if (level !== "all") {
-            const wordsFilteredByLevel = customWords.filter(
-              (word) => word.level == level
-            );
-            customWords = wordsFilteredByLevel;
-          }
-          const shuffledWords = shuffle(customWords);
-          const activeWords = shuffledWords.slice(0, number);
-          setCustomWords(activeWords);
-          setPracticeForm(false);
-          setPracticeList(true);
+          setError("Error updating level");
         }
-        const shuffledWords = shuffle(customWords);
-        const selectedWords = shuffledWords.slice(0, 4);
-        const multipleChoiceAnswers = selectedWords.map(
-          (word) => word.italianWord
-        );
-
-        setMultipleChoiceAnswers(multipleChoiceAnswers);
       } catch (error) {
-        console.error("Error fetching data.", error);
+        setError("Error updating level");
       }
     }
   };
 
-  const provideNewWord = () => {
-    if (customWords.length > 0) {
-      const newWord = customWords[index];
-      console.log(newWord);
-      setActiveWord(newWord);
-      const correctAnswer = newWord.italianWord;
-      const correctAnswerIndex = multipleChoiceAnswers.indexOf(correctAnswer);
-      const randomIndex =
-        correctAnswerIndex === -1
-          ? Math.floor(Math.random() * multipleChoiceAnswers.length)
-          : correctAnswerIndex;
-      const updatedMultipleChoiceAnswers = [
-        ...multipleChoiceAnswers.slice(0, randomIndex),
-        correctAnswer,
-        ...multipleChoiceAnswers.slice(randomIndex + 1),
-      ];
-      setAnswers(updatedMultipleChoiceAnswers);
-      setPracticeList(false);
-      setTipingPracticeForm(true);
-    } else {
-      if (level === "all") {
-        setAlert(`Du hast alle Wörter gelernt.`);
-      } else {
-        setAlert(`Du hast alle Wörter auf Level ${level} gelernt.`);
+  // after the user gave a correct answer and the level was updated the next word is provided
+  /* if the practice type is multiple choice
+  it is checked whether the correct answer is already one of the 4 randomly chosen answers,
+  if not one of the wrong answers is replaced by the correct answer,
+  the correct answer is given a random index so it might be any of the 4 options*/
+
+  const provideNewWord = (wordId) => {
+    setCustomWords((prevCustomWords) => {
+      const newCustomWords = prevCustomWords.filter(
+        (word) => word._id !== wordId
+      );
+      if (newCustomWords.length > 0) {
+        const newWord = newCustomWords[index];
+        setActiveWord(newWord);
+        if (practiceType === "Multiple Choice") {
+          const correctAnswer = newWord.italianWord;
+          const correctAnswerIndex =
+            multipleChoiceAnswers.indexOf(correctAnswer);
+          const randomIndex =
+            correctAnswerIndex === -1
+              ? Math.floor(Math.random() * multipleChoiceAnswers.length)
+              : correctAnswerIndex;
+          const updatedMultipleChoiceAnswers = [
+            ...multipleChoiceAnswers.slice(0, randomIndex),
+            correctAnswer,
+            ...multipleChoiceAnswers.slice(randomIndex + 1),
+          ];
+          setAnswers(updatedMultipleChoiceAnswers);
+        }
+        setPracticeStatus("practice");
       }
-    }
+      return newCustomWords;
+    });
   };
+
+  // in case the user choses criteria which match none of their words they can reload the page and try again
 
   const reload = () => {
-    setPracticeForm(true);
-    setPracticeList(false);
-    setAlert("");
-    setNumber(0);
+    setPracticeStatus("practice form");
+    setNumberOfWords(10);
+    setLevel(6);
   };
 
   return (
     <main>
       {status === "loading" ? (
-        <div className="flex items-center justify-center h-screen">
-          <Lottie loop animationData={lottieJson} play />
-        </div>
-      ) : practiceForm === true ? (
-        <PracticeForm
-          checked={checked}
-          setChecked={setChecked}
-          error={error}
-          setError={setError}
-          number={number}
-          setNumber={setNumber}
-          handleSubmit={handleSubmit}
-        />
-      ) : practiceList === true ? (
-        <PracticeList
-          level={level}
-          number={number}
-          favoriteWords={favoriteWords}
-          customWords={customWords}
-          provideNewWord={provideNewWord}
-          reload={reload}
-        />
-      ) : tipingPracticeForm === true ? (
-        <div className="flex flex-col items-center gap-[1.6rem] w-full ">
-          {alert ? (
-            <>
-              <p className="text-center">{alert}</p>
-              <DefaultButton
-                buttonFunction={reload}
-                buttonType="button"
-                buttonText="Zurück"
-              />
-            </>
-          ) : practiceType === "typing" ? (
-            <TipingPracticeForm
-              customWords={customWords}
-              setCustomWords={setCustomWords}
-              activeWord={activeWord}
-              italianWordInputRef={italianWordInputRef}
-              correct={correct}
-              setCorrect={setCorrect}
-              newQuestion={newQuestion}
-              updateWords={updateWords}
-              level={level}
+        <LoadingAnimation />
+      ) : error ? (
+        <>
+          <CloseLink href="/home" />
+          {error && <DefaultError errorMessage={error} correct={correct} />}
+        </>
+      ) : (
+        <>
+          <CloseLink href="/home" />
+          {practiceStatus === "practice form" ? (
+            <PracticeForm
+              numberOfWords={numberOfWords}
+              setNumberOfWords={setNumberOfWords}
               error={error}
               setError={setError}
-            >
-              <button
-                onClick={showHint}
-                className="w-full underline flex justify-end pointer-events-auto"
-              >
-                Lösung anzeigen
-              </button>
-            </TipingPracticeForm>
-          ) : practiceType === "wordsalad" ? (
-            <WordSaladPracticeForm
-              activeWord={activeWord}
-              italianWordInputRef={italianWordInputRef}
-              correct={correct}
-              setCorrect={setCorrect}
-              newQuestion={newQuestion}
-              updateWords={updateWords}
+              error2={error2}
+              setError2={setError2}
               level={level}
-              customWords={customWords}
+              setLevel={setLevel}
+              practiceType={practiceType}
+              setPracticeType={setPracticeType}
               setCustomWords={setCustomWords}
-              error={error}
-              setError={setError}
+              setPracticeStatus={setPracticeStatus}
+              setMultipleChoiceAnswers={setMultipleChoiceAnswers}
             />
-          ) : practiceType === "multipleChoice" ? (
-            <MultipleChoicePracticeForm
-              activeWord={activeWord}
-              answers={answers}
-              setAnswers={setAnswers}
-              correct={correct}
-              setCorrect={setCorrect}
-              newQuestion={newQuestion}
-              updateWords={updateWords}
-              level={level}
+          ) : practiceStatus === "practice list" ? (
+            <PracticeList
               customWords={customWords}
-              setCustomWords={setCustomWords}
+              provideNewWord={provideNewWord}
+              reload={reload}
             />
+          ) : practiceStatus === "practice" ? (
+            <div className="flex flex-col items-center gap-[1.6rem] w-full ">
+              {customWords.length === 0 ? (
+                <>
+                  <p className="text-center mt-[2rem]">
+                    Du hast alle Wörter gelernt.
+                  </p>
+                  <DefaultButton
+                    buttonFunction={() => router.push("/home")}
+                    buttonType="button"
+                    buttonText="Schließen"
+                  />
+                </>
+              ) : practiceType === "Eintippen" ? (
+                <TipingPracticeForm
+                  activeWord={activeWord}
+                  correct={correct}
+                  setCorrect={setCorrect}
+                  error2={error2}
+                  setError2={setError2}
+                  answer={answer}
+                  setAnswer={setAnswer}
+                  hint={hint}
+                  setHint={setHint}
+                  updateLevel={updateLevel}
+                  loading={loading}
+                ></TipingPracticeForm>
+              ) : practiceType === "Wortsalat" ? (
+                <WordSaladPracticeForm
+                  activeWord={activeWord}
+                  correct={correct}
+                  setCorrect={setCorrect}
+                  error2={error2}
+                  setError2={setError2}
+                  answer={answer}
+                  setAnswer={setAnswer}
+                  hint={hint}
+                  setHint={setHint}
+                  updateLevel={updateLevel}
+                  loading={loading}
+                />
+              ) : practiceType === "Multiple Choice" ? (
+                <MultipleChoicePracticeForm
+                  activeWord={activeWord}
+                  answers={answers}
+                  correct={correct}
+                  setCorrect={setCorrect}
+                  hint={hint}
+                  setHint={setHint}
+                  updateLevel={updateLevel}
+                  loading={loading}
+                />
+              ) : null}
+            </div>
           ) : null}
-          {hint ? <p className="w-full flex justify-end">{hint}</p> : null}
-        </div>
-      ) : null}
+        </>
+      )}
     </main>
   );
 }

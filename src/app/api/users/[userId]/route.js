@@ -1,35 +1,9 @@
 import { connectMongoDB } from "@/lib/mongodb";
-import User from "@/models/User";
-import Word from "@/models/Word";
-import Verb from "@/models/Verb";
 import { NextResponse } from "next/server";
+import User from "@/models/User";
 
-export async function POST(req, res) {
-  const { userId } = await req.json();
-  await connectMongoDB();
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    const defaultWords = await Word.find();
-    user.customWords.push(...defaultWords);
-    user.customWords.map((word) => (word.level = 1));
-    const defaultVerbs = await Verb.find();
-    user.customVerbs.push(...defaultVerbs);
-    user.wordsImported = true;
-    await user.save();
-    return NextResponse.json(
-      { message: "Data imported for user." },
-      { status: 200 }
-    );
-  } catch (error) {
-    return NextResponse.json(
-      { message: "Error importing data for user." },
-      { status: 500 }
-    );
-  }
-}
+// profile
+// provides all necessary information for the user profile
 
 export async function GET(request, { params }) {
   const { userId } = params;
@@ -37,7 +11,7 @@ export async function GET(request, { params }) {
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
     const registrationDate = user.createdAt;
     const customWords = user.customWords;
@@ -64,6 +38,14 @@ export async function GET(request, { params }) {
       (verb) => verb.isFavorite === true
     ).length;
     const wordsImported = user.wordsImported;
+    const wordsLevels = [
+      wordsLevel1,
+      wordsLevel2,
+      wordsLevel3,
+      wordsLevel4,
+      wordsLevel5,
+      customWords.length,
+    ];
     return NextResponse.json(
       {
         registrationDate,
@@ -77,20 +59,16 @@ export async function GET(request, { params }) {
         customVerbs,
         verbFavorites,
         wordsImported,
+        wordsLevels,
       },
       { status: 200 }
     );
   } catch (error) {
     return NextResponse.json(
-      { message: "Error loading filtered words." },
+      {
+        message: "Error retrieving user data",
+      },
       { status: 500 }
     );
   }
-}
-
-export async function DELETE(request) {
-  const id = request.nextUrl.searchParams.get("id");
-  await connectMongoDB();
-  await Word.findByIdAndDelete(id);
-  return NextResponse.json({ message: "Word deleted" }, { status: 200 });
 }

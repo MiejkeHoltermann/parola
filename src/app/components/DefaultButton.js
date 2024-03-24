@@ -2,12 +2,21 @@ export default function DefaultButton({
   buttonFunction,
   buttonType,
   buttonText,
+  color,
+  disabled,
+  size,
 }) {
   return (
     <button
       onClick={buttonFunction}
       type={buttonType}
-      className="bg-mint min-w-[8rem] text-white font-bold cursor-pointer rounded-lg px-6 py-2 mt-[2rem]"
+      disabled={disabled}
+      className="text-white font-bold cursor-pointer rounded-lg py-[0.4rem] mt-[1rem]"
+      style={{
+        backgroundColor: color ? color : "#027863",
+        color: disabled ? "rgb(52,147,130)" : "white",
+        width: size ? size : "10rem",
+      }}
     >
       {buttonText}
     </button>

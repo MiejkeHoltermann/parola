@@ -1,11 +1,13 @@
 "use client";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
 import DefaultButton from "./DefaultButton";
 import DefaultInput from "./DefaultInput";
 import DefaultError from "./DefaultError";
+
+// page.js
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -14,63 +16,60 @@ export default function LoginForm() {
 
   const router = useRouter();
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+    // checks whether email and password input fields are valid
+    const email = e.target.email.value.trim();
+    const password = e.target.password.value.trim();
     if (!email || !password) {
       setError("Alle Felder müssen ausgefüllt sein.");
       return;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError("Bitte gib eine gültige E-mail-Adresse ein.");
-      return;
-    } else if (
-      !/^(?=.*[0-9])(?=.*[!@#$%^&*_])[a-zA-Z0-9!@#$%^&*_]{8,}$/.test(password)
-    ) {
-      setError(
-        "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens eine Zahl und ein Sonderzeichen (!@#$%^&*) enthalten."
-      );
-      return;
     }
+    // checks the credentials in the database and performs login if email and password are correct
     try {
       const response = await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
-      if (response.error) {
-        setError("Du hast noch kein Konto bei uns.");
+      if (response.ok) {
+        router.push("/home");
+      } else {
+        setError("Login failed");
       }
-      router.replace("home");
     } catch (error) {
-      console.log(error);
+      setError("Login failed");
     }
-  }
+  };
 
   return (
     <>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col items-center my-[2rem] gap-[2rem]"
+        className="w-[90%] flex flex-col items-center gap-[1rem]"
       >
         <DefaultInput
-          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+          setValue={setEmail}
+          setError={setError}
           inputId="email"
           inputName="email"
           placeholder="E-mail"
         />
         <DefaultInput
-          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+          setValue={setPassword}
+          setError={setError}
           inputId="password"
           inputName="password"
           placeholder="Passwort"
         />
-        <DefaultButton buttonText="Anmelden" />
         {error && <DefaultError errorMessage={error} />}
+        <DefaultButton buttonType="submit" buttonText="Anmelden" />
       </form>
-      <Link className="text-center" href={"/register"}>
-        Kein Konto? <br />
-        Jetzt <span className="underline ">registrieren</span>.
+      <Link className="text-center mt-auto" href={"/register"}>
+        Noch kein Konto? <br />
+        Jetzt <span className="underline">registrieren</span>.
       </Link>
     </>
   );
