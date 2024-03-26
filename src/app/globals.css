@@ -18,8 +18,8 @@
 html,
 body {
   overflow-x: hidden;
-  background: #c6eee7;
   width: 100vw;
+  margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,21 +27,18 @@ body {
 }
 
 main {
-  position: relative;
-  background: white;
-  width: 90vw;
-  min-height: 80vh;
-  height: auto;
-  border-radius: 0.6rem;
+  background: #c6eee7;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem 1rem;
-  gap: 1.6rem;
-  margin: 12vh 0 8vh 0;
+  justify-content: center;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+@media (min-width: 450px) {
+  main {
+    width: 450px;
+  }
 }

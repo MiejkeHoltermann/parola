@@ -51,36 +51,42 @@ export default function ImportData() {
 
   return (
     <main>
-      {status === "loading" ? (
-        <LoadingAnimation />
-      ) : (
-        <>
-          <p className="w-full text-center mt-[2rem]">
-            Diese App stellt einen umfangreichen Grundwortschatz zur Verfügung.
-            <br />
-            Entferne das Häkchen, wenn du stattdessen deine eigenen Vokabeln
-            hinzufügen möchtest. <br />
-            <br />
-            Du kannst den Grundwortschatz auch später hinzufügen, wenn du noch
-            unsicher bist.
-          </p>
-          <form
-            onSubmit={handleSubmit}
-            className="w-[90%] flex flex-col items-center mt-[1rem] gap-[4rem]"
-          >
-            <DefaultCheckbox
-              checked={importData}
-              onChange={handleCheckboxChange}
-              checkboxId="importData"
-              checkboxName="importData"
-              checkboxLabel="Wortschatz importieren"
-            />
-            {loading && <LoadingAnimation small />}
-            {error && <DefaultError errorMessage={error} />}
-            <DefaultButton buttonType="submit" buttonText="OK" size="8rem" />
-          </form>
-        </>
-      )}
+      <div
+        className="relative bg-white w-[90%] min-h-[80vh] h-auto rounded-xl
+flex flex-col items-center py-[2rem] gap-[1.6rem] mt-[10vh] mb-[6vh]"
+      >
+        {status === "loading" ? (
+          <LoadingAnimation />
+        ) : (
+          <>
+            <p className="w-[90%] text-center">
+              Diese App stellt einen umfangreichen Grundwortschatz zur
+              Verfügung.
+              <br />
+              Entferne das Häkchen, wenn du stattdessen deine eigenen Vokabeln
+              hinzufügen möchtest. <br />
+              <br />
+              Du kannst den Grundwortschatz auch später hinzufügen, wenn du noch
+              unsicher bist.
+            </p>
+            <form
+              onSubmit={handleSubmit}
+              className="w-[90%] flex flex-col items-center mt-[1rem] gap-[4rem]"
+            >
+              <DefaultCheckbox
+                checked={importData}
+                onChange={handleCheckboxChange}
+                checkboxId="importData"
+                checkboxName="importData"
+                checkboxLabel="Wortschatz importieren"
+              />
+              {loading && <LoadingAnimation small />}
+              {error && <DefaultError errorMessage={error} />}
+              <DefaultButton buttonType="submit" buttonText="OK" size="8rem" />
+            </form>
+          </>
+        )}
+      </div>
     </main>
   );
 }

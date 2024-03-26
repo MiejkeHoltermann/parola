@@ -15,7 +15,7 @@ export default function Header() {
 
   return (
     session && (
-      <header className="bg-mint fixed top-0 left-0 h-[4rem] w-full flex items-center z-10">
+      <header className="bg-mint fixed top-0 left-0 h-[4rem] w-full flex items-center z-10 min-[450px]:w-[450px] min-[450px]:left-[50%] min-[450px]:-translate-x-1/2">
         <div className="flex flex-col">
           <button
             onClick={toggleDropdown}
