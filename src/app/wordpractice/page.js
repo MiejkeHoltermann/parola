@@ -6,7 +6,7 @@ import PracticeForm from "../components/Wordpractice/PracticeForm";
 import PracticeList from "../components/Wordpractice/PracticeList";
 import DefaultButton from "../components/DefaultButton";
 import TipingPracticeForm from "../components/Wordpractice/TipingPracticeForm";
-import WordSaladPracticeForm from "../components/Wordpractice/WordsaladPracticeForm";
+import WordScramblePracticeForm from "../components/Wordpractice/WordScramblePracticeForm";
 import MultipleChoicePracticeForm from "../components/Wordpractice/MultipleChoicePracticeForm";
 import LoadingAnimation from "../components/LoadingAnimation";
 import CloseLink from "../components/CloseLink";
@@ -76,7 +76,7 @@ export default function Wordpractice() {
       if (newCustomWords.length > 0) {
         const newWord = newCustomWords[index];
         setActiveWord(newWord);
-        if (practiceType === "Multiple Choice") {
+        if (practiceType === "multiple Choice") {
           const correctAnswer = newWord.italianWord;
           const correctAnswerIndex =
             multipleChoiceAnswers.indexOf(correctAnswer);
@@ -144,15 +144,15 @@ export default function Wordpractice() {
               {customWords.length === 0 ? (
                 <>
                   <p className="text-center mt-[2rem]">
-                    Du hast alle Wörter gelernt.
+                    You have practiced all words.
                   </p>
                   <DefaultButton
                     buttonFunction={() => router.push("/home")}
                     buttonType="button"
-                    buttonText="Schließen"
+                    buttonText="Close"
                   />
                 </>
-              ) : practiceType === "Eintippen" ? (
+              ) : practiceType === "typing" ? (
                 <TipingPracticeForm
                   activeWord={activeWord}
                   correct={correct}
@@ -166,8 +166,8 @@ export default function Wordpractice() {
                   updateLevel={updateLevel}
                   loading={loading}
                 ></TipingPracticeForm>
-              ) : practiceType === "Wortsalat" ? (
-                <WordSaladPracticeForm
+              ) : practiceType === "wordscramble" ? (
+                <WordScramblePracticeForm
                   activeWord={activeWord}
                   correct={correct}
                   setCorrect={setCorrect}
@@ -180,7 +180,7 @@ export default function Wordpractice() {
                   updateLevel={updateLevel}
                   loading={loading}
                 />
-              ) : practiceType === "Multiple Choice" ? (
+              ) : practiceType === "multiple choice" ? (
                 <MultipleChoicePracticeForm
                   activeWord={activeWord}
                   answers={answers}

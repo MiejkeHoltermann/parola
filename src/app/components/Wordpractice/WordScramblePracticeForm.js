@@ -10,7 +10,7 @@ import Hint from "./Hint";
 for each letter of the correct answer, mixed up in random order,
 they have to click the buttons in the right order to answer the questions correctly*/
 
-export default function WordSaladPracticeForm({
+export default function WordScramblePracticeForm({
   activeWord,
   correct,
   setCorrect,
@@ -71,7 +71,7 @@ export default function WordSaladPracticeForm({
       const normalizedItalianWord = activeWord.italianWord.trim();
       if (normalizedAnswer === normalizedItalianWord) {
         setCorrect(true);
-        setError2("Die Antwort ist richtig.");
+        setError2("The answer is correct.");
       } else {
         setCorrect(false);
       }
@@ -87,7 +87,7 @@ export default function WordSaladPracticeForm({
         <LoadingAnimation small />
       ) : (
         <>
-          <p className="mb-[1rem]">{activeWord && activeWord.germanWord}</p>
+          <p className="mb-[1rem]">{activeWord && activeWord.englishWord}</p>
           <input
             readOnly
             value={answer}
@@ -125,7 +125,7 @@ export default function WordSaladPracticeForm({
           <DefaultButton
             buttonFunction={updateLevel}
             buttonType="button"
-            buttonText="Weiter"
+            buttonText="Next"
             disabled={!correct}
             size="8rem"
           />

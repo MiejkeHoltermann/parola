@@ -4,9 +4,6 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import Image from "next/image";
 import LoginForm from "./components/LoginForm";
 
-// Alles kommentieren
-// Ins Englische übersetzen
-
 // by default the user is directed to the Login page
 
 export default async function Login() {

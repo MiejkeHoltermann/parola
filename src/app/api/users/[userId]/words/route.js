@@ -29,16 +29,16 @@ export async function GET(request, { params }) {
 // if not a new word is created
 
 export async function POST(request) {
-  const { userId, germanWord, italianWord } = await request.json();
+  const { userId, englishWord, italianWord } = await request.json();
   await connectMongoDB();
   try {
     const user = await User.findById(userId);
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-    // does the German word already exist?
-    const germanWordExists = await user.customWords.find(
-      (word) => word.germanWord === germanWord
+    // does the English word already exist?
+    const englishWordExists = await user.customWords.find(
+      (word) => word.englishWord === englishWord
     );
     // does the Italian word already exist?
     const italianWordExists = await user.customWords.find(
@@ -46,9 +46,9 @@ export async function POST(request) {
     );
     // do they belong together?
     if (
-      germanWordExists &&
+      englishWordExists &&
       italianWordExists &&
-      germanWordExists._id === italianWordExists._id
+      englishWordExists._id === italianWordExists._id
     ) {
       return NextResponse.json(
         { message: "Word already exists" },
@@ -59,7 +59,7 @@ export async function POST(request) {
     else {
       const newWord = {
         _id: uid(),
-        germanWord,
+        englishWord,
         italianWord,
         level: 1,
         isFavorite: false,
@@ -84,7 +84,7 @@ export async function POST(request) {
 updates the word, updates the word's level or toggles the favorite state */
 
 export async function PUT(request) {
-  const { userId, wordId, newGermanWord, newItalianWord, level } =
+  const { userId, wordId, newEnglishWord, newItalianWord, level } =
     await request.json();
   await connectMongoDB();
   try {
@@ -92,10 +92,10 @@ export async function PUT(request) {
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-    // if the parameters newGermanWord and newItalianWord are passed on, the function updates the existing word
-    if (newGermanWord && newItalianWord) {
+    // if the parameters newEnglishWord and newItalianWord are passed on, the function updates the existing word
+    if (newEnglishWord && newItalianWord) {
       const updatedWord = user.customWords.id(wordId);
-      updatedWord.germanWord = newGermanWord;
+      updatedWord.englishWord = newEnglishWord;
       updatedWord.italianWord = newItalianWord;
       await user.save();
       const newCustomWords = user.customWords;

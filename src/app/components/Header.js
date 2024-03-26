@@ -37,26 +37,26 @@ export default function Header() {
                   <Link href="/home">Home</Link>
                 </li>
                 <li onClick={toggleDropdown} className="py-[0.3rem]">
-                  <Link href="/profile">Mein Profil</Link>
+                  <Link href="/profile">My profile</Link>
                 </li>
                 <li onClick={toggleDropdown} className="py-[0.3rem]">
-                  <Link href="/words">Meine Vokabeln</Link>
+                  <Link href="/words">My words</Link>
                 </li>
                 <li onClick={toggleDropdown} className="py-[0.3rem]">
-                  <Link href="/wordpractice">Vokabeltrainer</Link>
+                  <Link href="/wordpractice">Practice words</Link>
                 </li>
                 <li onClick={toggleDropdown} className="py-[0.3rem]">
-                  <Link href="/verbs">Meine Verben</Link>
+                  <Link href="/verbs">My verbs</Link>
                 </li>
                 <li onClick={toggleDropdown} className="py-[0.3rem]">
-                  <Link href="/verbpractice">Verbtrainer</Link>
+                  <Link href="/verbpractice">Practice verbs</Link>
                 </li>
                 <li className="py-[0.3rem]">
                   <button
                     onClick={() => signOut()}
                     className="text-mint font-bold mt-[0.4rem]"
                   >
-                    Abmelden
+                    Sign out
                   </button>
                 </li>
               </ul>

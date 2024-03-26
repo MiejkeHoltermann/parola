@@ -11,18 +11,18 @@ export default function Home() {
   return (
     <main>
       <h1 className="text-2xl font-bold mt-[2rem]">
-        Hallo, {session?.user?.name}!
+        Hello, {session?.user?.name}!
       </h1>
-      <p className="my-[0.4rem]">Willkommen in deinem Account.</p>
-      <DefaultLink link="/profile" linkText="Mein Profil" />
-      <DefaultLink link="/words" linkText="Meine Vokabeln" />
-      <DefaultLink link="/wordpractice" linkText="Vokabeltrainer" />
-      <DefaultLink link="/verbs" linkText="Meine Verben" />
-      <DefaultLink link="/verbpractice" linkText="Verbtrainer" />
+      <p className="my-[0.4rem]">Welcome to your account.</p>
+      <DefaultLink link="/profile" linkText="My profile" />
+      <DefaultLink link="/words" linkText="My words" />
+      <DefaultLink link="/wordpractice" linkText="Practice words" />
+      <DefaultLink link="/verbs" linkText="My verbs" />
+      <DefaultLink link="/verbpractice" linkText="Practice verbs" />
       <DefaultButton
         buttonFunction={() => signOut()}
         buttonType="button"
-        buttonText="Abmelden"
+        buttonText="Sign out"
       />
     </main>
   );

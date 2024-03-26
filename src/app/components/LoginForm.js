@@ -22,7 +22,7 @@ export default function LoginForm() {
     const email = e.target.email.value.trim();
     const password = e.target.password.value.trim();
     if (!email || !password) {
-      setError("Alle Felder müssen ausgefüllt sein.");
+      setError("Please fill out all required fields.");
       return;
     }
     // checks the credentials in the database and performs login if email and password are correct
@@ -62,14 +62,14 @@ export default function LoginForm() {
           setError={setError}
           inputId="password"
           inputName="password"
-          placeholder="Passwort"
+          placeholder="Password"
         />
         {error && <DefaultError errorMessage={error} />}
-        <DefaultButton buttonType="submit" buttonText="Anmelden" />
+        <DefaultButton buttonType="submit" buttonText="Sign in" />
       </form>
       <Link className="text-center mt-auto" href={"/register"}>
-        Noch kein Konto? <br />
-        Jetzt <span className="underline">registrieren</span>.
+        No account? <br />
+        <span className="underline">Sign up</span> now.
       </Link>
     </>
   );

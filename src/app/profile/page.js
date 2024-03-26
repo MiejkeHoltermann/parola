@@ -73,7 +73,7 @@ export default function Profile() {
             setWordsImported(wordsImported);
             setError("");
           } else {
-            setError("Error retrieving user data2");
+            setError("Error retrieving user data");
           }
         } catch (error) {
           setError("Error retrieving user data");
@@ -113,7 +113,7 @@ export default function Profile() {
                   <p className="font-bold text-lg text-mint mb-4">
                     {session.user.name}
                   </p>
-                  <p>registriert seit:</p>
+                  <p>registered since:</p>
                   <p>{registrationDate}</p>
                 </div>
                 <div className="flex justify-end w-[50%]">
@@ -126,13 +126,13 @@ export default function Profile() {
                   />
                 </div>
               </div>
-              <p className="font-bold text-lg text-mint mb-4">Statistik</p>
+              <p className="font-bold text-lg text-mint mb-4">Statistics</p>
               <div className="w-[80%]">
                 <p className="w-[6rem] bg-mint text-center text-white rounded-t-lg py-1">
-                  Wörter
+                  Words
                 </p>
                 <ul className="w-full bg-superlightblue px-6 grid grid-cols-2 rounded-b-lg rounded-r-lg">
-                  <li className="py-1">Gesamt</li>
+                  <li className="py-1">All</li>
                   <li className="py-1 justify-self-end font-bold text-mint">
                     {customWords.length}
                   </li>
@@ -144,7 +144,7 @@ export default function Profile() {
                       </li>
                     </Fragment>
                   ))}
-                  <li className="py-1">Favoriten</li>
+                  <li className="py-1">Favorites</li>
                   <li className="py-1 justify-self-end font-bold text-mint ">
                     {favorites}
                   </li>
@@ -152,14 +152,14 @@ export default function Profile() {
               </div>
               <div className="w-[80%]">
                 <p className="w-[6rem] bg-mint text-center text-white rounded-t-lg py-1">
-                  Verben
+                  Verbs
                 </p>
                 <ul className="w-full bg-superlightblue px-6 grid grid-cols-2 rounded-b-lg rounded-r-lg">
-                  <li className="py-1">Gesamt</li>
+                  <li className="py-1">All</li>
                   <li className="py-1 justify-self-end font-bold text-mint">
                     {customVerbs.length}
                   </li>
-                  <li className="py-1">Favoriten</li>
+                  <li className="py-1">Favorites</li>
                   <li className="py-1 justify-self-end font-bold text-mint ">
                     {verbFavorites}
                   </li>
@@ -169,21 +169,21 @@ export default function Profile() {
               {!wordsImported && customWords.length === 0 ? (
                 <>
                   <p className="text-center">
-                    Du hast noch keine Vokabeln gespeichert. Möchtest du den
-                    Grundwortschatz der App hinzufügen?
+                    You have not saved any words yet. Do you want to import the
+                    default vocabulary?
                   </p>
                   <ImportButton
                     setError={setError2}
                     setCustomWords={setCustomWords}
                   >
-                    Importieren
+                    Import
                   </ImportButton>
                 </>
               ) : null}
               <DefaultButton
                 buttonFunction={signOutUser}
                 buttonType="button"
-                buttonText="Abmelden"
+                buttonText="Sign out"
               />
             </>
           ) : null}

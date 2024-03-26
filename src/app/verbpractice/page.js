@@ -109,12 +109,12 @@ export default function Verbpractice() {
               {customVerbs.length === 0 ? (
                 <>
                   <p className="text-center mt-[2rem]">
-                    Du hast alle Verben gelernt.
+                    You have practiced all verbs.
                   </p>
                   <DefaultButton
                     buttonFunction={() => router.push("/home")}
                     buttonType="button"
-                    buttonText="Schließen"
+                    buttonText="Close"
                   />
                 </>
               ) : (

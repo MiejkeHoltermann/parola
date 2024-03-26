@@ -1,4 +1,4 @@
-export default function VerbCard({ verb }) {
+export default function SimpleVerbCard({ verb }) {
   const presenteLabels = ["io", "tu", "lei/lui", "noi", "voi", "loro"];
 
   return (

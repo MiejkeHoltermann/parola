@@ -10,10 +10,10 @@ import DefaultButton from "../DefaultButton";
 export default function EditModal({
   wordId,
   setEditModal,
-  germanWord,
+  englishWord,
   italianWord,
-  newGermanWord,
-  setNewGermanWord,
+  newEnglishWord,
+  setNewEnglishWord,
   newItalianWord,
   setNewItalianWord,
   setCustomWords,
@@ -27,18 +27,18 @@ export default function EditModal({
 
   // if the user cancels editing the word is reset to its initial value
   const cancelEditing = () => {
-    setNewGermanWord(germanWord);
+    setNewEnglishWord(englishWord);
     setNewItalianWord(italianWord);
     setEditModal(false);
   };
 
   const updateWord = async () => {
     // checks whether all input fields are valid
-    if (newGermanWord.length === 0 || newItalianWord.length === 0) {
-      setError2("Alle Felder müssen ausgefüllt sein.");
+    if (newEnglishWord.length === 0 || newItalianWord.length === 0) {
+      setError2("Please fill out all required fields.");
       return;
-    } else if (newGermanWord.length > 20 || newItalianWord.length > 20) {
-      setError2("Keines der Wörter darf länger als 20 Zeichen sein.");
+    } else if (newEnglishWord.length > 20 || newItalianWord.length > 20) {
+      setError2("No input can be longer than 20 characters.");
     } else if (session) {
       const userId = session.user.id;
       // updates the edited word in the database
@@ -51,7 +51,7 @@ export default function EditModal({
           body: JSON.stringify({
             userId,
             wordId,
-            newGermanWord,
+            newEnglishWord,
             newItalianWord,
           }),
         });
@@ -63,12 +63,12 @@ export default function EditModal({
         }
         // if an error occurs during the update, the word is reset to its initial value
         else {
-          setNewGermanWord(germanWord);
+          setNewEnglishWord(englishWord);
           setNewItalianWord(italianWord);
           setError("Error updating word");
         }
       } catch (error) {
-        setNewGermanWord(germanWord);
+        setNewEnglishWord(englishWord);
         setNewItalianWord(italianWord);
         setError("Error updating word");
       }
@@ -87,12 +87,12 @@ export default function EditModal({
             <CloseButton buttonFunction={cancelEditing} />
           </div>
           <DefaultInput
-            value={newGermanWord}
-            setValue={setNewGermanWord}
+            value={newEnglishWord}
+            setValue={setNewEnglishWord}
             setError={setError2}
-            inputId="germanWordInput"
-            inputName="germanWordInput"
-            placeholder="deutsches Wort"
+            inputId="englishWordInput"
+            inputName="englishWordInput"
+            placeholder="English word"
           />
           <DefaultInput
             value={newItalianWord}
@@ -100,13 +100,13 @@ export default function EditModal({
             setError={setError2}
             inputId="italianWordInput"
             inputName="italianWordInput"
-            placeholder="italienisches Wort"
+            placeholder="Italian word"
           />
           {error2 && <DefaultError errorMessage={error2} />}
           <DefaultButton
             buttonFunction={updateWord}
             buttonType="button"
-            buttonText="Speichern"
+            buttonText="Save"
             size="8rem"
           />
         </div>

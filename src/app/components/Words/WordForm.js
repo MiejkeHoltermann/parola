@@ -11,7 +11,7 @@ export default function WordForm({
   setCustomWords,
   setFilteredWords,
 }) {
-  const [germanWord, setGermanWord] = useState("");
+  const [englishWord, setEnglishWord] = useState("");
   const [italianWord, setItalianWord] = useState("");
   const [error, setError] = useState("");
 
@@ -20,13 +20,13 @@ export default function WordForm({
   async function handleSubmit(e) {
     e.preventDefault();
     // checks whether all input fields are valid
-    const germanWord = e.target.germanWord.value.trim();
+    const englishWord = e.target.englishWord.value.trim();
     const italianWord = e.target.italianWord.value.trim();
-    if (!germanWord || !italianWord) {
-      setError("Alle Felder müssen ausgefüllt sein");
+    if (!englishWord || !italianWord) {
+      setError("Please fill out all required fields.");
       return;
-    } else if (germanWord.length > 20 || italianWord.length > 20) {
-      setError("Die Wörter dürfen nicht länger als 20 Zeichen sein.");
+    } else if (englishWord.length > 20 || italianWord.length > 20) {
+      setError("No input can be longer than 20 characters.");
       return;
     }
     // checks whether the new word already exists in the database
@@ -38,7 +38,7 @@ export default function WordForm({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId, germanWord, italianWord }),
+          body: JSON.stringify({ userId, englishWord, italianWord }),
         });
         const { message, customWords } = await response.json();
         if (message === "Word already exists") {
@@ -79,13 +79,13 @@ export default function WordForm({
             className="w-[1.5rem] h-[1.5rem]"
           ></Image>
         </button>
-        <h1 className="mt-[2rem] mb-[1.4rem]">Füge ein neues Wort hinzu</h1>
+        <h1 className="mt-[2rem] mb-[1.4rem]">Add a new word</h1>
         <DefaultInput
-          value={germanWord}
-          setValue={setGermanWord}
+          value={englishWord}
+          setValue={setEnglishWord}
           setError={setError}
-          inputId="germanWord"
-          inputName="germanWord"
+          inputId="englishWord"
+          inputName="englishWord"
           placeholder="Deutsch"
         />
         <DefaultInput
@@ -97,7 +97,7 @@ export default function WordForm({
           placeholder="Italienisch"
         />
         {error && <DefaultError errorMessage={error} />}
-        <DefaultButton buttonType="submit" buttonText="Hinzufügen" />
+        <DefaultButton buttonType="submit" buttonText="Add" />
       </form>
     </>
   );
