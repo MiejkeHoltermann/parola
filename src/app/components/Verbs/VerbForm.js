@@ -73,13 +73,11 @@ export default function VerbForm({
     const errorMessages = [];
     for (const key in verbData) {
       if (!verbData[key]) {
-        errorMessages.push("Alle Felder müssen ausgefüllt sein");
+        errorMessages.push("Please fill out all required fields.");
         break;
       }
       if (verbData[key].length > 20) {
-        errorMessages.push(
-          "Keines der Wörter darf mehr als 20 Zeichen betragen."
-        );
+        errorMessages.push("No input can be longer than 20 characters.");
         break;
       }
     }
@@ -105,7 +103,7 @@ export default function VerbForm({
             className="w-[1.5rem] h-[1.5rem]"
           ></Image>
         </button>
-        <h1 className="mt-[2rem] mb-[1.4rem]">Füge ein neues Verb hinzu</h1>
+        <h1 className="mt-[2rem] mb-[1.4rem]">Add a new verb</h1>
         {Object.entries(verbData).map(([key, value], index) => (
           <VerbInput
             key={key}
@@ -118,7 +116,7 @@ export default function VerbForm({
           />
         ))}
         {error && <DefaultError errorMessage={error} />}
-        <DefaultButton buttonType="submit" buttonText="Hinzufügen" />
+        <DefaultButton buttonType="submit" buttonText="Add" />
       </form>
     </>
   );

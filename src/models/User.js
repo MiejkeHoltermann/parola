@@ -17,7 +17,7 @@ const userSchema = new Schema(
     customWords: [
       {
         _id: { type: String, required: true },
-        germanWord: { type: String, required: true },
+        englishWord: { type: String, required: true },
         italianWord: { type: String, required: true },
         level: { type: Number, required: true, default: 1 },
         isFavorite: { type: Boolean, required: true, default: false },

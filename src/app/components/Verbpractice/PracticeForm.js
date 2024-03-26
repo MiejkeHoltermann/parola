@@ -24,7 +24,7 @@ export default function PracticeForm({
     setNumberOfVerbs(numberOfVerbs);
     if (numberOfVerbs < 1 || numberOfVerbs > 10) {
       setInvalid(true);
-      setError2("Wähle zwischen 1 und 10 Verben für diese Lerneinheit aus.");
+      setError2("Pick between 1 and 10 verbs.");
     } else {
       setInvalid(false);
       setError2("");
@@ -36,7 +36,7 @@ export default function PracticeForm({
     // checks whether the input field for numberOfVerbs is valid
     const numberOfVerbs = e.target.elements.numberOfVerbs.value;
     if (numberOfVerbs < 1 || numberOfVerbs > 10) {
-      setError2("Wähle zwischen 1 und 10 Verben für diese Lerneinheit aus.");
+      setError2("Pick between 1 and 10 verbs.");
       return;
     } else if (session) {
       const userId = session.user.id;
@@ -68,7 +68,7 @@ export default function PracticeForm({
       className="w-[90%] flex flex-col items-center mt-[1rem] gap-[0.6rem]"
     >
       <label htmlFor="numberOfVerbs" className="text-center">
-        Wie viele Verben möchtest du heute lernen?
+        How many verbs do you want to practice?
       </label>
       <input
         type="number"
@@ -81,7 +81,7 @@ export default function PracticeForm({
         }`}
       />
       {error2 && <DefaultError errorMessage={error2} />}
-      <DefaultButton buttonType="submit" buttonText="Los geht's" size="8rem" />
+      <DefaultButton buttonType="submit" buttonText="Let's go" size="8rem" />
     </form>
   );
 }

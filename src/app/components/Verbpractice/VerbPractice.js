@@ -25,7 +25,7 @@ export default function VerbPractice({
       value.trim()
     );
     if (trimmedInputs.some((input) => !input)) {
-      setError2("Alle Felder müssen ausgefüllt sein.");
+      setError2("Please fill out all required fields.");
     }
 
     // checks whether the inputs are correct
@@ -36,9 +36,7 @@ export default function VerbPractice({
       );
       setCorrect(correctAnswers);
       setError2(
-        correctAnswers
-          ? "Die Antwort ist richtig."
-          : "Das ist nicht die richtige Antwort."
+        correctAnswers ? "The answer is correct." : "The answer is not correct."
       );
     }
   };
@@ -69,7 +67,7 @@ export default function VerbPractice({
           {error2 && <DefaultError errorMessage={error2} correct={correct} />}{" "}
           <DefaultButton
             buttonType="submit"
-            buttonText={!correct ? "Prüfen" : "Weiter"}
+            buttonText={!correct ? "Check" : "Next"}
             size="8rem"
           />
           <Hint hint={hint} setHint={setHint} activeVerb={activeVerb} />

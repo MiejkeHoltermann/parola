@@ -39,7 +39,7 @@ export default function MultipleChoicePracticeForm({
         ) : (
           <>
             <p className="w-[80%] text-center rounded-xl py-[1rem] border border-gray-300 mb-[1rem]">
-              {activeWord && activeWord.germanWord}
+              {activeWord && activeWord.englishWord}
             </p>
             {answers && (
               <>
@@ -65,7 +65,7 @@ export default function MultipleChoicePracticeForm({
             <DefaultButton
               buttonFunction={updateLevel}
               buttonType="submit"
-              buttonText="Weiter"
+              buttonText="Next"
               disabled={!correct}
               size="8rem"
             />

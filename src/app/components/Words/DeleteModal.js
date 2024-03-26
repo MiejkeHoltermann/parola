@@ -43,20 +43,20 @@ export default function DeleteModal({
   return (
     <div>
       <p className="text-center">
-        Bist du sicher, dass du dieses Wort endgültig löschen möchtest?
+        Are you sure, you want to delete this word?{" "}
       </p>
       <div className="flex justify-center gap-[1rem] mt-[0.6rem]">
         <DefaultButton
           buttonFunction={() => setDeleteModal(false)}
           buttonType="button"
-          buttonText="Nein"
+          buttonText="No"
           size="6rem"
           color="red"
         />
         <DefaultButton
           buttonFunction={() => removeWord(wordId)}
           buttonType="button"
-          buttonText="Ja"
+          buttonText="Yes"
           size="6rem"
         />
       </div>

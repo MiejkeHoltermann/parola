@@ -88,7 +88,7 @@ export default function Words() {
                   <SearchBar
                     customWords={customWords}
                     setFilteredWords={setFilteredWords}
-                    placeholder="Vokabeln suchen"
+                    placeholder="Search"
                     setSortingDialogue={setSortingDialogue}
                     setFilterDialogue={setFilterDialogue}
                   />
@@ -119,7 +119,7 @@ export default function Words() {
                           key={word._id}
                           wordId={word._id}
                           isFavorite={word.isFavorite}
-                          germanWord={word.germanWord}
+                          englishWord={word.englishWord}
                           italianWord={word.italianWord}
                           setFilteredWords={setFilteredWords}
                           setCustomWords={setCustomWords}
@@ -130,7 +130,7 @@ export default function Words() {
                         <DefaultButton
                           buttonFunction={resetFilters}
                           buttonType="button"
-                          buttonText="Zurücksetzen"
+                          buttonText="Reset"
                         />
                       ) : null}
                     </>
@@ -140,7 +140,7 @@ export default function Words() {
                       <DefaultButton
                         buttonFunction={resetFilters}
                         buttonType="button"
-                        buttonText="Zurücksetzen"
+                        buttonText="Reset"
                       />
                     </>
                   )}
@@ -150,9 +150,8 @@ export default function Words() {
               ) : (
                 <>
                   <p className="text-center mt-[2rem]">
-                    Du hast noch keine Vokabeln gespeichert. Füge über das
-                    Formular oben neue Wörter hinzu oder importiere den
-                    Grundwortschatz der App.
+                    You have not saved any words yet. You can import the default
+                    vocabulary or add your own words with the form above.
                   </p>
                   <ImportButton
                     setCustomWords={setCustomWords}

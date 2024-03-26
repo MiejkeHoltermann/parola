@@ -10,7 +10,7 @@ export default function FaveButton({
   setError,
 }) {
   const [favorite, setFavorite] = useState(isFavorite);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const addToFavorites = async () => {
     if (session) {

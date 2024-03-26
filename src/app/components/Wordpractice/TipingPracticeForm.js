@@ -23,7 +23,7 @@ export default function TipingPracticeForm({
   // the input field is automatically focused on
 
   useEffect(() => {
-    if (activeWord && activeWord.germanWord) {
+    if (activeWord && activeWord.englishWord) {
       document.getElementById("italianWordInput").focus();
     }
   }, [activeWord]);
@@ -33,18 +33,18 @@ export default function TipingPracticeForm({
     e.preventDefault();
     const answer = e.target.elements.italianWordInput.value.trim();
     if (answer === "") {
-      setError2("Gib eine Lösung ein.");
+      setError2("Please type something in.");
     } else if (
       activeWord.italianWord.trim() ===
       e.target.elements.italianWordInput.value.trim()
     ) {
       setCorrect(true);
-      setError2("Die Antwort ist richtig.");
+      setError2("The answer is correct.");
     } else if (e.target.elements.italianWordInput.value.trim() === "") {
       return;
     } else {
       setCorrect(false);
-      setError2("Das ist nicht die richtige Antwort.");
+      setError2("The answer is not correct.");
     }
   };
 
@@ -58,7 +58,7 @@ export default function TipingPracticeForm({
         <LoadingAnimation small />
       ) : (
         <>
-          <p className="mb-[1rem]">{activeWord && activeWord.germanWord}</p>
+          <p className="mb-[1rem]">{activeWord && activeWord.englishWord}</p>
           <DefaultInput
             value={answer}
             setValue={setAnswer}
@@ -69,7 +69,7 @@ export default function TipingPracticeForm({
           {error2 && <DefaultError errorMessage={error2} correct={correct} />}{" "}
           <DefaultButton
             buttonType="submit"
-            buttonText={!correct ? "Prüfen" : "Weiter"}
+            buttonText={!correct ? "Check" : "Next"}
             size="8rem"
           />
           <Hint hint={hint} setHint={setHint} activeWord={activeWord} />

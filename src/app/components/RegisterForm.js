@@ -29,19 +29,19 @@ export default function RegisterForm() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /^(?=.*[0-9])(?!.*[!@#$%^&*_])[a-zA-Z0-9]{8,20}$/;
     if (!name || !email || !password) {
-      setError("Alle Felder müssen ausgefüllt sein.");
+      setError("Please fill out all required fields.");
       return;
     } else if (!nameRegex.test(name)) {
       setError(
-        "Dein Name muss zwischen 4 und 10 Zeichen lang sein und darf nur Buchstaben enthalten."
+        "Your name has to be between 4 and 10 characters in length and contain only letters."
       );
       return;
     } else if (!emailRegex.test(email)) {
-      setError("Bitte gib eine gültige E-mail-Adresse ein.");
+      setError("Please type in a valid e-mail address.");
       return;
     } else if (!passwordRegex.test(password)) {
       setError(
-        "Dein Passwort muss mindestens 8 Zeichen lang sein und mindestens eine Zahl enthalten."
+        "Your password has to be at least 8 characters in length and contain at least one digit."
       );
       return;
     }
@@ -109,15 +109,15 @@ export default function RegisterForm() {
           setError={setError}
           inputId="password"
           inputName="password"
-          placeholder="Passwort"
+          placeholder="Password"
         />
         {loading && <LoadingAnimation small />}
         {error && <DefaultError errorMessage={error} />}
-        <DefaultButton buttonType="submit" buttonText="Registrieren" />
+        <DefaultButton buttonType="submit" buttonText="Sign up" />
       </form>
       <Link className="text-center mt-auto" href={"/"}>
-        Du hast schon ein Konto? <br />
-        Jetzt <span className="underline ">anmelden</span>.
+        Already have an account? <br />
+        <span className="underline ">Sign in</span> now.
       </Link>
     </>
   );

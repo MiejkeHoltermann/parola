@@ -86,7 +86,7 @@ export default function MyVerbs() {
                   <SearchBar
                     customVerbs={customVerbs}
                     setFilteredVerbs={setFilteredVerbs}
-                    placeholder="Verben suchen"
+                    placeholder="Search"
                     setSortingDialogue={setSortingDialogue}
                     setFilterDialogue={setFilterDialogue}
                   />
@@ -123,7 +123,7 @@ export default function MyVerbs() {
                         <DefaultButton
                           buttonFunction={resetFilters}
                           buttonType="button"
-                          buttonText="Zurücksetzen"
+                          buttonText="Reset"
                         />
                       ) : null}
                     </>
@@ -133,7 +133,7 @@ export default function MyVerbs() {
                       <DefaultButton
                         buttonFunction={resetFilters}
                         buttonType="button"
-                        buttonText="Zurücksetzen"
+                        buttonText="Reset"
                       />
                     </>
                   )}
@@ -143,9 +143,8 @@ export default function MyVerbs() {
               ) : (
                 <>
                   <p className="text-center mt-[2rem]">
-                    Du hast noch keine Verben gespeichert. Füge über das
-                    Formular oben neue Verben hinzu oder importiere den
-                    Grundwortschatz der App.
+                    You have not saved any verbs yet. You can import the default
+                    vocabulary or add your own verbs with the form above.
                   </p>
                   <ImportButton
                     setCustomVerbs={setCustomVerbs}
