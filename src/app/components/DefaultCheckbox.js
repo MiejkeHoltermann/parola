@@ -7,10 +7,6 @@ export default function DefaultCheckbox({
   checkboxValue,
   checkboxLabel,
 }) {
-  const handleCheckboxChange = (e) => {
-    setImportData(e.target.checked);
-  };
-
   return (
     <label
       htmlFor={checkboxId}

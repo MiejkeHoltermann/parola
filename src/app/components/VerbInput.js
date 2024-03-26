@@ -1,4 +1,4 @@
-export default function DefaultInput({
+export default function VerbInput({
   index,
   value,
   verbData,

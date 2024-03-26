@@ -18,8 +18,8 @@ export default function SortingOptions({
   const sortWords = (order) => {
     const sortedWords = filteredWords ? [...filteredWords] : [...customWords];
     sortedWords.sort((a, b) => {
-      const wordA = a.germanWord.toLowerCase();
-      const wordB = b.germanWord.toLowerCase();
+      const wordA = a.englishWord.toLowerCase();
+      const wordB = b.englishWord.toLowerCase();
       if (order === "asc") {
         return wordA.localeCompare(wordB);
       } else if (order === "desc") {
@@ -38,7 +38,7 @@ export default function SortingOptions({
         type="button"
         className="absolute top-0 right-0 flex justify-end items-center gap-[0.5rem]"
       >
-        <p>Sortieren</p>
+        <p>Sort</p>
         <Image
           src="/arrow.svg"
           alt="arrow"
@@ -54,13 +54,13 @@ export default function SortingOptions({
               onClick={() => sortWords("asc")}
               className="block px-[1rem] py-[0.5rem]"
             >
-              Alphabet A - Z
+              A - Z
             </button>
             <button
               onClick={() => sortWords("desc")}
               className="block px-[1rem] py-[0.5rem]"
             >
-              Alphabet Z - A
+              Z - A
             </button>
           </ul>
         </div>

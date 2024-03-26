@@ -2,7 +2,7 @@ import mongoose, { Schema, models } from "mongoose";
 
 const wordSchema = new Schema(
   {
-    germanWord: { type: String, required: true },
+    englishWord: { type: String, required: true },
     italianWord: { type: String, required: true },
   },
   { timestamps: true }

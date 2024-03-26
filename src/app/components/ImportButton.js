@@ -37,7 +37,7 @@ export default function ImportButton({
     <DefaultButton
       buttonFunction={importWords}
       buttonType="button"
-      buttonText="Importieren"
+      buttonText="Import"
     />
   );
 }

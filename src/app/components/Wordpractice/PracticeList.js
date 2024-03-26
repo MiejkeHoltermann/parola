@@ -8,29 +8,28 @@ export default function PracticeList({ customWords, provideNewWord, reload }) {
     <>
       {customWords.length > 0 ? (
         <>
-          <p className="text-center">Präge dir diese Wörter gut ein.</p>
+          <p className="text-center">Try to memorize these words.</p>
           {customWords.map((word) => (
             <SimpleWordCard
               key={word._id}
-              germanWord={word.germanWord}
+              englishWord={word.englishWord}
               italianWord={word.italianWord}
             />
           ))}
           <DefaultButton
             buttonFunction={provideNewWord}
             buttonType="button"
-            buttonText="Jetzt abfragen"
+            buttonText="Practice now"
           />
         </>
       ) : (
         <>
-          <p className="text-center">
-            Du hast keine Vokabeln, die diese Kriterien erfüllen.
-          </p>
+          <p className="text-center">None of your words meet these criteria.</p>
+
           <DefaultButton
             buttonFunction={reload}
             buttonType="button"
-            buttonText="Zurück"
+            buttonText="Back"
           />
         </>
       )}

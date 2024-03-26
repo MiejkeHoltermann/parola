@@ -8,25 +8,23 @@ export default function PracticeList({ customVerbs, provideNewVerb, reload }) {
     <>
       {customVerbs.length > 0 ? (
         <>
-          <p className="text-center">Präge dir diese Verben gut ein.</p>
+          <p className="text-center">Try to memorize these verbs.</p>
           {customVerbs.map((verb) => (
             <SimpleVerbCard key={verb._id} verb={verb} />
           ))}
           <DefaultButton
             buttonFunction={provideNewVerb}
             buttonType="button"
-            buttonText="Jetzt abfragen"
+            buttonText="Practice now"
           />
         </>
       ) : (
         <>
-          <p className="text-center">
-            Du hast keine Verben, die diese Kriterien erfüllen.
-          </p>
+          <p className="text-center">None of your verbs meet these criteria.</p>
           <DefaultButton
             buttonFunction={reload}
             buttonType="button"
-            buttonText="Zurück"
+            buttonText="Back"
           />
         </>
       )}

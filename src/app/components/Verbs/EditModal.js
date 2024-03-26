@@ -39,10 +39,10 @@ export default function EditModal({
   const updateVerb = async () => {
     // checks whether all input fields are valid
     if (Object.values(formData).some((value) => value.trim() === "")) {
-      setError2("Alle Felder müssen ausgefüllt sein.");
+      setError2("Please fill out all required fields.");
       return;
     } else if (Object.values(formData).some((value) => value.length > 20)) {
-      setError2("Keines der Wörter darf länger als 20 Zeichen sein.");
+      setError2("No input can be longer than 20 characters.");
       return;
     } else if (session) {
       const userId = session.user.id;
@@ -144,7 +144,7 @@ export default function EditModal({
             type="button"
             className="bg-mint w-[7rem] text-white text-center font-bold cursor-pointer rounded-lg px-[0.2rem] py-[0.3rem] mt-[0.4rem]"
           >
-            Speichern
+            Save
           </button>
         </div>
       ) : (

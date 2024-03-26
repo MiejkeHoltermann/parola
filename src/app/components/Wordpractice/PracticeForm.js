@@ -35,9 +35,7 @@ export default function PracticeForm({
     setNumberOfWords(numberOfWords);
     if (numberOfWords < 1 || numberOfWords > 100) {
       setInvalid(true);
-      setError2(
-        "Wähle zwischen 1 und 100 Wörtern für diese Lerneinheit aus oder setze ein Häkchen bei den Favoriten."
-      );
+      setError2("Pick between 1 and 100 words or tick the favorites checkbox.");
     } else {
       setInvalid(false);
       setError2("");
@@ -61,9 +59,7 @@ export default function PracticeForm({
     const numberOfWords = e.target.elements.numberOfWords.value;
     const favoriteWords = e.target.elements.favoriteWords.checked;
     if ((numberOfWords < 1 || numberOfWords > 100) && !favoriteWords) {
-      setError2(
-        "Wähle zwischen 1 und 100 Wörtern für diese Lerneinheit aus oder setze ein Häkchen bei den Favoriten."
-      );
+      setError2("Pick between 1 and 100 words or tick the favorites checkbox.");
       return;
     } else if (session) {
       const userId = session.user.id;
@@ -128,7 +124,7 @@ export default function PracticeForm({
       className="w-[90%] flex flex-col items-center mt-[1rem] gap-[0.6rem]"
     >
       <label htmlFor="numberOfWords" className="text-center">
-        Wie viele Wörter möchtest du heute lernen?
+        How many words do you want to practice?{" "}
       </label>
       <input
         type="number"
@@ -140,7 +136,7 @@ export default function PracticeForm({
           invalid ? "text-red-500" : ""
         }`}
       />
-      <p>Wähle ein Level aus</p>
+      <p>Pick a level</p>
       <SelectLevelInput
         setLevel={setLevel}
         defaultOption={defaultOption}
@@ -153,15 +149,17 @@ export default function PracticeForm({
         checkboxId="favoriteWords"
         checkboxName="favoriteWords"
         checkboxValue="favoriteWords"
-        checkboxLabel="nur Favoriten"
+        checkboxLabel="Favorites only"
       />
-      <p className="text-center mt-[1rem]">Wie möchtest du abgefragt werden?</p>
+      <p className="text-center mt-[1rem]">
+        Which practice mode do you want to use?
+      </p>
       <SelectPracticeTypeInput
         practiceType={practiceType}
         setPracticeType={setPracticeType}
       />
       {error2 && <DefaultError errorMessage={error2} />}
-      <DefaultButton buttonType="submit" buttonText="Los geht's" size="8rem" />
+      <DefaultButton buttonType="submit" buttonText="Let's go" size="8rem" />
     </form>
   );
 }

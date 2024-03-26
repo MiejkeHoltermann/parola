@@ -8,13 +8,13 @@ import { RiEdit2Fill } from "react-icons/ri";
 export default function WordCard({
   wordId,
   isFavorite,
-  germanWord,
+  englishWord,
   italianWord,
   setFilteredWords,
   setCustomWords,
   setError,
 }) {
-  const [newGermanWord, setNewGermanWord] = useState(germanWord);
+  const [newEnglishWord, setNewEnglishWord] = useState(englishWord);
   const [newItalianWord, setNewItalianWord] = useState(italianWord);
   const [editModal, setEditModal] = useState(false);
 
@@ -25,13 +25,13 @@ export default function WordCard({
         <div className="w-[90%] flex flex-col rounded-xl shadow-[2px_2px_rgba(0,215,177,1)] px-[1rem] py-[0.6rem]">
           <div className="w-full flex gap-[1rem] pb-[0.6rem]">
             <Image
-              src="/german-flag.svg"
-              alt="german flag"
+              src="/british-flag.svg"
+              alt="british flag"
               width={50}
               height={50}
               className="w-[1.6rem] h-[1.6rem]"
             />
-            <p className="w-full">{newGermanWord}</p>
+            <p className="w-full">{newEnglishWord}</p>
             <FaveButton
               wordId={wordId}
               isFavorite={isFavorite}
@@ -60,10 +60,10 @@ export default function WordCard({
           <EditModal
             wordId={wordId}
             setEditModal={setEditModal}
-            germanWord={germanWord}
+            englishWord={englishWord}
             italianWord={italianWord}
-            newGermanWord={newGermanWord}
-            setNewGermanWord={setNewGermanWord}
+            newEnglishWord={newEnglishWord}
+            setNewEnglishWord={setNewEnglishWord}
             newItalianWord={newItalianWord}
             setNewItalianWord={setNewItalianWord}
             setCustomWords={setCustomWords}

@@ -56,13 +56,13 @@ export default function ImportData() {
       ) : (
         <>
           <p className="w-full text-center mt-[2rem]">
-            Diese App stellt einen umfangreichen Grundwortschatz zur Verfügung.
+            This app provides a comprehensive vocabulary for you to start with.
             <br />
-            Entferne das Häkchen, wenn du stattdessen deine eigenen Vokabeln
-            hinzufügen möchtest. <br />
+            Untick the box, if you want to add your own words instead.
             <br />
-            Du kannst den Grundwortschatz auch später hinzufügen, wenn du noch
-            unsicher bist.
+            <br />
+            You can import the default vocabulary later, if you are not sure
+            yet.
           </p>
           <form
             onSubmit={handleSubmit}
@@ -73,7 +73,7 @@ export default function ImportData() {
               onChange={handleCheckboxChange}
               checkboxId="importData"
               checkboxName="importData"
-              checkboxLabel="Wortschatz importieren"
+              checkboxLabel="import vocabulary"
             />
             {loading && <LoadingAnimation small />}
             {error && <DefaultError errorMessage={error} />}

@@ -11,16 +11,16 @@ export default function SearchBar({
   const [searchWord, setSearchWord] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
-  // looks for any matches in either the German or Italian words
+  // looks for any matches in either the English or Italian words
 
   const handleSearch = () => {
-    const matchesGerman = customWords.filter((word) =>
-      word.germanWord.toLowerCase().includes(searchWord.toLowerCase())
+    const matchesEnglish = customWords.filter((word) =>
+      word.englishWord.toLowerCase().includes(searchWord.toLowerCase())
     );
     const matchesItalian = customWords.filter((word) =>
       word.italianWord.toLowerCase().includes(searchWord.toLowerCase())
     );
-    const matchesCombined = [...matchesGerman, ...matchesItalian];
+    const matchesCombined = [...matchesEnglish, ...matchesItalian];
     if (matchesCombined) {
       setFilteredWords(matchesCombined);
       setSearchWord("");

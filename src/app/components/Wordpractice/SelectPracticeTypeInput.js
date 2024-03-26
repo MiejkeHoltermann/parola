@@ -36,19 +36,19 @@ export default function SelectPracticeTypeInput({
         <div className="bg-white absolute top-[2.2rem] left-0 z-20 w-[14rem] shadow-[6px_6px_20px_rgba(0,0,0,0.2)] rounded-lg">
           <ul className="pb-[0.6rem]">
             <li
-              onClick={() => handleOptions("Eintippen")}
+              onClick={() => handleOptions("typing")}
               className="py-[0.4rem] pl-[1.2rem]"
             >
-              Eintippen
+              Typing
             </li>
             <li
-              onClick={() => handleOptions("Wortsalat")}
+              onClick={() => handleOptions("wordscramble")}
               className="py-[0.4rem] pl-[1.2rem]"
             >
-              Wortsalat
+              Wordscramble
             </li>
             <li
-              onClick={() => handleOptions("Multiple Choice")}
+              onClick={() => handleOptions("multiple Choice")}
               className="py-[0.4rem] pl-[1.2rem]"
             >
               Multiple Choice

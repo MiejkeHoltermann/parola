@@ -64,7 +64,7 @@ export default function FilterOptions({
                 onChange={handleCheckboxChange}
                 className="accent-mint w-[1.4rem] h-[1.4rem]"
               />
-              <label htmlFor="favorites">nur Favoriten</label>
+              <label htmlFor="favorites">Favorites only</label>
             </div>
             <p className="mt-[1rem] mb-[0.3rem]">Levels</p>
             <div className="flex items-center gap-[0.5rem]">
@@ -87,7 +87,7 @@ export default function FilterOptions({
                 type="button"
                 className="underline mb-[0.2rem]"
               >
-                Zurücksetzen
+                Reset
               </button>
               <DefaultButton buttonType="submit" buttonText="OK" size="4rem" />
             </div>

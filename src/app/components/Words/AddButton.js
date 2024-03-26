@@ -16,7 +16,7 @@ export default function AddButton({ toggleAddModal }) {
         ></Image>
       </button>
       <button onClick={toggleAddModal} className="text-mint font-bold">
-        Wörter hinzufügen
+        Add words
       </button>
     </div>
   );
