@@ -79,7 +79,7 @@ export default function Words() {
               <>
                 <CloseLink href="/home" />
                 <h1 className="text-xl font-bold">
-                  Meine Vokabeln {customWords && `(${customWords.length})`}
+                  My Words {customWords && `(${customWords.length})`}
                 </h1>
                 {error && <DefaultError errorMessage={error} />}
                 <DefaultButton

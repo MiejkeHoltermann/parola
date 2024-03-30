@@ -6,7 +6,7 @@ export default function Hint({ hint, setHint, activeWord }) {
   }
 
   return (
-    <div className=" w-full flex items-center justify-end mt-[2rem] gap-[0.6rem]">
+    <div className=" w-full flex items-center justify-end mt-[0.4rem] gap-[0.6rem]">
       {hint ? (
         <p className="text-mint font-bold">{activeWord.italianWord}</p>
       ) : null}

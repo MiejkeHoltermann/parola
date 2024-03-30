@@ -30,15 +30,12 @@ export default function MultipleChoicePracticeForm({
 
   return (
     <>
-      <form
-        id="form"
-        className="w-[90%] flex flex-col items-center gap-[1rem] mt-[1rem]"
-      >
+      <form id="form" className="w-[90%] flex flex-col items-center gap-[1rem]">
         {loading ? (
           <LoadingAnimation small />
         ) : (
           <>
-            <p className="w-[80%] text-center rounded-xl py-[1rem] border border-gray-300 mb-[1rem]">
+            <p className="w-[80%] text-center rounded-xl py-[0.8rem] border border-gray-300 mb-[0.6rem]">
               {activeWord && activeWord.englishWord}
             </p>
             {answers && (
@@ -48,7 +45,7 @@ export default function MultipleChoicePracticeForm({
                     key={index}
                     onClick={() => checkAnswer(answer, index)}
                     type="button"
-                    className={`w-[80%] bg-darkblue text-white text-center rounded-xl py-[1rem] ${
+                    className={`w-[80%] bg-darkblue text-white text-center rounded-xl py-[0.8rem] ${
                       correct && activeWord.italianWord === answer
                         ? "bg-green-600 shadow-none"
                         : clickedIndex === index
