@@ -20,6 +20,7 @@ export default function MyVerbs() {
   const [addModal, setAddModal] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   const { data: session, status } = useSession();
 
@@ -58,6 +59,7 @@ export default function MyVerbs() {
   const resetFilters = async () => {
     setFilteredVerbs(customVerbs);
     setFilterDialogue(false);
+    setChecked(false);
   };
 
   return (
@@ -101,6 +103,8 @@ export default function MyVerbs() {
                         setFilterDialogue={setFilterDialogue}
                         setSortingDialogue={setSortingDialogue}
                         resetFilters={resetFilters}
+                        checked={checked}
+                        setChecked={setChecked}
                       />
                       <SortingOptions
                         customVerbs={customVerbs}

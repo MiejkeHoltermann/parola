@@ -9,9 +9,9 @@ export default function FilterOptions({
   setFilterDialogue,
   setSortingDialogue,
   resetFilters,
+  checked,
+  setChecked,
 }) {
-  const [checked, setChecked] = useState(false);
-
   const handleFilterDialogue = () => {
     setFilterDialogue(!filterDialogue);
     setSortingDialogue(false);
