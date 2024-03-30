@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import WordCard from "../components/Words/WordCard";
 import SortingOptions from "../components/Words/SortingOptions";
 import FilterOptions from "../components/Words/FilterOptions";
@@ -23,6 +24,11 @@ export default function Words() {
   const [loading, setLoading] = useState(false);
 
   const { data: session, status } = useSession();
+  const router = useRouter();
+
+  if (status === "unauthenticated") {
+    router.push("/");
+  }
 
   useEffect(() => {
     // loads all words that are saved in the user account

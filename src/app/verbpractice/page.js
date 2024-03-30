@@ -33,6 +33,10 @@ export default function Verbpractice() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  if (status === "unauthenticated") {
+    router.push("/");
+  }
+
   // if a user fills out all input fields for a verb correctly, a new verb is loaded
 
   const newQuestion = async (e) => {

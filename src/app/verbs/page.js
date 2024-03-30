@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import VerbCard from "../components/Verbs/VerbCard";
 import SortingOptions from "../components/Verbs/SortingOptions";
 import FilterOptions from "../components/Verbs/FilterOptions";
@@ -23,6 +24,11 @@ export default function MyVerbs() {
   const [checked, setChecked] = useState(false);
 
   const { data: session, status } = useSession();
+  const router = useRouter();
+
+  if (status === "unauthenticated") {
+    router.push("/");
+  }
 
   useEffect(() => {
     // loads all verbs that are saved in the user account
@@ -61,6 +67,8 @@ export default function MyVerbs() {
     setFilterDialogue(false);
     setChecked(false);
   };
+
+  console.log(checked);
 
   return (
     <main>

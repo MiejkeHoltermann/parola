@@ -32,6 +32,10 @@ export default function Wordpractice() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  if (status === "unauthenticated") {
+    router.push("/");
+  }
+
   // if a user gives the correct translation for a word, this word is automatically raised up one level
 
   const updateLevel = async (e) => {

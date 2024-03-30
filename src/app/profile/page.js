@@ -23,6 +23,10 @@ export default function Profile() {
 
   const router = useRouter();
 
+  if (status === "unauthenticated") {
+    router.push("/");
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       if (session) {
