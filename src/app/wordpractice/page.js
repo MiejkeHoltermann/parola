@@ -34,7 +34,8 @@ export default function Wordpractice() {
 
   // if a user gives the correct translation for a word, this word is automatically raised up one level
 
-  const updateLevel = async () => {
+  const updateLevel = async (e) => {
+    e.preventDefault();
     setLoading(true);
     if (session && level !== 5) {
       const userId = session.user.id;
