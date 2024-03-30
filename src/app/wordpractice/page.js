@@ -55,9 +55,11 @@ export default function Wordpractice() {
           setLoading(false);
           provideNewWord(wordId);
         } else {
+          setLoading(false);
           setError("Error updating level");
         }
       } catch (error) {
+        setLoading(false);
         setError("Error updating level");
       }
     }
