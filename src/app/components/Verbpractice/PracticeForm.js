@@ -76,12 +76,12 @@ export default function PracticeForm({
         name="numberOfVerbs"
         value={numberOfVerbs}
         onChange={handleNumberChange}
-        className={`w-[6rem] h-[2.2rem] pl-[1.2rem] pr-[0.4rem] mb-[1rem] focus:outline-none border border-gray-300 rounded-md ${
+        className={`w-[6rem] h-[2.2rem] pl-[1.2rem] pr-[0.4rem] mb-[1rem] focus:outline-none border border-gray-300 rounded-md hover:shadow-lg ${
           invalid ? "text-red-500" : ""
         }`}
       />
       {error2 && <DefaultError errorMessage={error2} />}
-      <DefaultButton buttonType="submit" buttonText="Let's go" size="8rem" />
+      <DefaultButton buttonType="submit" buttonText="Let's go" />
     </form>
   );
 }

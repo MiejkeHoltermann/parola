@@ -22,7 +22,7 @@ export default function WordCard({
     <>
       {!editModal ? (
         // renders the normal WordCard
-        <div className="w-[90%] flex flex-col rounded-xl shadow-[2px_2px_rgba(0,215,177,1)] px-[1rem] py-[0.6rem]">
+        <div className="w-[90%] flex flex-col rounded-xl shadow-[2px_2px_rgba(0,215,177,1)] px-[1rem] py-[0.6rem] hover:scale-105">
           <div className="w-full flex gap-[1rem] pb-[0.6rem]">
             <Image
               src="/british-flag.svg"

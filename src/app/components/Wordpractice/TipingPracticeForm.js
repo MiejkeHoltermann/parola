@@ -49,32 +49,34 @@ export default function TipingPracticeForm({
   };
 
   return (
-    <form
-      onSubmit={!correct ? (e) => checkAnswer(e) : (e) => updateLevel(e)}
-      id="form"
-      className="w-[90%] flex flex-col items-center mt-[1rem] gap-[1rem]"
-    >
-      {loading ? (
-        <LoadingAnimation small />
-      ) : (
-        <>
-          <p className="mb-[1rem]">{activeWord && activeWord.englishWord}</p>
-          <DefaultInput
-            value={answer}
-            setValue={setAnswer}
-            setError={setError2}
-            inputId="italianWordInput"
-            name="italianWordInput"
-          />
-          {error2 && <DefaultError errorMessage={error2} correct={correct} />}{" "}
-          <DefaultButton
-            buttonType="submit"
-            buttonText={!correct ? "Check" : "Next"}
-            size="8rem"
-          />
-          <Hint hint={hint} setHint={setHint} activeWord={activeWord} />
-        </>
-      )}
-    </form>
+    <>
+      <form
+        onSubmit={!correct ? (e) => checkAnswer(e) : (e) => updateLevel(e)}
+        id="form"
+        className="w-[90%] flex flex-col items-center mt-[1rem] gap-[1rem]"
+      >
+        {loading ? (
+          <LoadingAnimation small />
+        ) : (
+          <>
+            <p className="mb-[1rem]">{activeWord && activeWord.englishWord}</p>
+            <DefaultInput
+              value={answer}
+              setValue={setAnswer}
+              setError={setError2}
+              inputId="italianWordInput"
+              name="italianWordInput"
+            />
+            {error2 && <DefaultError errorMessage={error2} correct={correct} />}{" "}
+            <DefaultButton
+              buttonType="submit"
+              buttonText={!correct ? "Check" : "Next"}
+              size="8rem"
+            />
+            <Hint hint={hint} setHint={setHint} activeWord={activeWord} />
+          </>
+        )}
+      </form>
+    </>
   );
 }

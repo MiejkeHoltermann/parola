@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 import DefaultButton from "../DefaultButton";
 
 export default function FilterOptions({
@@ -39,9 +40,16 @@ export default function FilterOptions({
       <button
         onClick={handleFilterDialogue}
         type="button"
-        className="text-left w-[4rem]"
+        className="flex justify-end items-center gap-[0.5rem]"
       >
-        Filter
+        <p>Filter</p>
+        <Image
+          src="/arrow.svg"
+          alt="arrow"
+          width={100}
+          height={100}
+          className="w-[1rem] h-[1rem] flex justify-center items-center"
+        />
       </button>
       {filterDialogue && (
         <>
@@ -65,7 +73,7 @@ export default function FilterOptions({
               <button
                 onClick={() => resetFilters()}
                 type="button"
-                className="underline mb-[0.2rem]"
+                className="underline mb-[0.2rem] hover:text-mint"
               >
                 Reset
               </button>

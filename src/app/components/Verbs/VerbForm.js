@@ -5,6 +5,7 @@ import Image from "next/image";
 import DefaultButton from "../DefaultButton";
 import DefaultError from "../DefaultError";
 import VerbInput from "../VerbInput";
+import CloseButton from "../CloseButton";
 
 export default function VerbForm({
   toggleAddModal,
@@ -86,23 +87,11 @@ export default function VerbForm({
 
   return (
     <>
+      <CloseButton buttonFunction={toggleAddModal} />
       <form
         onSubmit={handleSubmit}
         className=" w-full h-full flex flex-col items-center gap-[0.6rem]"
       >
-        <button
-          onClick={toggleAddModal}
-          type="button"
-          className="ml-auto bg-mint flex justify-center items-center text-white w-[1.6rem] h-[1.6rem] rounded-md"
-        >
-          <Image
-            src="/cross.svg"
-            alt="close button"
-            width={50}
-            height={50}
-            className="w-[1.5rem] h-[1.5rem]"
-          ></Image>
-        </button>
         <h1 className="mt-[2rem] mb-[1.4rem]">Add a new verb</h1>
         {Object.entries(verbData).map(([key, value], index) => (
           <VerbInput
@@ -116,7 +105,7 @@ export default function VerbForm({
           />
         ))}
         {error && <DefaultError errorMessage={error} />}
-        <DefaultButton buttonType="submit" buttonText="Add" />
+        <DefaultButton buttonType="submit" buttonText="Add" size="6rem" />
       </form>
     </>
   );

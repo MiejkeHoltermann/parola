@@ -20,6 +20,7 @@ export default function PracticeList({ customWords, provideNewWord, reload }) {
             buttonFunction={provideNewWord}
             buttonType="button"
             buttonText="Practice now"
+            size="10rem"
           />
         </>
       ) : (

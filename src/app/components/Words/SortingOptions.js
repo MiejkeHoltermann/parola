@@ -52,13 +52,13 @@ export default function SortingOptions({
           <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
             <button
               onClick={() => sortWords("asc")}
-              className="block px-[1rem] py-[0.5rem]"
+              className="block px-[1rem] py-[0.5rem] hover:bg-superlightblue"
             >
               A - Z
             </button>
             <button
               onClick={() => sortWords("desc")}
-              className="block px-[1rem] py-[0.5rem]"
+              className="block px-[1rem] py-[0.5rem] hover:bg-superlightblue"
             >
               Z - A
             </button>

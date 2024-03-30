@@ -1,10 +1,10 @@
-import Link from "next/link";
 import Image from "next/image";
 
-export default function CloseLink({ href }) {
+export default function CloseButton({ buttonFunction }) {
   return (
-    <Link
-      href={href}
+    <button
+      onClick={buttonFunction}
+      type="button"
       className="ml-auto bg-mint flex justify-center items-center text-white w-[1.6rem] h-[1.6rem] rounded-md hover:scale-105"
     >
       <Image
@@ -14,6 +14,6 @@ export default function CloseLink({ href }) {
         height={50}
         className="w-[1.5rem] h-[1.5rem]"
       ></Image>
-    </Link>
+    </button>
   );
 }

@@ -8,7 +8,6 @@ import SearchBar from "../components/Verbs/SearchBar";
 import LoadingAnimation from "../components/LoadingAnimation";
 import ImportButton from "../components/ImportButton";
 import VerbForm from "../components/Verbs/VerbForm";
-import AddButton from "../components/Verbs/AddButton";
 import CloseLink from "../components/CloseLink";
 import DefaultError from "../components/DefaultError";
 import DefaultButton from "../components/DefaultButton";
@@ -63,100 +62,106 @@ export default function MyVerbs() {
 
   return (
     <main>
-      {status === "loading" ? (
-        <LoadingAnimation />
-      ) : (
-        <>
-          {addModal ? (
-            <VerbForm
-              toggleAddModal={toggleAddModal}
-              setCustomVerbs={setCustomVerbs}
-              setFilteredVerbs={setFilteredVerbs}
-            />
-          ) : (
-            <>
-              <CloseLink href="/home" />
-              <h1 className="text-xl font-bold">
-                Meine Verben {customVerbs && `(${customVerbs.length})`}
-              </h1>
-              {error && <DefaultError errorMessage={error} />}
-              <AddButton toggleAddModal={toggleAddModal} />
-              {customVerbs && customVerbs.length > 0 ? (
-                <>
-                  <SearchBar
-                    customVerbs={customVerbs}
-                    setFilteredVerbs={setFilteredVerbs}
-                    placeholder="Search"
-                    setSortingDialogue={setSortingDialogue}
-                    setFilterDialogue={setFilterDialogue}
-                  />
-                  <div className="relative w-[90%]">
-                    <FilterOptions
+      <div className="relative bg-white w-[90%] min-h-[80vh] h-auto rounded-xl flex flex-col items-center py-[2rem] px-[1rem] gap-[1.6rem] mt-[5.4rem] mb-[6vh]">
+        {status === "loading" ? (
+          <LoadingAnimation />
+        ) : (
+          <>
+            {addModal ? (
+              <VerbForm
+                toggleAddModal={toggleAddModal}
+                setCustomVerbs={setCustomVerbs}
+                setFilteredVerbs={setFilteredVerbs}
+              />
+            ) : (
+              <>
+                <CloseLink href="/home" />
+                <h1 className="text-xl font-bold">
+                  Meine Verben {customVerbs && `(${customVerbs.length})`}
+                </h1>
+                {error && <DefaultError errorMessage={error} />}
+                <DefaultButton
+                  buttonFunction={toggleAddModal}
+                  buttonText="Add verbs"
+                />
+                {customVerbs && customVerbs.length > 0 ? (
+                  <>
+                    <SearchBar
                       customVerbs={customVerbs}
                       setFilteredVerbs={setFilteredVerbs}
-                      filterDialogue={filterDialogue}
-                      setFilterDialogue={setFilterDialogue}
-                      setSortingDialogue={setSortingDialogue}
-                      resetFilters={resetFilters}
-                    />
-                    <SortingOptions
-                      customVerbs={customVerbs}
-                      filteredVerbs={filteredVerbs}
-                      setFilteredVerbs={setFilteredVerbs}
-                      sortingDialogue={sortingDialogue}
+                      placeholder="Search"
                       setSortingDialogue={setSortingDialogue}
                       setFilterDialogue={setFilterDialogue}
                     />
-                  </div>
-                  {filteredVerbs.length > 0 ? (
-                    <>
-                      {filteredVerbs.map((verb) => (
-                        <VerbCard
-                          key={verb._id}
-                          verb={verb}
-                          setFilteredVerbs={setFilteredVerbs}
-                          setCustomVerbs={setCustomVerbs}
-                          setError={setError}
-                        />
-                      ))}
-                      {filteredVerbs.length !== customVerbs.length ? (
+                    <div className="relative w-[90%]">
+                      <FilterOptions
+                        customVerbs={customVerbs}
+                        setFilteredVerbs={setFilteredVerbs}
+                        filterDialogue={filterDialogue}
+                        setFilterDialogue={setFilterDialogue}
+                        setSortingDialogue={setSortingDialogue}
+                        resetFilters={resetFilters}
+                      />
+                      <SortingOptions
+                        customVerbs={customVerbs}
+                        filteredVerbs={filteredVerbs}
+                        setFilteredVerbs={setFilteredVerbs}
+                        sortingDialogue={sortingDialogue}
+                        setSortingDialogue={setSortingDialogue}
+                        setFilterDialogue={setFilterDialogue}
+                      />
+                    </div>
+                    {filteredVerbs.length > 0 ? (
+                      <>
+                        {filteredVerbs.map((verb) => (
+                          <VerbCard
+                            key={verb._id}
+                            verb={verb}
+                            setFilteredVerbs={setFilteredVerbs}
+                            setCustomVerbs={setCustomVerbs}
+                            setError={setError}
+                          />
+                        ))}
+                        {filteredVerbs.length !== customVerbs.length ? (
+                          <DefaultButton
+                            buttonFunction={resetFilters}
+                            buttonType="button"
+                            buttonText="Reset"
+                          />
+                        ) : null}
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-center mt-[2rem]">Keine Treffer</p>
                         <DefaultButton
                           buttonFunction={resetFilters}
                           buttonType="button"
                           buttonText="Reset"
                         />
-                      ) : null}
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-center mt-[2rem]">Keine Treffer</p>
-                      <DefaultButton
-                        buttonFunction={resetFilters}
-                        buttonType="button"
-                        buttonText="Reset"
-                      />
-                    </>
-                  )}
-                </>
-              ) : loading ? (
-                <LoadingAnimation small />
-              ) : (
-                <>
-                  <p className="text-center mt-[2rem]">
-                    You have not saved any verbs yet. You can import the default
-                    vocabulary or add your own verbs with the form above.
-                  </p>
-                  <ImportButton
-                    setCustomVerbs={setCustomVerbs}
-                    setFilteredVerbs={setFilteredVerbs}
-                    setError={setError}
-                  />
-                </>
-              )}
-            </>
-          )}
-        </>
-      )}
+                      </>
+                    )}
+                  </>
+                ) : loading ? (
+                  <LoadingAnimation small />
+                ) : (
+                  <>
+                    <p className="text-center mt-[2rem]">
+                      You have not saved any verbs yet. You can import the
+                      default vocabulary or add your own verbs with the form
+                      above.
+                    </p>
+                    <ImportButton
+                      setCustomVerbs={setCustomVerbs}
+                      setFilteredVerbs={setFilteredVerbs}
+                      setError={setError}
+                    />
+                  </>
+                )}
+              </>
+            )}
+          </>
+        )}
+      </div>
     </main>
   );
 }

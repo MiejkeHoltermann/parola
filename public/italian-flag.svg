@@ -1,46 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 28.3.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 120 120" style="enable-background:new 0 0 120 120;" xml:space="preserve">
 <style type="text/css">
 	.st0{display:none;}
 	.st1{display:inline;fill:#018844;}
 	.st2{display:inline;fill:#BD2833;}
 	.st3{display:inline;fill:#FFFFFF;}
-	.st4{fill:#012169;}
-	.st5{fill:#FFFFFF;}
-	.st6{fill:#FF0000;}
-	.st7{fill:#F7C800;}
+	.st4{clip-path:url(#SVGID_00000102513159453190846870000001655059613773293722_);}
+	.st5{fill:#008E39;}
+	.st6{fill:#FFFFFF;}
+	.st7{fill:#C61728;}
 </style>
-<g id="Layer_1" class="st0">
+<g id="Layer_1_00000088095722783946682930000004509308724495514245_" class="st0">
 	<path class="st1" d="M40,3.4v113.2C16.7,108.3,0,86.1,0,60S16.7,11.7,40,3.4z"/>
 	<path class="st2" d="M120,60c0,26.1-16.7,48.3-40,56.6V3.4C103.3,11.7,120,33.9,120,60z"/>
 	<path class="st3" d="M80,3.4v113.2c-6.3,2.2-13,3.4-20,3.4s-13.7-1.2-20-3.4V3.4C46.3,1.2,53,0,60,0S73.7,1.2,80,3.4z"/>
-	
-		<image style="display:inline;overflow:visible;" width="640" height="384" xlink:href="7CFFFA3F.jpg"  transform="matrix(0.3125 0 0 0.3125 -40 0)">
-	</image>
 </g>
-<g id="Layer_2">
-	<g>
-		<rect y="0" class="st4" width="120" height="120"/>
-		<g>
-			
-				<rect x="50.1" y="-36" transform="matrix(0.5145 -0.8575 0.8575 0.5145 -22.3193 80.5798)" class="st5" width="19.7" height="191.9"/>
-			
-				<rect x="-36" y="50.1" transform="matrix(0.8575 -0.5145 0.5145 0.8575 -22.319 39.419)" class="st5" width="191.9" height="19.7"/>
-		</g>
-		
-			<rect x="10.8" y="-7.6" transform="matrix(0.5134 -0.8582 0.8582 0.5134 -24.8105 30.0565)" class="st6" width="6.6" height="89"/>
-		<rect x="105" y="40.4" transform="matrix(0.5134 -0.8582 0.8582 0.5134 -20.186 134.2236)" class="st6" width="6.6" height="89"/>
-		<rect x="-26" y="85.5" transform="matrix(0.8582 -0.5134 0.5134 0.8582 -42.9788 22.0703)" class="st6" width="89" height="6.6"/>
-		<rect x="54.7" y="28.6" transform="matrix(0.8582 -0.5134 0.5134 0.8582 -2.3272 55.4535)" class="st6" width="89" height="6.6"/>
-		<g>
-			<rect x="-29" y="43.1" class="st5" width="177.9" height="33.7"/>
-			<rect x="43.5" class="st5" width="33" height="120"/>
-		</g>
-		<rect x="-27.4" y="50.1" class="st6" width="174.7" height="19.8"/>
-		<rect x="50.2" y="-7.2" class="st6" width="19.6" height="145.1"/>
+<g>
+	<defs>
+		<circle id="SVGID_1_" cx="60" cy="60" r="60"/>
+	</defs>
+	<clipPath id="SVGID_00000180360441664480489710000005983327061069251747_">
+		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+	</clipPath>
+	<g style="clip-path:url(#SVGID_00000180360441664480489710000005983327061069251747_);">
+		<rect class="st5" width="40" height="120"/>
+		<rect x="40" class="st6" width="40" height="120"/>
+		<rect x="80" class="st7" width="40" height="120"/>
 	</g>
-	<circle class="st7" cx="60" cy="59.2" r="60"/>
 </g>
 </svg>

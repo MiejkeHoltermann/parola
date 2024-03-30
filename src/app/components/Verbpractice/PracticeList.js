@@ -16,6 +16,7 @@ export default function PracticeList({ customVerbs, provideNewVerb, reload }) {
             buttonFunction={provideNewVerb}
             buttonType="button"
             buttonText="Practice now"
+            size="10rem"
           />
         </>
       ) : (

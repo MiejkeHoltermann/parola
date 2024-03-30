@@ -117,7 +117,7 @@ export default function RegisterForm() {
       </form>
       <Link className="text-center mt-auto" href={"/"}>
         Already have an account? <br />
-        <span className="underline ">Sign in</span> now.
+        <span className="underline hover:text-mint">Sign in</span> now.
       </Link>
     </>
   );

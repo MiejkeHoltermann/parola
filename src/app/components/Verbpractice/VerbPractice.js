@@ -3,6 +3,7 @@ import DefaultError from "../DefaultError";
 import DefaultButton from "../DefaultButton";
 import LoadingAnimation from "../LoadingAnimation";
 import Hint from "./Hint";
+import { useState } from "react";
 
 export default function VerbPractice({
   activeVerb,
@@ -17,6 +18,8 @@ export default function VerbPractice({
   newQuestion,
   loading,
 }) {
+  const [correctAnswers, setCorrectAnswers] = useState([]);
+
   const checkAnswer = (e) => {
     e.preventDefault();
     // checks whether all input fields are valid
@@ -30,13 +33,16 @@ export default function VerbPractice({
 
     // checks whether the inputs are correct
     else {
-      const correctAnswers = trimmedInputs.every(
-        (input, index) =>
-          input === Object.values(activeVerb.presente)[index].trim()
-      );
-      setCorrect(correctAnswers);
+      const correctAnswers = trimmedInputs.map((input, index) => {
+        const isCorrect =
+          input === Object.values(activeVerb.presente)[index].trim();
+        return isCorrect;
+      });
+      setCorrectAnswers(correctAnswers);
+      const isCorrect = correctAnswers.every((answer) => answer);
+      setCorrect(isCorrect);
       setError2(
-        correctAnswers ? "The answer is correct." : "The answer is not correct."
+        isCorrect ? "The answer is correct." : "The answer is not correct."
       );
     }
   };
@@ -62,6 +68,7 @@ export default function VerbPractice({
               inputId={key}
               inputName={key}
               short
+              correctAnswer={correctAnswers[index]}
             />
           ))}
           {error2 && <DefaultError errorMessage={error2} correct={correct} />}{" "}

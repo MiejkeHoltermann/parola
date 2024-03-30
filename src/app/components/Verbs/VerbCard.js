@@ -16,7 +16,7 @@ export default function VerbCard({
     <>
       {!editModal ? (
         // renders the normal VerbCard
-        <div className="w-[90%] flex flex-col rounded-xl shadow-[2px_2px_rgba(0,215,177,1)] px-4 py-2">
+        <div className="w-[90%] flex flex-col rounded-xl shadow-[2px_2px_rgba(0,215,177,1)] px-4 py-2 hover:scale-105">
           <div className="flex items-center mt-[0.3rem] gap-[0.6rem]">
             <p className="w-full break-all font-bold">{verb.name}</p>
             <button onClick={() => setEditModal(true)}>

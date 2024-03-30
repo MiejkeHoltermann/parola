@@ -5,6 +5,7 @@ import Image from "next/image";
 import DefaultInput from "../DefaultInput";
 import DefaultButton from "../DefaultButton";
 import DefaultError from "../DefaultError";
+import CloseButton from "../CloseButton";
 
 export default function WordForm({
   toggleAddModal,
@@ -62,23 +63,11 @@ export default function WordForm({
 
   return (
     <>
+      <CloseButton buttonFunction={toggleAddModal} />
       <form
         onSubmit={handleSubmit}
-        className=" w-full h-full flex flex-col items-center gap-[0.6rem]"
+        className=" w-[90%] h-full flex flex-col items-center gap-[0.6rem]"
       >
-        <button
-          onClick={toggleAddModal}
-          type="button"
-          className="ml-auto bg-mint flex justify-center items-center text-white w-[1.6rem] h-[1.6rem] rounded-md"
-        >
-          <Image
-            src="/cross.svg"
-            alt="close button"
-            width={50}
-            height={50}
-            className="w-[1.5rem] h-[1.5rem]"
-          ></Image>
-        </button>
         <h1 className="mt-[2rem] mb-[1.4rem]">Add a new word</h1>
         <DefaultInput
           value={englishWord}
@@ -97,7 +86,7 @@ export default function WordForm({
           placeholder="Italienisch"
         />
         {error && <DefaultError errorMessage={error} />}
-        <DefaultButton buttonType="submit" buttonText="Add" />
+        <DefaultButton buttonType="submit" buttonText="Add" size="6rem" />
       </form>
     </>
   );

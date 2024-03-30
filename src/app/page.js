@@ -14,14 +14,16 @@ export default async function Login() {
 
   return (
     <main>
-      <Image
-        src="/parola_logo.png"
-        alt="parola logo"
-        width={400}
-        height={200}
-        style={{ width: "40vw", margin: "2rem 0" }}
-      />
-      <LoginForm />
+      <div className="relative bg-white w-[90%] min-h-[80vh] h-auto rounded-xl flex flex-col items-center py-[2rem] px-[1rem] gap-[1.6rem] mt-[5.4rem] mb-[6vh]">
+        <Image
+          src="/parola_logo.png"
+          alt="parola logo"
+          width={400}
+          height={200}
+          style={{ width: "50%", margin: "2rem 0" }}
+        />
+        <LoginForm />
+      </div>
     </main>
   );
 }

@@ -15,20 +15,27 @@ export async function POST(req, res) {
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-    const defaultWords = await Word.find();
-    user.customWords.push(...defaultWords);
-    user.customWords.map((word) => (word.level = 1));
-    const defaultVerbs = await Verb.find();
-    user.customVerbs.push(...defaultVerbs);
-    user.wordsImported = true;
-    await user.save();
-    const customWords = user.customWords;
-    return NextResponse.json(
-      {
-        customWords,
-      },
-      { status: 200 }
-    );
+    if (user.wordsImported === false) {
+      const defaultWords = await Word.find();
+      user.customWords.push(...defaultWords);
+      user.customWords.map((word) => (word.level = 1));
+      const defaultVerbs = await Verb.find();
+      user.customVerbs.push(...defaultVerbs);
+      user.wordsImported = true;
+      await user.save();
+      const customWords = user.customWords;
+      return NextResponse.json(
+        {
+          customWords,
+        },
+        { status: 200 }
+      );
+    } else {
+      return NextResponse.json(
+        { message: "Words already imported" },
+        { status: 409 }
+      );
+    }
   } catch (error) {
     return NextResponse.json(
       {

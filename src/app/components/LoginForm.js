@@ -69,7 +69,7 @@ export default function LoginForm() {
       </form>
       <Link className="text-center mt-auto" href={"/register"}>
         No account? <br />
-        <span className="underline">Sign up</span> now.
+        <span className="underline hover:text-mint">Sign up</span> now.
       </Link>
     </>
   );

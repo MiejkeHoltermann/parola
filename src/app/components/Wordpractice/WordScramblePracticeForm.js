@@ -94,7 +94,7 @@ export default function WordScramblePracticeForm({
             type="text"
             id="italianWordInput"
             name="italianWordInput"
-            className="pl-6 w-full min-h-[2.8rem] border border-gray-300 rounded-xl shadow-lg focus:outline-none focus:border-2 focus:border-lightblue"
+            className="pl-6 w-full min-h-[2.8rem] border border-gray-300 rounded-xl shadow-lg focus:outline-none"
           />
           <label htmlFor="italianWordInput" className="text-[0]">
             italian word input
@@ -104,7 +104,7 @@ export default function WordScramblePracticeForm({
               <button
                 key={index}
                 onClick={(e) => addToWord(e, letter, index)}
-                className="bg-superlightblue flex items-center justify-center rounded-md w-[2rem] h-[2.6rem]"
+                className="bg-superlightblue flex items-center justify-center rounded-md w-[2rem] h-[2.6rem] hover:bg-lightmint"
               >
                 {letter}
               </button>
@@ -114,7 +114,7 @@ export default function WordScramblePracticeForm({
             <div className="flex w-[90%] ">
               <button
                 onClick={(e) => resetWord(e)}
-                className="ml-auto bg-darkmint text-white flex items-center justify-center rounded-md p-2 w-16"
+                className="ml-auto bg-darkmint text-white flex items-center justify-center rounded-md p-2 w-16 hover:scale-105"
               >
                 <RxReset />
               </button>

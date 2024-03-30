@@ -121,10 +121,10 @@ export default function PracticeForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-[90%] flex flex-col items-center mt-[1rem] gap-[0.6rem]"
+      className="w-[90%] flex flex-col items-center gap-[0.6rem]"
     >
       <label htmlFor="numberOfWords" className="text-center">
-        How many words do you want to practice?{" "}
+        How many words do you want to practice?
       </label>
       <input
         type="number"
@@ -132,7 +132,7 @@ export default function PracticeForm({
         name="numberOfWords"
         value={numberOfWords}
         onChange={handleNumberChange}
-        className={`w-[6rem] h-[2.2rem] pl-[1.2rem] pr-[0.4rem] mb-[1rem] focus:outline-none border border-gray-300 rounded-md ${
+        className={`w-[6rem] h-[2.2rem] pl-[1.2rem] pr-[0.4rem] mb-[1rem] focus:outline-none border border-gray-300 rounded-md hover:shadow-lg ${
           invalid ? "text-red-500" : ""
         }`}
       />
@@ -159,7 +159,7 @@ export default function PracticeForm({
         setPracticeType={setPracticeType}
       />
       {error2 && <DefaultError errorMessage={error2} />}
-      <DefaultButton buttonType="submit" buttonText="Let's go" size="8rem" />
+      <DefaultButton buttonType="submit" buttonText="Let's go" />
     </form>
   );
 }

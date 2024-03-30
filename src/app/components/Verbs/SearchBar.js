@@ -64,13 +64,13 @@ export default function SearchBar({
         onChange={(e) => setSearchWord(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={isFocused ? "" : placeholder}
-        className="pl-[1.2rem] w-full min-h-[2.4rem] border border-gray-300 rounded-xl shadow-lg focus:outline-none "
+        className="pl-[1.2rem] w-full min-h-[2.4rem] border border-gray-300 rounded-xl shadow-lg hover:shadow-xl focus:outline-none "
         onFocus={handleFocus}
         onBlur={() => setIsFocused(false)}
       />
       <button
         onClick={handleSearch}
-        className="absolute top-[50%] -translate-y-1/2 right-[1rem] z-10"
+        className="absolute top-[50%] -translate-y-1/2 right-[1rem] z-10 hover:scale-110"
       >
         <Image
           src="/search.svg"

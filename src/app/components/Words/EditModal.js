@@ -107,7 +107,7 @@ export default function EditModal({
             buttonFunction={updateWord}
             buttonType="button"
             buttonText="Save"
-            size="8rem"
+            size="6rem"
           />
         </div>
       ) : (

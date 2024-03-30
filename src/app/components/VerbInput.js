@@ -6,6 +6,7 @@ export default function VerbInput({
   inputId,
   inputName,
   short,
+  correctAnswer,
 }) {
   const presenteLabels = ["Name", "io", "tu", "lui/lei", "noi", "voi", "loro"];
 
@@ -39,7 +40,13 @@ export default function VerbInput({
         type="text"
         id={inputId}
         name={inputName}
-        className="pl-6 min-h-[2.8rem] col-span-3 border border-gray-300 rounded-xl shadow-lg focus:outline-none focus:border-2 focus:border-lightblue"
+        className={`pl-6 min-h-[2.8rem] col-span-3 border border-gray-300 ${
+          correctAnswer === true
+            ? "font-bold text-green-700"
+            : correctAnswer === false
+            ? "font-bold text-red-500"
+            : ""
+        } rounded-xl shadow-lg hover:shadow-xl focus:outline-none focus:border-2 focus:border-lightblue`}
       />
     </div>
   );

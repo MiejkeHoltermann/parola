@@ -17,7 +17,7 @@ export default function SelectPracticeTypeInput({
   };
 
   return (
-    <div className="relative w-[14rem] h-[2.2rem] flex flex-col justify-center border border-gray-300 rounded-md">
+    <div className="relative w-[14rem] h-[2.2rem] flex flex-col justify-center border border-gray-300 rounded-md hover:shadow-lg">
       <button
         onClick={toggleDropdown}
         type="button"
@@ -36,22 +36,22 @@ export default function SelectPracticeTypeInput({
         <div className="bg-white absolute top-[2.2rem] left-0 z-20 w-[14rem] shadow-[6px_6px_20px_rgba(0,0,0,0.2)] rounded-lg">
           <ul className="pb-[0.6rem]">
             <li
-              onClick={() => handleOptions("typing")}
+              onClick={() => handleOptions("Typing")}
               className="py-[0.4rem] pl-[1.2rem]"
             >
               Typing
             </li>
             <li
-              onClick={() => handleOptions("wordscramble")}
+              onClick={() => handleOptions("Wordscramble")}
               className="py-[0.4rem] pl-[1.2rem]"
             >
               Wordscramble
             </li>
             <li
-              onClick={() => handleOptions("multiple Choice")}
+              onClick={() => handleOptions("Multiple choice")}
               className="py-[0.4rem] pl-[1.2rem]"
             >
-              Multiple Choice
+              Multiple choice
             </li>
           </ul>
         </div>

@@ -60,7 +60,7 @@ export default function SelectLevelInput({
   };
 
   return (
-    <div className="relative w-[14rem] h-[2.2rem] mb-[1rem] flex flex-col justify-center border border-gray-300 rounded-md">
+    <div className="relative w-[14rem] h-[2.2rem] mb-[1rem] flex flex-col justify-center border border-gray-300 rounded-md hover:shadow-lg">
       <button
         onClick={toggleDropdown}
         type="button"

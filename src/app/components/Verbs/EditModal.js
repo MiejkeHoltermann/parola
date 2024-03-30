@@ -4,6 +4,8 @@ import Image from "next/image";
 import DeleteModal from "./DeleteModal";
 import DefaultError from "../DefaultError";
 import { HiOutlineTrash } from "react-icons/hi";
+import DefaultButton from "../DefaultButton";
+import CloseButton from "../CloseButton";
 
 export default function EditModal({
   verb,
@@ -101,18 +103,7 @@ export default function EditModal({
             <button onClick={() => setDeleteModal(true)} className="self-start">
               <HiOutlineTrash size={28} style={{ color: "#027863" }} />
             </button>
-            <button
-              onClick={() => cancelEdit()}
-              className="ml-auto bg-darkmint flex justify-center items-center text-white w-[1.8rem] h-[1.8rem] rounded-md"
-            >
-              <Image
-                src="/cross.svg"
-                alt="close button"
-                width={80}
-                height={80}
-                className="w-[1.5rem] h-[1.5rem]"
-              ></Image>
-            </button>
+            <CloseButton buttonFunction={cancelEdit} />
           </div>
           {presenteLabels.map((label, index) => {
             const fieldName = index === 0 ? "newName" : `newPresente0${index}`;
@@ -133,19 +124,17 @@ export default function EditModal({
                   id={fieldName}
                   name={fieldName}
                   placeholder={verb.presente[`presente0${index}`]}
-                  className="pl-6 w-full min-h-[2.8rem] col-span-3 border border-gray-300 rounded-xl shadow-lg focus:outline-none focus:border-2 focus:border-lightblue"
+                  className="pl-6 w-full min-h-[2.8rem] col-span-3 border border-gray-300 rounded-xl shadow-lg hover:shadow-xl focus:outline-none focus:border-2 focus:border-lightblue"
                 />
               </div>
             );
           })}
           {error2 && <DefaultError errorMessage={error2} />}
-          <button
-            onClick={() => updateVerb()}
-            type="button"
-            className="bg-mint w-[7rem] text-white text-center font-bold cursor-pointer rounded-lg px-[0.2rem] py-[0.3rem] mt-[0.4rem]"
-          >
-            Save
-          </button>
+          <DefaultButton
+            buttonFunction={updateVerb}
+            buttonText="Save"
+            size="6rem"
+          />
         </div>
       ) : (
         <DeleteModal

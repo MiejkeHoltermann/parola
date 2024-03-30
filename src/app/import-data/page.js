@@ -6,6 +6,7 @@ import DefaultButton from "../components/DefaultButton";
 import DefaultCheckbox from "../components/DefaultCheckbox";
 import DefaultError from "../components/DefaultError";
 import LoadingAnimation from "../components/LoadingAnimation";
+import CloseLink from "../components/CloseLink";
 
 export default function ImportData() {
   const [importData, setImportData] = useState(true);
@@ -34,8 +35,12 @@ export default function ImportData() {
           },
           body: JSON.stringify({ userId }),
         });
+        const { message } = await response.json();
         if (response.ok) {
           router.push("/home");
+        } else if (message === "Words already imported") {
+          setLoading(false);
+          setError("You already imported the vocabulary.");
         } else {
           setLoading(false);
           setError("Error importing data. Please untick the checkbox.");
@@ -51,23 +56,18 @@ export default function ImportData() {
 
   return (
     <main>
-      <div
-        className="relative bg-white w-[90%] min-h-[80vh] h-auto rounded-xl
-flex flex-col items-center py-[2rem] gap-[1.6rem] mt-[10vh] mb-[6vh]"
-      >
+      <div className="relative bg-white w-[90%] min-h-[80vh] h-auto rounded-xl flex flex-col items-center py-[2rem] px-[1rem] gap-[1.6rem] mt-[5.4rem] mb-[6vh]">
         {status === "loading" ? (
           <LoadingAnimation />
         ) : (
           <>
-            <p className="w-[90%] text-center">
-              Diese App stellt einen umfangreichen Grundwortschatz zur
-              Verfügung.
+            <CloseLink href="/home" />
+            <p className="w-[80%] text-center">
+              This app provides a comprehensive vocabulary to get you started.
               <br />
-              Entferne das Häkchen, wenn du stattdessen deine eigenen Vokabeln
-              hinzufügen möchtest. <br />
+              Untick the box if you want to add your own words instead. <br />
               <br />
-              Du kannst den Grundwortschatz auch später hinzufügen, wenn du noch
-              unsicher bist.
+              You can import the vocabulary later, if you are not sure yet.
             </p>
             <form
               onSubmit={handleSubmit}
@@ -78,11 +78,11 @@ flex flex-col items-center py-[2rem] gap-[1.6rem] mt-[10vh] mb-[6vh]"
                 onChange={handleCheckboxChange}
                 checkboxId="importData"
                 checkboxName="importData"
-                checkboxLabel="Wortschatz importieren"
+                checkboxLabel="Import vocabulary"
               />
               {loading && <LoadingAnimation small />}
               {error && <DefaultError errorMessage={error} />}
-              <DefaultButton buttonType="submit" buttonText="OK" size="8rem" />
+              <DefaultButton buttonType="submit" buttonText="OK" size="6rem" />
             </form>
           </>
         )}

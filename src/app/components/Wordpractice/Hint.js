@@ -10,7 +10,7 @@ export default function Hint({ hint, setHint, activeWord }) {
       {hint ? (
         <p className="text-mint font-bold">{activeWord.italianWord}</p>
       ) : null}
-      <button onClick={toggleHint} type="button" className="self-start">
+      <button onClick={toggleHint} type="button" className="hover:scale-110">
         <HiQuestionMarkCircle size={40} style={{ color: "#027863" }} />
       </button>
     </div>
