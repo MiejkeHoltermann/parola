@@ -12,6 +12,7 @@ export default function Home() {
   const router = useRouter();
 
   if (status === "unauthenticated") {
+    console.log("unauthenticated");
     router.push("/");
   }
 

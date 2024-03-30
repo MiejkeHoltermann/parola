@@ -94,13 +94,6 @@ export default function Profile() {
     setRegistrationDate(`${formattedDay}.${formattedMonth}.${formattedYear}`);
   };
 
-  const signOutUser = () => {
-    signOut();
-    if (session) {
-      router.push("/");
-    }
-  };
-
   return (
     <main>
       <div className="relative bg-white w-[90%] min-h-[80vh] h-auto rounded-xl flex flex-col items-center py-[2rem] px-[1rem] gap-[1.6rem] mt-[5.4rem] mb-[6vh]">
@@ -188,7 +181,7 @@ export default function Profile() {
                   </>
                 ) : null}
                 <DefaultButton
-                  buttonFunction={signOutUser}
+                  buttonFunction={() => signOut()}
                   buttonType="button"
                   buttonText="Sign out"
                 />
