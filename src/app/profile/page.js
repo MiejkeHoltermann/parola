@@ -97,97 +97,91 @@ export default function Profile() {
   return (
     <main>
       <div className="relative bg-white w-[90%] min-h-[80vh] h-auto rounded-xl flex flex-col items-center py-[2rem] px-[1rem] gap-[1.6rem] mt-[5.4rem] mb-[6vh]">
-        {status === "loading" ? (
-          <LoadingAnimation />
+        {status === "authenticated" && registrationDate ? (
+          <>
+            <CloseLink href="/home" />
+            <div className="flex justify-between w-[80%] mb-[1rem]">
+              <div className="w-[50%] ">
+                <p className="font-bold text-lg text-mint mb-[1rem]">
+                  {session.user.name}
+                </p>
+                <p>registered since:</p>
+                <p>{registrationDate}</p>
+              </div>
+              <div className="w-[36%]">
+                <Image
+                  src="/profile-pic.jpg"
+                  alt="profile-picture"
+                  width={200}
+                  height={200}
+                  className="rounded-[50%]"
+                />
+              </div>
+            </div>
+            <p className="font-bold text-lg text-mint mt-[2rem]">Statistics</p>
+            <div className="w-[80%]">
+              <p className="w-[6rem] bg-mint text-center text-white rounded-t-lg py-[0.2rem]">
+                Words
+              </p>
+              <ul className="w-full bg-superlightblue px-[1.4rem] py-[0.8rem] grid grid-cols-2 rounded-b-lg rounded-r-lg">
+                <li className="py-[0.2rem]">All</li>
+                <li className="py-[0.2rem] justify-self-end font-bold text-mint">
+                  {customWords.length}
+                </li>
+                {wordsLevels.map((level, index) => (
+                  <Fragment key={index}>
+                    <li className="py-[0.2rem]">Level {index + 1}</li>
+                    <li className="py-[0.2rem] justify-self-end font-bold text-mint">
+                      {wordsLevels[index]}
+                    </li>
+                  </Fragment>
+                ))}
+                <li className="py-[0.2rem]">Favorites</li>
+                <li className="py-[0.2rem] justify-self-end font-bold text-mint ">
+                  {favorites}
+                </li>
+              </ul>
+            </div>
+            <div className="w-[80%]">
+              <p className="w-[6rem] bg-mint text-center text-white rounded-t-lg py-[0.2rem]">
+                Verbs
+              </p>
+              <ul className="w-full bg-superlightblue px-[1.4rem] py-[0.8rem] grid grid-cols-2 rounded-b-lg rounded-r-lg">
+                <li className="py-[0.2rem]">All</li>
+                <li className="py-[0.2rem] justify-self-end font-bold text-mint">
+                  {customVerbs.length}
+                </li>
+                <li className="py-[0.2rem]">Favorites</li>
+                <li className="py-[0.2rem] justify-self-end font-bold text-mint">
+                  {verbFavorites}
+                </li>
+              </ul>
+            </div>
+            <>{error2 && <DefaultError errorMessage={error2} />}</>
+            {!wordsImported && customWords.length === 0 ? (
+              <>
+                <p className="text-center">
+                  You have not saved any words yet. Do you want to import the
+                  default vocabulary?
+                </p>
+                <ImportButton
+                  setError={setError2}
+                  setCustomWords={setCustomWords}
+                >
+                  Import
+                </ImportButton>
+              </>
+            ) : null}
+            <DefaultButton
+              buttonFunction={() => signOut()}
+              buttonType="button"
+              buttonText="Sign out"
+            />
+          </>
         ) : error ? (
           <>{error && <DefaultError errorMessage={error} />}</>
         ) : (
-          <>
-            {session && registrationDate !== undefined ? (
-              <>
-                <CloseLink href="/home" />
-                <div className="flex justify-between w-[80%] mb-[1rem]">
-                  <div className="w-[50%] ">
-                    <p className="font-bold text-lg text-mint mb-[1rem]">
-                      {session.user.name}
-                    </p>
-                    <p>registered since:</p>
-                    <p>{registrationDate}</p>
-                  </div>
-                  <div className="w-[36%]">
-                    <Image
-                      src="/profile-pic.jpg"
-                      alt="profile-picture"
-                      width={200}
-                      height={200}
-                      className="rounded-[50%]"
-                    />
-                  </div>
-                </div>
-                <p className="font-bold text-lg text-mint mt-[2rem]">
-                  Statistics
-                </p>
-                <div className="w-[80%]">
-                  <p className="w-[6rem] bg-mint text-center text-white rounded-t-lg py-[0.2rem]">
-                    Words
-                  </p>
-                  <ul className="w-full bg-superlightblue px-[1.4rem] py-[0.8rem] grid grid-cols-2 rounded-b-lg rounded-r-lg">
-                    <li className="py-[0.2rem]">All</li>
-                    <li className="py-[0.2rem] justify-self-end font-bold text-mint">
-                      {customWords.length}
-                    </li>
-                    {wordsLevels.map((level, index) => (
-                      <Fragment key={index}>
-                        <li className="py-[0.2rem]">Level {index + 1}</li>
-                        <li className="py-[0.2rem] justify-self-end font-bold text-mint">
-                          {wordsLevels[index]}
-                        </li>
-                      </Fragment>
-                    ))}
-                    <li className="py-[0.2rem]">Favorites</li>
-                    <li className="py-[0.2rem] justify-self-end font-bold text-mint ">
-                      {favorites}
-                    </li>
-                  </ul>
-                </div>
-                <div className="w-[80%]">
-                  <p className="w-[6rem] bg-mint text-center text-white rounded-t-lg py-[0.2rem]">
-                    Verbs
-                  </p>
-                  <ul className="w-full bg-superlightblue px-[1.4rem] py-[0.8rem] grid grid-cols-2 rounded-b-lg rounded-r-lg">
-                    <li className="py-[0.2rem]">All</li>
-                    <li className="py-[0.2rem] justify-self-end font-bold text-mint">
-                      {customVerbs.length}
-                    </li>
-                    <li className="py-[0.2rem]">Favorites</li>
-                    <li className="py-[0.2rem] justify-self-end font-bold text-mint">
-                      {verbFavorites}
-                    </li>
-                  </ul>
-                </div>
-                <>{error2 && <DefaultError errorMessage={error2} />}</>
-                {!wordsImported && customWords.length === 0 ? (
-                  <>
-                    <p className="text-center">
-                      You have not saved any words yet. Do you want to import
-                      the default vocabulary?
-                    </p>
-                    <ImportButton
-                      setError={setError2}
-                      setCustomWords={setCustomWords}
-                    >
-                      Import
-                    </ImportButton>
-                  </>
-                ) : null}
-                <DefaultButton
-                  buttonFunction={() => signOut()}
-                  buttonType="button"
-                  buttonText="Sign out"
-                />
-              </>
-            ) : null}
-          </>
+          <LoadingAnimation />
         )}
       </div>
     </main>

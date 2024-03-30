@@ -82,14 +82,7 @@ export default function Verbpractice() {
   return (
     <main>
       <div className="relative bg-white w-[90%] min-h-[80vh] h-auto rounded-xl flex flex-col items-center py-[2rem] px-[1rem] gap-[1.6rem] mt-[5.4rem] mb-[6vh]">
-        {status === "loading" ? (
-          <LoadingAnimation />
-        ) : error ? (
-          <>
-            <CloseLink href="/home" />
-            {error && <DefaultError errorMessage={error} correct={correct} />}
-          </>
-        ) : (
+        {status === "authenticated" ? (
           <>
             <CloseLink href="/home" />
             {practiceStatus === "practice form" ? (
@@ -140,6 +133,13 @@ export default function Verbpractice() {
               </div>
             ) : null}
           </>
+        ) : error ? (
+          <>
+            <CloseLink href="/home" />
+            {error && <DefaultError errorMessage={error} correct={correct} />}
+          </>
+        ) : (
+          <LoadingAnimation />
         )}
       </div>
     </main>

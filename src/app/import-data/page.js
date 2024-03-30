@@ -61,9 +61,7 @@ export default function ImportData() {
   return (
     <main>
       <div className="relative bg-white w-[90%] min-h-[80vh] h-auto rounded-xl flex flex-col items-center py-[2rem] px-[1rem] gap-[1.6rem] mt-[5.4rem] mb-[6vh]">
-        {status === "loading" ? (
-          <LoadingAnimation />
-        ) : (
+        {status === "authenticated" ? (
           <>
             <CloseLink href="/home" />
             <p className="w-[80%] text-center">
@@ -89,6 +87,8 @@ export default function ImportData() {
               <DefaultButton buttonType="submit" buttonText="OK" size="6rem" />
             </form>
           </>
+        ) : (
+          <LoadingAnimation />
         )}
       </div>
     </main>

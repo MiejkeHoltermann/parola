@@ -73,9 +73,7 @@ export default function MyVerbs() {
   return (
     <main>
       <div className="relative bg-white w-[90%] min-h-[80vh] h-auto rounded-xl flex flex-col items-center py-[2rem] px-[1rem] gap-[1.6rem] mt-[5.4rem] mb-[6vh]">
-        {status === "loading" ? (
-          <LoadingAnimation />
-        ) : (
+        {status === "authenticated" ? (
           <>
             {addModal ? (
               <VerbForm
@@ -172,6 +170,8 @@ export default function MyVerbs() {
               </>
             )}
           </>
+        ) : (
+          <LoadingAnimation />
         )}
       </div>
     </main>
